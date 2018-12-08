@@ -15,6 +15,7 @@ public class EstablishmentsDTO extends BaseDTO {
 	public void set_name(String _name) {
 		this._name = _name;
 	}
+	@XmlElement
 	public String get_description() {
 		return _description;
 	}
@@ -22,6 +23,7 @@ public class EstablishmentsDTO extends BaseDTO {
 	public void set_description(String _description) {
 		this._description = _description;
 	}
+	@XmlElement
 	public String get_schedule() {
 		return _schedule;
 	}
@@ -29,6 +31,7 @@ public class EstablishmentsDTO extends BaseDTO {
 	public void set_schedule(String _schedule) {
 		this._schedule = _schedule;
 	}
+	@XmlElement
 	public String get_address() {
 		return _address;
 	}
@@ -36,6 +39,7 @@ public class EstablishmentsDTO extends BaseDTO {
 	public void set_address(String _address) {
 		this._address = _address;
 	}
+	@XmlElement
 	public String get_phone_number() {
 		return _phone_number;
 	}
@@ -43,6 +47,7 @@ public class EstablishmentsDTO extends BaseDTO {
 	public void set_phone_number(String _phone_number) {
 		this._phone_number = _phone_number;
 	}
+	@XmlElement
 	public String get_email() {
 		return _email;
 	}
@@ -50,6 +55,7 @@ public class EstablishmentsDTO extends BaseDTO {
 	public void set_email(String _email) {
 		this._email = _email;
 	}
+	@XmlElement
 	public String get_creation_date() {
 		return _creation_date;
 	}

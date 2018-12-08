@@ -74,12 +74,12 @@ public class EstablishmentsDomain implements BaseDomain {
 	public void setSchedule(String schedule) {
 		this._schedule = schedule;
 	}
-	public String getAddress() {
-		return _address;
-	}
-
-	public void setAddress(String address) {
-		this._schedule = address;
+	
+public String getAddress(){
+	return _address;
+}
+	public void setAddress(String address){
+		this._address=address;
 	}
 	public String getPhoneNumber() {
 		return _phone_number;

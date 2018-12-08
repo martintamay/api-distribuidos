@@ -61,6 +61,12 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentsDTO
 		final EstablishmentsDTO dto = new EstablishmentsDTO();
 		dto.setId(domain.getId());
 		dto.set_name(domain.getName());
+		dto.set_address(domain.getAddress());
+		dto.set_description(domain.getDescription());
+		dto.set_email(domain.getEmail());
+		dto.set_phone_number(domain.getPhoneNumber());
+		dto.set_schedule(domain.getSchedule());
+		System.out.println(domain.getAddress());
 		return dto;
 	}
 
@@ -69,6 +75,12 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentsDTO
 		final EstablishmentsDomain domain = new EstablishmentsDomain();
 		domain.setId(dto.getId());
 		domain.setName(dto.get_name());
+		domain.setAddress(dto.get_address());
+		domain.setDescription(dto.get_description());
+		domain.setEmail(dto.get_email());
+		domain.setPhoneNumber(dto.get_phone_number());
+		domain.setSchedule(dto.get_schedule());
+		System.out.println(dto.get_address());
 		return domain;
 	}
 	@Override
