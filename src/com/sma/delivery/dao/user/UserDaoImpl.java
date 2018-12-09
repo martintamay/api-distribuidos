@@ -46,8 +46,10 @@ public class UserDaoImpl extends BaseDaoImpl<UserDomain> implements IUserDao {
 	@Override
 	public List<UserDomain> find(String text) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(UserDomain.class);
-		Criterion email = Restrictions.like("email", text);
-		criteria.add(email);
+		Criterion email = Restrictions.like("email", text, MatchMode.START);
+		Criterion firstName = Restrictions.like("firstName", text, MatchMode.START);
+		Criterion lastName = Restrictions.like("lastName", text, MatchMode.START);
+		criteria.add(Restrictions.or(firstName,email,lastName));
 		return criteria.list();
 	}
 	@Override
