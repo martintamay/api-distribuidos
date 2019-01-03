@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sma.delivery.dao.orders.OrdersDaoImpl;
 import com.sma.delivery.dao.orders.IOrdersDao;
+import com.sma.delivery.dao.user.IUserDao;
 import com.sma.delivery.domain.orders.OrdersDomain;
 import com.sma.delivery.dto.orders.OrdersDTO;
 import com.sma.delivery.dto.orders.OrdersResult;
@@ -24,6 +25,8 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrdersDTO, OrdersDomain, 
 	
 	@Autowired
 	private IEstablishmentsDao establishmentsDao;
+	@Autowired
+	private IUserDao userDao;
 	@Autowired
 	private IOrdersDao ordersDao;
 
@@ -73,6 +76,7 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrdersDTO, OrdersDomain, 
 		dto.setContactNumber(domain.getContactNumber());
 		dto.setTotalCost(domain.getTotalCost());
 		dto.setEstablishment_id(domain.getEstablishment().getId());
+		dto.setUser_id(domain.getUser().getId());
 		return dto;
 	}
 
@@ -86,6 +90,7 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrdersDTO, OrdersDomain, 
 		domain.setContactNumber(dto.getContactNumber());
 		domain.setTotalCost(dto.getTotalCost());
 		domain.setEstablishment(establishmentsDao.getById(dto.getEstablishment_id()));
+		domain.setUser(userDao.getById(dto.getUser_id()));
 		return domain;
 	}
 	

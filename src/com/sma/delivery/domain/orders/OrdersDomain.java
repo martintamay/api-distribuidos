@@ -18,6 +18,7 @@ import com.sma.delivery.domain.bills.BillsDomain;
 import com.sma.delivery.domain.comments.CommentsDomain;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
+import com.sma.delivery.domain.user.UserDomain;
 @Entity
 @Table(name = "orders")
 public class OrdersDomain implements BaseDomain {
@@ -45,11 +46,17 @@ public class OrdersDomain implements BaseDomain {
 
 	@ManyToOne
 	private EstablishmentsDomain  establishment;
+	
+	
+	@ManyToOne
+	private UserDomain  user;
+
+	
 
 	@OneToMany(mappedBy = "order")
 	private Set<OrdersDetailDomain> ordersDetail = new HashSet<>();
-	@OneToMany(mappedBy = "orders")
-	private Set<BillsDomain> bills = new HashSet<>();
+	//@OneToMany(mappedBy = "order")
+	//private Set<BillsDomain> bills = new HashSet<>();
 
 	public Integer getId() {
 		return id;
@@ -120,12 +127,22 @@ public class OrdersDomain implements BaseDomain {
 		this.establishment = establishment;
 	}
 
-	public Set<BillsDomain> getBills() {
-		return bills;
+	//public Set<BillsDomain> getBills() {
+	//	return bills;
+	//}
+
+	//public void setBills(Set<BillsDomain> bills) {
+	//	this.bills = bills;
+	//}
+	
+	
+	public UserDomain getUser() {
+		return user;
 	}
 
-	public void setBills(Set<BillsDomain> bills) {
-		this.bills = bills;
+
+	public void setUser(UserDomain user) {
+		this.user = user;
 	}
 	/*public Set<OrdersDetailDomain> getOrdersDetail() {
 		return ordersDetail;
