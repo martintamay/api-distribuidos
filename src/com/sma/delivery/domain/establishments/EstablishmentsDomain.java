@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.comments.CommentsDomain;
 import com.sma.delivery.domain.orders.OrdersDomain;
+import com.sma.delivery.domain.products.ProductsDomain;
 @Entity
 @Table(name = "establishments")
 public class EstablishmentsDomain implements BaseDomain {
@@ -46,6 +47,18 @@ public class EstablishmentsDomain implements BaseDomain {
 	@OneToMany(mappedBy = "establishment")
 	private Set<OrdersDomain> orders = new HashSet<>();
 	
+	
+	@OneToMany(mappedBy = "establisment")
+	private Set<ProductsDomain> products = new HashSet<>();
+	
+	public Set<ProductsDomain> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Set<ProductsDomain> products) {
+		this.products = products;
+	}
+
 	public Integer getId() {
 		return id;
 	}
