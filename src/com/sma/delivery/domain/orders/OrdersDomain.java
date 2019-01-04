@@ -55,8 +55,18 @@ public class OrdersDomain implements BaseDomain {
 
 	@OneToMany(mappedBy = "order")
 	private Set<OrdersDetailDomain> ordersDetail = new HashSet<>();
-	//@OneToMany(mappedBy = "order")
-	//private Set<BillsDomain> bills = new HashSet<>();
+	
+	@OneToMany(mappedBy = "orders")
+	private Set<BillsDomain> bills = new HashSet<>();
+
+	public Set<BillsDomain> getBills() {
+		return bills;
+	}
+
+
+	public void setBills(Set<BillsDomain> bills) {
+		this.bills = bills;
+	}
 
 	public Integer getId() {
 		return id;

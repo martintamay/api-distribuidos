@@ -65,10 +65,9 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	protected BillsDTO convertDomainToDto(BillsDomain domain) {
 		final BillsDTO dto = new BillsDTO();
 		dto.setId(domain.getId());
-		dto.setTotal(domain.get_total());
-		dto.setIva(domain.get_iva());
-		dto.setOrdersId(domain.getOrders().getId());
-		
+		dto.setTotal(domain.getTotal());
+		dto.setIva(domain.getIva10());
+		dto.setOrder_id(domain.getOrders().getId());
 
 		return dto;
 	}
@@ -77,26 +76,13 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	protected BillsDomain convertDtoToDomain(BillsDTO dto) {
 		final BillsDomain domain = new BillsDomain();
 		domain.setId(dto.getId());
-		domain.set_total(dto.getTotal());
-		domain.set_iva(dto.getIva());
-		domain.setOrders(ordersDao.getById(dto.getOrderId()));
-
+		domain.setTotal(dto.getTotal());
+		domain.setIva10(dto.getIva());
+		//domain.setOrders(ordersDao.getById(1));
+		domain.setOrders(ordersDao.getById(dto.getOrder_id()));
 		return domain;
 	}
 
-	@Override
-	@Transactional
-	public BillsResult get(Integer page, Integer tamPag) {
-		final List<BillsDTO> clientss = new ArrayList<>();
-		for (BillsDomain domain : billsDao.findByParams(page, tamPag)) {
-			final BillsDTO client = convertDomainToDto(domain);
-			clientss.add(client);
-		}
-
-		final BillsResult clientResult = new BillsResult();
-		clientResult.setBills(clientss);
-		return clientResult;
-		}
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'bills_' + #dto.id")
@@ -147,4 +133,6 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	}
 
 }
+
+
 

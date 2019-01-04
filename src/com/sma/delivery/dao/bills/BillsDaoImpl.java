@@ -1,5 +1,4 @@
 package com.sma.delivery.dao.bills;
-
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -13,9 +12,8 @@ import com.sma.delivery.dao.base.BaseDaoImpl;
 
 import com.sma.delivery.domain.bills.BillsDomain;
 
-
 @Repository
-public class BillsDaoImpl extends BaseDaoImpl<BillsDomain> implements IBillsDao{
+public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao{
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -49,16 +47,6 @@ public class BillsDaoImpl extends BaseDaoImpl<BillsDomain> implements IBillsDao{
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 
-
-	
-
-	@Override
-	public List<BillsDomain> findByParams(Integer page, Integer maxPage) {
-		// TODO Auto-generated method stub
-		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BillsDomain.class).setMaxResults(maxPage).setFirstResult(page * maxPage);
-		return criteria.list();
-	}
-
 	@Override
 	public List<BillsDomain> find(String text) {
 		// TODO Auto-generated method stub
@@ -77,6 +65,5 @@ public class BillsDaoImpl extends BaseDaoImpl<BillsDomain> implements IBillsDao{
 		criteria.setMaxResults(size);
 		return criteria.list();
 	}
-	
-
 }
+
