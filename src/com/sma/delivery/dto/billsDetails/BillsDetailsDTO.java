@@ -8,17 +8,10 @@ public class BillsDetailsDTO extends BaseDTO{
 	
 	private static final long serialVersionUID = 1L;
 	
-	@XmlElement
-	public Integer getOrderDetailsId() {
-		return _orderDetailsId;
-	}
 	
-	public void setOrderDetailsId(Integer _orderDetailsId) {
-		this._orderDetailsId = _orderDetailsId;
-	}
 	
 	@XmlElement
-	public Integer getTotal() {
+	public Integer getAmount() {
 		return _amount;
 	}
 
@@ -46,7 +39,6 @@ public class BillsDetailsDTO extends BaseDTO{
 	
 	private Integer _amount;
 	private Integer _iva10;
-	private Integer _orderDetailsId;
 	private Integer _bills;
 	
 

@@ -79,7 +79,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillsDetailsDTO, Bi
 	protected BillsDetailsDomain convertDtoToDomain(BillsDetailsDTO dto) {
 		final BillsDetailsDomain domain = new BillsDetailsDomain();
 		domain.setId(dto.getId());
-		domain.set_total(dto.getTotal());
+		domain.set_total(dto.getAmount());
 		domain.set_iva(dto.getIva());
 		domain.set_bills(billsDao.getById(dto.get_bills()));
 		return domain;
