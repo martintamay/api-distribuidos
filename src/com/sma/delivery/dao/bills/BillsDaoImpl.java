@@ -6,11 +6,12 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
-
 import com.sma.delivery.domain.bills.BillsDomain;
+import com.sma.delivery.domain.user.UserDomain;
 
 @Repository
 public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao{
@@ -51,9 +52,10 @@ public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao
 	public List<BillsDomain> find(String text) {
 		// TODO Auto-generated method stub
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BillsDomain.class);
-		Criterion iva10 = Restrictions.like("_iva10", text);
-		Criterion total = Restrictions.like("_total", text);
-		criteria.add(Restrictions.or(total,iva10));
+		Criterion iva10 = Restrictions.like("iva10", text, MatchMode.START);
+		Criterion total = Restrictions.like("total", text, MatchMode.START);
+		Criterion orders = Restrictions.like("orders", text, MatchMode.START);
+		criteria.add(Restrictions.or(iva10,total,orders));
 		return criteria.list();
 		
 	}

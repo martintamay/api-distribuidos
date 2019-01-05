@@ -42,6 +42,14 @@ public class BillsResource {
 		return billsService.getAll();
 	}
 	
+	
+	@GET
+	@Path("/search/{text}")
+	@Produces({"application/xml", "application/json"})
+	public BillsResult findAll(@PathParam("text") String text) {
+		return billsService.find(text);
+	}
+	
 	@GET
 	@Path("/buscar")
 	@Produces({"application/xml", "application/json"})

@@ -5,14 +5,13 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
-import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
-import com.sma.delivery.domain.user.UserDomain;
 
 @Repository
 public class EstablishmentsDaoImpl extends BaseDaoImpl<EstablishmentsDomain> implements IEstablishmentsDao{
@@ -37,9 +36,10 @@ public class EstablishmentsDaoImpl extends BaseDaoImpl<EstablishmentsDomain> imp
 	@Override
 	public List<EstablishmentsDomain> find(String text) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EstablishmentsDomain.class);
-		Criterion firstName = Restrictions.like("_name", text);
-		Criterion description = Restrictions.like("_description", text);
-		criteria.add(Restrictions.or(firstName,description));
+		Criterion name = Restrictions.like("_name", text, MatchMode.START);
+		Criterion description = Restrictions.like("_description", text, MatchMode.START);
+		Criterion email = Restrictions.like("_email", text, MatchMode.START);
+		criteria.add(Restrictions.or(name,email,description));
 		return criteria.list();
 	
 	}
