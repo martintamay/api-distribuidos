@@ -7,12 +7,11 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
-import com.sma.delivery.dao.comments.ICommentsDao;
 import com.sma.delivery.domain.comments.CommentsDomain;
-import com.sma.delivery.domain.user.UserDomain;
 
 @Repository
 public class CommentsDaoImpl extends BaseDaoImpl<CommentsDomain> implements ICommentsDao{
@@ -63,9 +62,10 @@ public class CommentsDaoImpl extends BaseDaoImpl<CommentsDomain> implements ICom
 	public List<CommentsDomain> find(String text) {
 		// TODO Auto-generated method stub
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CommentsDomain.class);
-		Criterion title = Restrictions.like("_title", text);
-		Criterion content = Restrictions.like("_content", text);
-		criteria.add(Restrictions.or(title,content));
+		Criterion title = Restrictions.like("_title", text, MatchMode.START);
+		Criterion content = Restrictions.like("_content", text, MatchMode.START);
+		Criterion establishments = Restrictions.like("_establisment", text, MatchMode.START);
+		criteria.add(Restrictions.or(title,content,establishments));
 		return criteria.list();
 		
 	}

@@ -38,6 +38,14 @@ public class EstablishmentsResource {
 	}
 
 	@GET
+	@Path("/search/{text}")
+	@Produces({"application/xml", "application/json"})
+	public EstablishmentsResult findAll(@PathParam("text") String text) {
+		return establishmentsService.find(text);
+	}
+	
+	
+	@GET
 	@Produces({"application/xml", "application/json"})
 	public EstablishmentsResult getAll() {
 		return establishmentsService.getAll();

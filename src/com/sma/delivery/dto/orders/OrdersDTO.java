@@ -13,8 +13,19 @@ private static final long serialVersionUID = 1L;
 	private String address;
 	private String state;
 	private String contactNumber;
-	private int totalCost;
-	private int establishment_id;
+	private Integer totalCost;
+	private Integer establishment_id;
+	private Integer user_id;
+
+	
+	@XmlElement
+	public Integer getUser_id() {
+		return user_id;
+	}
+	
+	public void setUser_id(Integer user_id) {
+		this.user_id = user_id;
+	}
 	
 	@XmlElement
 	public int getOrderNumber() {
@@ -49,18 +60,18 @@ private static final long serialVersionUID = 1L;
 	}
 	
 	@XmlElement
-	public int getTotalCost() {
+	public Integer getTotalCost() {
 		return totalCost;
 	}
-	public void setTotalCost(int totalCost) {
+	public void setTotalCost(Integer totalCost) {
 		this.totalCost = totalCost;
 	}
 	
 	@XmlElement
-	public int getEstablishment_id() {
+	public Integer getEstablishment_id() {
 		return establishment_id;
 	}
-	public void setEstablishment_id(int establishment_id) {
+	public void setEstablishment_id(Integer establishment_id) {
 		this.establishment_id = establishment_id;
 	}
 	

@@ -5,39 +5,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.sma.delivery.dto.base.BaseDTO;
 @XmlRootElement(name = "bills")
 public class BillsDTO extends BaseDTO{
-	
 	private static final long serialVersionUID = 1L;
 	
 	@XmlElement
-	public Integer getOrderId() {
-		return _ordersId;
-	}
-	
-	public void setOrdersId(Integer _ordersId) {
-		this._ordersId = _ordersId;
-	}
-	
-	@XmlElement
 	public String getTotal() {
-		return _total;
+		return total;
 	}
 
-	public void setTotal(String _total) {
-		this._total = _total;
+	public void setTotal(String total) {
+		this.total = total;
 	}
+	
 	@XmlElement
 	public Integer getIva() {
-		return _iva;
+		return iva;
 	}
 
-	public void setIva(Integer _iva) {
-		this._iva = _iva;
+	public void setIva(Integer iva) {
+		this.iva = iva;
 	}
-	private String _total;
-	private Integer _iva;
-	private Integer _ordersId;
 	
+	@XmlElement
+	public Integer getOrder_id() {
+		return order_id;
+	}
 
-	
+	public void setOrder_id(Integer order_id) {
+		this.order_id = order_id;
+	}
 
+
+	private String total;
+	private Integer iva;
+	private Integer order_id;
 }
+

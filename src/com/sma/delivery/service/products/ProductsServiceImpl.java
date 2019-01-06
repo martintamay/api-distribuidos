@@ -8,6 +8,8 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.dao.products.ProductsDaoImpl;
 import com.sma.delivery.dao.products.IProductsDao;
 import com.sma.delivery.domain.products.ProductsDomain;
@@ -19,7 +21,10 @@ import com.sma.delivery.service.base.BaseServiceImpl;
 public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDomain, ProductsDaoImpl, ProductsResult> implements IProductsService {
 	@Autowired
 	private IProductsDao productsDao;
+	@Autowired
+	private IEstablishmentsDao establishmentsDao;
 
+	
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'products_' + #products.id", condition = "#dto.id!=null")
@@ -64,6 +69,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 		product.setName(domain.getName());
 		product.setDescription(domain.getDescription());
 		product.setCost((domain.getCost()));
+		product.setEstablishments(domain.getEstablisment().getId());
 		return product;
 	}
 
@@ -74,6 +80,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 		product.setName(dto.getName());
 		product.setDescription(dto.getDescription());
 		product.setCost((dto.getCost()));
+		product.setEstablisment(establishmentsDao.getById(dto.getEstablishments()));
 		return product;
 	}
 

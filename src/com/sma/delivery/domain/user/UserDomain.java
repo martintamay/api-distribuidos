@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.comments.CommentsDomain;
+import com.sma.delivery.domain.orders.OrdersDomain;
 
 @Entity
 @Table(name = "user")
@@ -51,6 +52,18 @@ public class UserDomain implements BaseDomain {
 
 	@Column(name = "creation_date")
 	private Timestamp creation_date;
+
+	@OneToMany(mappedBy = "user")
+	private Set<OrdersDomain> order = new HashSet<>();
+	
+	
+	public Set<OrdersDomain> getOrder() {
+		return order;
+	}
+
+	public void setOrder(Set<OrdersDomain> order) {
+		this.order = order;
+	}
 
 	public Integer getId() {
 		return id;

@@ -12,6 +12,15 @@ private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
 	private int cost;
+	private Integer establishments;
+
+	@XmlElement
+	public Integer getEstablishments() {
+		return establishments;
+	}
+	public void setEstablishments(Integer establishments) {
+		this.establishments = establishments;
+	}
 
 	@XmlElement
 	public String getName() {

@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
+import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 
 @Entity
 @Table(name = "products")
@@ -25,6 +27,18 @@ public class ProductsDomain implements BaseDomain {
 	
 	@Column(name = "cost", nullable = false)
 	private Integer _cost;
+
+	@ManyToOne
+	private EstablishmentsDomain establisment;
+	
+	
+	public EstablishmentsDomain getEstablisment() {
+		return establisment;
+	}
+
+	public void setEstablisment(EstablishmentsDomain establisment) {
+		this.establisment = establisment;
+	}
 
 	public Integer getId() {
 		return _id;

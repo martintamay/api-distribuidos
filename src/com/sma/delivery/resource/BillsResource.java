@@ -1,5 +1,4 @@
 package com.sma.delivery.resource;
-
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -41,6 +40,14 @@ public class BillsResource {
 	@Produces({"application/xml", "application/json"})
 	public BillsResult getAll() {
 		return billsService.getAll();
+	}
+	
+	
+	@GET
+	@Path("/search/{text}")
+	@Produces({"application/xml", "application/json"})
+	public BillsResult findAll(@PathParam("text") String text) {
+		return billsService.find(text);
 	}
 	
 	@GET
