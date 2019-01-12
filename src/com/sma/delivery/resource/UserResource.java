@@ -32,18 +32,19 @@ public class UserResource {
 	}
 
 	@GET
-	@Path("/search/{text}")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public UserResult findAll(@PathParam("text") String text) {
-		return userService.find(text);
+	public UserResult findAll(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return userService.find(text,page,size);
 	}
 
 	@GET
 	@Path("/buscar")
 	@Produces({"application/xml", "application/json"})
 	public UserResult find(@QueryParam("email") String text) {
-		return userService.find(text);
+		return userService.find(text,1,1);
 	}
+	
 	@GET
 	@Path("/{page}/{size}")
 	@Produces({"application/xml", "application/json"})

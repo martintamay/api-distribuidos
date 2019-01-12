@@ -31,10 +31,10 @@ public class ProductsResource {
 	}
 
 	@GET
-	@Path("/buscar")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public ProductsResult find(@QueryParam("text") String text) {
-		return productsService.find(text);
+	public ProductsResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return productsService.find(text, page, size);
 	}
 	@GET
 	@Path("/{page}/{size}")

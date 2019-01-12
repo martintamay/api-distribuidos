@@ -50,10 +50,12 @@ public class OrdersDetailDaoImpl extends BaseDaoImpl<OrdersDetailDomain> impleme
 	}
 
 	@Override
-	public List<OrdersDetailDomain> find(String text) {
+	public List<OrdersDetailDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDetailDomain.class);
 		Criterion comment = Restrictions.like("comment", text);
 		criteria.add(Restrictions.or(comment));
+		criteria.setFirstResult((page - 1) * size);
+		criteria.setMaxResults(size);
 		return criteria.list();
 		
 	}

@@ -34,11 +34,12 @@ public class IngredientsResource {
 	}
 
 	@GET
-	@Path("/buscar")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public IngredientsResult find(@QueryParam("text") String text) {
-		return ingredientsService.find(text);
+	public IngredientsResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return ingredientsService.find(text,page,size);
 	}
+	
 	@GET
 	@Path("/{page}/{size}")
 	@Produces({"application/xml", "application/json"})

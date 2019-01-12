@@ -107,9 +107,9 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_bil' + #text")
-	public BillsResult find(String text) {
+	public BillsResult find(String text, Integer page, Integer size) {
 		final List<BillsDTO> bills = new ArrayList<>();
-		for (BillsDomain domain : billsDao.find(text)) {
+		for (BillsDomain domain : billsDao.find(text, page, size)) {
 			final BillsDTO user = convertDomainToDto(domain);
 			bills.add(user);
 		}

@@ -100,9 +100,9 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
-	public IngredientsResult find(String text) {
+	public IngredientsResult find(String text, Integer page, Integer size) {
 		final List<IngredientsDTO> users = new ArrayList<>();
-		for (IngredientsDomain domain : ingredientsDao.find(text)) {
+		for (IngredientsDomain domain : ingredientsDao.find(text, page, size)) {
 			final IngredientsDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}

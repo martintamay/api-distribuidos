@@ -122,9 +122,9 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillsDetailsDTO, Bi
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_bid' + #text")
-	public BillsDetailsResult find(String text) {
+	public BillsDetailsResult find(String text, Integer page, Integer size) {
 		final List<BillsDetailsDTO> bills = new ArrayList<>();
-		for (BillsDetailsDomain domain : billsDetailsDao.find(text)) {
+		for (BillsDetailsDomain domain : billsDetailsDao.find(text, page, size)) {
 			final BillsDetailsDTO user = convertDomainToDto(domain);
 			bills.add(user);
 		}

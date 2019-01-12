@@ -24,10 +24,10 @@ public class EstablishmentsResource {
 	private IEstablishmentsService establishmentsService;
 
 	@GET
-	@Path("/buscar")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsResult find(@QueryParam("text") String text) {
-		return establishmentsService.find(text);
+	public EstablishmentsResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return establishmentsService.find(text,page,size);
 	}
 	
 	@GET
@@ -37,14 +37,6 @@ public class EstablishmentsResource {
 		return establishmentsService.getById(establishmentsId);
 	}
 
-	@GET
-	@Path("/search/{text}")
-	@Produces({"application/xml", "application/json"})
-	public EstablishmentsResult findAll(@PathParam("text") String text) {
-		return establishmentsService.find(text);
-	}
-	
-	
 	@GET
 	@Produces({"application/xml", "application/json"})
 	public EstablishmentsResult getAll() {

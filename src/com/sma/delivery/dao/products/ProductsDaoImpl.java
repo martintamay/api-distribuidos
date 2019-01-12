@@ -48,10 +48,12 @@ public class ProductsDaoImpl extends BaseDaoImpl<ProductsDomain> implements IPro
 	}
 	
 	@Override
-	public List<ProductsDomain> find(String text) {
+	public List<ProductsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ProductsDomain.class);
 		Criterion Name = Restrictions.like("_name", text);
 		criteria.add(Restrictions.or(Name));
+		criteria.setFirstResult((page - 1) * size);
+		criteria.setMaxResults(size);
 		return criteria.list();
 	}
 

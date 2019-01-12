@@ -18,8 +18,7 @@ public interface IBaseDao<DOMAIN extends BaseDomain> {
 	
 	public void delete(DOMAIN domain);
 
-	public List<DOMAIN> find(String text);
-	
+	public List<DOMAIN> find(String text,Integer page,Integer size);	
 
 
 

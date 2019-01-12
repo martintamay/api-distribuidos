@@ -113,9 +113,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_use' + #text")
-	public UserResult find(String text) {
+	public UserResult find(String text,Integer page,Integer size) {
 		final List<UserDTO> users = new ArrayList<>();
-		for (UserDomain domain : userDao.find(text)) {
+		for (UserDomain domain : userDao.find(text,page,size)) {
 			final UserDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
@@ -125,6 +125,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 		return userResult;
 
 	}
+
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_use' + #page + #size")

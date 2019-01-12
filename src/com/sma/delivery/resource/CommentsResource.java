@@ -44,17 +44,10 @@ public class CommentsResource {
 	}
 	
 	@GET
-	@Path("/search/{text}")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public CommentsResult findAll(@PathParam("text") String text) {
-		return commentsService.find(text);
-	}
-	
-	@GET
-	@Path("/buscar")
-	@Produces({"application/xml", "application/json"})
-	public CommentsResult find(@QueryParam("text") String text) {
-		return commentsService.find(text);
+	public CommentsResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return commentsService.find(text,page,size);
 	}
 
 	@POST

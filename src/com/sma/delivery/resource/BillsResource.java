@@ -44,17 +44,10 @@ public class BillsResource {
 	
 	
 	@GET
-	@Path("/search/{text}")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public BillsResult findAll(@PathParam("text") String text) {
-		return billsService.find(text);
-	}
-	
-	@GET
-	@Path("/buscar")
-	@Produces({"application/xml", "application/json"})
-	public BillsResult find(@QueryParam("text") String text) {
-		return billsService.find(text);
+	public BillsResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return billsService.find(text, page, size);
 	}
 
 	@POST

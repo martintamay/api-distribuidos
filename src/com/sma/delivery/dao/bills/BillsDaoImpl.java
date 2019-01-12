@@ -49,13 +49,14 @@ public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao
 	}
 
 	@Override
-	public List<BillsDomain> find(String text) {
+	public List<BillsDomain> find(String text,Integer page, Integer size) {
 		// TODO Auto-generated method stub
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BillsDomain.class);
-		Criterion iva10 = Restrictions.like("iva10", text, MatchMode.START);
-		Criterion total = Restrictions.like("total", text, MatchMode.START);
-		Criterion orders = Restrictions.like("orders", text, MatchMode.START);
-		criteria.add(Restrictions.or(iva10,total,orders));
+		Criterion iva10 = Restrictions.like("_iva10", text);
+		Criterion total = Restrictions.like("_total", text);
+		criteria.add(Restrictions.or(total,iva10));
+		criteria.setFirstResult((page - 1) * size); 
+		criteria.setMaxResults(size);
 		return criteria.list();
 		
 	}

@@ -126,9 +126,9 @@ public class CommentsServiceImpl extends BaseServiceImpl<CommentsDTO, CommentsDo
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_com' + #text")
-	public CommentsResult find(String text) {
+	public CommentsResult find(String text, Integer page, Integer size) {
 		final List<CommentsDTO> comments = new ArrayList<>();
-		for (CommentsDomain domain : commentsDao.find(text)) {
+		for (CommentsDomain domain : commentsDao.find(text,page, size)) {
 			final CommentsDTO user = convertDomainToDto(domain);
 			comments.add(user);
 		}

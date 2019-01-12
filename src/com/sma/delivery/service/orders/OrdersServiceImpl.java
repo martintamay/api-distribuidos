@@ -117,9 +117,9 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrdersDTO, OrdersDomain, 
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_ord' + #text")
-	public OrdersResult find(String text) {
+	public OrdersResult find(String text, Integer page, Integer size) {
 		final List<OrdersDTO> orders = new ArrayList<>();
-		for (OrdersDomain domain : ordersDao.find(text)) {
+		for (OrdersDomain domain : ordersDao.find(text, page, size)) {
 			final OrdersDTO order = convertDomainToDto(domain);
 			orders.add(order);
 		}

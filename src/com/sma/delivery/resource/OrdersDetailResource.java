@@ -31,11 +31,12 @@ public class OrdersDetailResource {
 	}
 	
 	@GET
-	@Path("/buscar")
+	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public OrdersDetailResult find(@QueryParam("text") String text) {
-		return ordersDetailService.find(text);
+	public OrdersDetailResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return ordersDetailService.find(text, page, size);
 	}
+
 
 	@GET
 	@Produces({"application/xml", "application/json"})

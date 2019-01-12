@@ -19,5 +19,5 @@ public interface IBaseService<DTO extends BaseDTO, DOMAIN extends BaseDomain, DA
 
 	public DTO update(DTO dto);
 
-	public R find(String text);
+	public R find(String text,Integer page,Integer size);
 }

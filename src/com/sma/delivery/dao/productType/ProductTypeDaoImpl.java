@@ -33,15 +33,17 @@ public class ProductTypeDaoImpl extends BaseDaoImpl<ProductTypeDomain> implement
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 	@Override
-	public List<ProductTypeDomain> find(String text) {
+	public List<ProductTypeDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ProductTypeDomain.class);
 		Criterion description = Restrictions.like("description", text, MatchMode.START);
 		Criterion id = Restrictions.like("id", text, MatchMode.START);
 		criteria.add(Restrictions.or(id,description));
+		criteria.setFirstResult((page - 1) * size);
+		criteria.setMaxResults(size);
 		return criteria.list();
 	
 	}
-
+	
 	@Override
 	public ProductTypeDomain getById(Integer domainId) {
 		return (ProductTypeDomain) sessionFactory.getCurrentSession().get(ProductTypeDomain.class, domainId);

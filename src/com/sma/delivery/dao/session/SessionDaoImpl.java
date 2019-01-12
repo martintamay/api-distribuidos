@@ -48,7 +48,7 @@ public class SessionDaoImpl extends BaseDaoImpl<SessionDomain> implements ISessi
 	}
 
 	@Override
-	public List<SessionDomain> find(String text) {
+	public List<SessionDomain> find(String text,Integer page, Integer size) {
 		// TODO Auto-generated method stub
 		return null;
 	}

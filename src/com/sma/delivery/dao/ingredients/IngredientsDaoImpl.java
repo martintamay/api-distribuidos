@@ -35,15 +35,17 @@ public class IngredientsDaoImpl extends BaseDaoImpl<IngredientsDomain> implement
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 	@Override
-	public List<IngredientsDomain> find(String text) {
+	public List<IngredientsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(IngredientsDomain.class);
 		Criterion description = Restrictions.like("description", text, MatchMode.START);
 		Criterion id = Restrictions.like("id", text, MatchMode.START);
 		criteria.add(Restrictions.or(id,description));
+		criteria.setFirstResult((page - 1) * size);
+		criteria.setMaxResults(size);
 		return criteria.list();
 	
 	}
-
+	
 	@Override
 	public IngredientsDomain getById(Integer domainId) {
 		return (IngredientsDomain) sessionFactory.getCurrentSession().get(IngredientsDomain.class, domainId);

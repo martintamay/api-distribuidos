@@ -48,10 +48,12 @@ public class OrdersDaoImpl extends BaseDaoImpl<OrdersDomain> implements IOrdersD
 	}
 
 	@Override
-	public List<OrdersDomain> find(String text) {
+	public List<OrdersDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDomain.class);
 		Criterion address = Restrictions.like("address", text);
 		criteria.add(Restrictions.or(address));
+		criteria.setFirstResult((page - 1) * size);
+		criteria.setMaxResults(size);
 		return criteria.list();
 	}
 	@Override

@@ -53,7 +53,7 @@ public class ApiClientDaoImpl extends BaseDaoImpl<ApiClientDomain> implements IA
 	}
 
 	@Override
-	public List<ApiClientDomain> find(String text) {
+	public List<ApiClientDomain> find(String text,Integer page, Integer size) {
 		// TODO Auto-generated method stub
 		return null;
 	}

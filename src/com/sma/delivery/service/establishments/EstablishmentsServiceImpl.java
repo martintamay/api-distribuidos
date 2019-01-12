@@ -106,9 +106,9 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentsDTO
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_est' + #text")
-	public EstablishmentsResult find(String text) {
+	public EstablishmentsResult find(String text, Integer page, Integer size) {
 		final List<EstablishmentsDTO> establishments = new ArrayList<>();
-		for (EstablishmentsDomain domain : establishmentsDao.find(text)) {
+		for (EstablishmentsDomain domain : establishmentsDao.find(text, page, size)) {
 			final EstablishmentsDTO establishment = convertDomainToDto(domain);
 			establishments.add(establishment);
 		}

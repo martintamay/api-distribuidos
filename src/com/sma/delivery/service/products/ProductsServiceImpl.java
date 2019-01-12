@@ -108,9 +108,9 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
-	public ProductsResult find(String text) {
+	public ProductsResult find(String text, Integer page, Integer size) {
 		final List<ProductsDTO> users = new ArrayList<>();
-		for (ProductsDomain domain : productsDao.find(text)) {
+		for (ProductsDomain domain : productsDao.find(text, page, size)) {
 			final ProductsDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}

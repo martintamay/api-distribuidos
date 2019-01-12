@@ -34,12 +34,13 @@ public class EstablishmentsDaoImpl extends BaseDaoImpl<EstablishmentsDomain> imp
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 	@Override
-	public List<EstablishmentsDomain> find(String text) {
+	public List<EstablishmentsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EstablishmentsDomain.class);
-		Criterion name = Restrictions.like("_name", text, MatchMode.START);
-		Criterion description = Restrictions.like("_description", text, MatchMode.START);
-		Criterion email = Restrictions.like("_email", text, MatchMode.START);
-		criteria.add(Restrictions.or(name,email,description));
+		Criterion firstName = Restrictions.like("_name", text);
+		Criterion description = Restrictions.like("_description", text);
+		criteria.add(Restrictions.or(firstName,description));
+		criteria.setFirstResult((page - 1) * size);
+		criteria.setMaxResults(size);
 		return criteria.list();
 	
 	}
