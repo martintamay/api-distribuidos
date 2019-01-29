@@ -1,11 +1,12 @@
 package com.sma.delivery.dto.promotions;
+import java.sql.Time;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.apache.tomcat.jni.Time;
+
 
 import com.sma.delivery.dto.base.BaseDTO;
-import com.sun.jmx.snmp.Timestamp;
 @XmlRootElement(name = "promotions")
 public class PromotionsDTO extends BaseDTO{
 
@@ -14,7 +15,7 @@ private static final long serialVersionUID = 1L;
 
 	private String name;
 	private String available;
-	private Timestamp end_date;
+	private Time end_date;
 
 	
 	@XmlElement
@@ -33,10 +34,10 @@ private static final long serialVersionUID = 1L;
 		this.available = available;
 	}
 	@XmlElement
-	public Timestamp getEnd_date() {
+	public Time getEnd_date() {
 		return end_date;
 	}
-	public void setEnd_date(Timestamp end_date) {
+	public void setEnd_date(Time end_date) {
 		this.end_date = end_date;
 	}
 	
