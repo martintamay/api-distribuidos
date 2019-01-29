@@ -1,5 +1,6 @@
-package com.sma.delivery.domain.products;
+package com.sma.delivery.domain.promotions;
 
+import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,14 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
+
 import com.sma.delivery.domain.base.BaseDomain;
-import com.sma.delivery.domain.comments.CommentsDomain;
-import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
 
 @Entity
-@Table(name = "products")
-public class ProductsDomain implements BaseDomain {
+@Table(name = "promotions")
+public class PromotionsDomain implements BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
@@ -28,21 +29,18 @@ public class ProductsDomain implements BaseDomain {
 	@Column(name = "name", nullable = false, unique = true)
 	private String _name;
 	
-	@Column(name = "description", nullable = true)
-	private String _description;
+	@Column(name = "available", nullable = true)
+	private String _available;
 	
-	@Column(name = "cost", nullable = false)
-	private Integer _cost;
+	
 
-	@ManyToOne
-	private EstablishmentsDomain establisment;
+	@Column(name = "end_date", nullable = false)
+	private Time _end_date;
+
 	
 	
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "promotion")
 	private Set<OrdersDetailDomain> orderDetail = new HashSet<>();
-	
-	
-	
 	
 	
 	public Set<OrdersDetailDomain> getOrderDetail() {
@@ -51,14 +49,6 @@ public class ProductsDomain implements BaseDomain {
 
 	public void setOrderDetail(Set<OrdersDetailDomain> orderDetail) {
 		this.orderDetail = orderDetail;
-	}
-
-	public EstablishmentsDomain getEstablisment() {
-		return establisment;
-	}
-
-	public void setEstablisment(EstablishmentsDomain establisment) {
-		this.establisment = establisment;
 	}
 
 	public Integer getId() {
@@ -77,20 +67,21 @@ public class ProductsDomain implements BaseDomain {
 		_name = name;
 	}
 
-	public String getDescription() {
-		return _description;
+	public String get_available() {
+		return _available;
 	}
 
-	public void setDescription(String description) {
-		_description = description;
+	public void set_available(String _available) {
+		this._available = _available;
+	}
+
+	public Time get_end_date() {
+		return _end_date;
+	}
+
+	public void set_end_date(Time _end_date) {
+		this._end_date = _end_date;
 	}
 	
-	public Integer getCost() {
-		return _cost;
-	}
-
-	public void setCost(Integer cost) {
-		_cost = cost;
-	}
 
 }

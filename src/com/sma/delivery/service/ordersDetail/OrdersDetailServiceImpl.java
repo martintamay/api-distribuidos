@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.ordersDetail.OrdersDetailDaoImpl;
 import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.dao.ordersDetail.IOrdersDetailDao;
+import com.sma.delivery.dao.packaged.IPackageDao;
+import com.sma.delivery.dao.products.IProductsDao;
+import com.sma.delivery.dao.promotions.IPromotionsDao;
 import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
 import com.sma.delivery.dto.orders.OrdersDTO;
 import com.sma.delivery.dto.ordersDetail.OrdersDetailDTO;
@@ -25,7 +28,15 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrdersDetailDTO, Or
 	
 	@Autowired 
 	private IOrdersDetailDao ordersDetailDao;
-
+	@Autowired 
+	private IPromotionsDao promotionsDao;
+	@Autowired 
+	private IPackageDao packageDao;
+	@Autowired 
+	private IProductsDao productsDao;
+	
+	
+	
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'ordersDetail_' + #ordersDetail.id", condition = "#dto.id!=null")
@@ -66,13 +77,15 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrdersDetailDTO, Or
 	protected OrdersDetailDTO convertDomainToDto(OrdersDetailDomain domain) {
 		final OrdersDetailDTO dto = new OrdersDetailDTO();
 		dto.setId(domain.getId());
-		dto.setId(domain.getId());
 		dto.setCost(domain.getCost());
 		dto.setCuantity(domain.getCuantity());
 		dto.setComment(domain.getComment());
-		/*dto.setOrdersId(domain.getOrder().getId());*/
-		dto.setPackageId(domain.getPackageId());
-		dto.setPromotionsId(domain.getPromotionsId());
+		dto.setPackageId(domain.getPackages().getId());
+		dto.setProducts(domain.getProduct().getId());
+		dto.setOrders(domain.getOrders().getId());
+		dto.setPromotion(domain.getPromotion().getId());
+
+		
 		return dto;
 	}
 
@@ -83,9 +96,10 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrdersDetailDTO, Or
 		domain.setCost(dto.getCost());
 		domain.setCuantity(dto.getCuantity());
 		domain.setComment(dto.getComment());
-		/*domain.setOrder(ordersDao.getById(dto.getOrdersId()));*/
-		domain.setPackageId(dto.getPackageId());
-		domain.setPromotionsId(dto.getPromotionsId());
+		domain.setPackages(packageDao.getById(dto.getPackage()));
+		domain.setProduct(productsDao.getById(dto.getProducts()));
+		domain.setOrders(ordersDao.getById(dto.getOrders()));
+		domain.setPromotion(promotionsDao.getById(dto.getPromotion()));
 		return domain;
 	}
 	

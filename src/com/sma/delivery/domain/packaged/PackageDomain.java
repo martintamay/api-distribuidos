@@ -1,4 +1,4 @@
-package com.sma.delivery.domain.products;
+package com.sma.delivery.domain.packaged;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,8 +18,8 @@ import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
 
 @Entity
-@Table(name = "products")
-public class ProductsDomain implements BaseDomain {
+@Table(name = "package")
+public class PackageDomain implements BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
@@ -28,37 +28,21 @@ public class ProductsDomain implements BaseDomain {
 	@Column(name = "name", nullable = false, unique = true)
 	private String _name;
 	
-	@Column(name = "description", nullable = true)
-	private String _description;
-	
 	@Column(name = "cost", nullable = false)
 	private Integer _cost;
 
-	@ManyToOne
-	private EstablishmentsDomain establisment;
 	
 	
-	@OneToMany(mappedBy = "product")
-	private Set<OrdersDetailDomain> orderDetail = new HashSet<>();
+	@OneToMany(mappedBy = "packages")
+	private Set<OrdersDetailDomain> _orderDetail = new HashSet<>();
 	
 	
-	
-	
-	
-	public Set<OrdersDetailDomain> getOrderDetail() {
-		return orderDetail;
+	public Set<OrdersDetailDomain> get_orderDetail() {
+		return _orderDetail;
 	}
 
-	public void setOrderDetail(Set<OrdersDetailDomain> orderDetail) {
-		this.orderDetail = orderDetail;
-	}
-
-	public EstablishmentsDomain getEstablisment() {
-		return establisment;
-	}
-
-	public void setEstablisment(EstablishmentsDomain establisment) {
-		this.establisment = establisment;
+	public void set_orderDetail(Set<OrdersDetailDomain> _orderDetail) {
+		this._orderDetail = _orderDetail;
 	}
 
 	public Integer getId() {
@@ -75,14 +59,6 @@ public class ProductsDomain implements BaseDomain {
 
 	public void setName(String name) {
 		_name = name;
-	}
-
-	public String getDescription() {
-		return _description;
-	}
-
-	public void setDescription(String description) {
-		_description = description;
 	}
 	
 	public Integer getCost() {

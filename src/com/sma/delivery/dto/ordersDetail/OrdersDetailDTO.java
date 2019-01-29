@@ -12,10 +12,22 @@ private static final long serialVersionUID = 1L;
 	private int cost;
 	private int cuantity;
 	private String comment;
-	private int ordersId;
-	private int packageId;
-	private int promotionsId;
-	
+	private Integer orders;
+	private Integer packages;
+	private Integer promotion;
+	private Integer products;
+	public Integer getOrders() {
+		return orders;
+	}
+	public void setOrders(Integer orders) {
+		this.orders = orders;
+	}
+	public Integer getPromotion() {
+		return promotion;
+	}
+	public void setPromotion(Integer promotion) {
+		this.promotion = promotion;
+	}
 	@XmlElement
 	public int getCost() {
 		return cost;
@@ -40,31 +52,22 @@ private static final long serialVersionUID = 1L;
 		this.comment = comment;
 	}
 	
-	@XmlElement
-	public int getOrdersId() {
-		return ordersId;
-	}
-	public void setOrdersId(int ordersId) {
-		this.ordersId = ordersId;
-	}
 	
 	@XmlElement
-	public int getPackageId() {
-		return packageId;
+	public int getPackage() {
+		return packages;
 	}
-	public void setPackageId(int packageId) {
-		this.packageId = packageId;
+	public void setPackageId(Integer packages) {
+		this.packages = packages;
 	}
 	
 	@XmlElement
-	public int getPromotionsId() {
-		return promotionsId;
+	public Integer getProducts() {
+		return products;
 	}
-	public void setPromotionsId(int promotionsId) {
-		this.promotionsId = promotionsId;
+	public void setProducts(Integer products) {
+		this.products = products;
 	}
-	
-	
 	
 	
 	

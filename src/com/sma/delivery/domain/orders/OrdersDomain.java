@@ -53,11 +53,23 @@ public class OrdersDomain implements BaseDomain {
 
 	
 
-	@OneToMany(mappedBy = "order")
-	private Set<OrdersDetailDomain> ordersDetail = new HashSet<>();
-	
 	@OneToMany(mappedBy = "orders")
 	private Set<BillsDomain> bills = new HashSet<>();
+	
+	
+	@OneToMany(mappedBy = "orders")
+	private Set<OrdersDetailDomain> ordersDetail = new HashSet<>();
+	
+	public Set<OrdersDetailDomain> getOrdersDetail() {
+		return ordersDetail;
+	}
+
+
+	public void setOrdersDetail(Set<OrdersDetailDomain> ordersDetail) {
+		this.ordersDetail = ordersDetail;
+	}
+
+
 
 	public Set<BillsDomain> getBills() {
 		return bills;
@@ -136,14 +148,6 @@ public class OrdersDomain implements BaseDomain {
 	public void setEstablishment(EstablishmentsDomain establishment) {
 		this.establishment = establishment;
 	}
-
-	//public Set<BillsDomain> getBills() {
-	//	return bills;
-	//}
-
-	//public void setBills(Set<BillsDomain> bills) {
-	//	this.bills = bills;
-	//}
 	
 	
 	public UserDomain getUser() {
@@ -154,14 +158,6 @@ public class OrdersDomain implements BaseDomain {
 	public void setUser(UserDomain user) {
 		this.user = user;
 	}
-	/*public Set<OrdersDetailDomain> getOrdersDetail() {
-		return ordersDetail;
-	}
-
-
-	public void setOrdersDetail(Set<OrdersDetailDomain> ordersDetail) {
-		this.ordersDetail = ordersDetail;
-	}*/
 
 
 

@@ -15,6 +15,9 @@ import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.billsDetails.BillsDetailsDomain;
 import com.sma.delivery.domain.comments.CommentsDomain;
 import com.sma.delivery.domain.orders.OrdersDomain;
+import com.sma.delivery.domain.packaged.PackageDomain;
+import com.sma.delivery.domain.products.ProductsDomain;
+import com.sma.delivery.domain.promotions.PromotionsDomain;
 @Entity
 @Table(name = "orders_detail")
 public class OrdersDetailDomain implements BaseDomain {
@@ -33,16 +36,42 @@ public class OrdersDetailDomain implements BaseDomain {
 	@Column(name = "comment")
 	private String comment;
 
-	@Column(name = "package_id")
-	private int packageId;
-	
-	@Column(name = "promotions_id")
-	private int promotionsId;
 	
 	@ManyToOne
-	private OrdersDomain order;
-
+	private OrdersDomain orders;
+	@ManyToOne
+	private PromotionsDomain promotion;
 	
+	@ManyToOne
+	private PackageDomain packages;
+	
+	
+	@ManyToOne
+	private ProductsDomain product;
+	
+	public ProductsDomain getProduct() {
+		return product;
+	}
+
+	public void setProduct(ProductsDomain product) {
+		this.product = product;
+	}
+
+	public PromotionsDomain getPromotion() {
+		return promotion;
+	}
+
+	public void setPromotion(PromotionsDomain promotion) {
+		this.promotion = promotion;
+	}
+
+	public PackageDomain getPackages() {
+		return packages;
+	}
+
+	public void setPackages(PackageDomain packages) {
+		this.packages = packages;
+	}
 
 	public Integer getId() {
 		return id;
@@ -76,28 +105,13 @@ public class OrdersDetailDomain implements BaseDomain {
 		this.comment = comment;
 	}
 
-	public int getPackageId() {
-		return packageId;
+
+	public OrdersDomain getOrders() {
+		return orders;
 	}
 
-	public void setPackageId(int packageId) {
-		this.packageId = packageId;
-	}
-
-	public int getPromotionsId() {
-		return promotionsId;
-	}
-
-	public void setPromotionsId(int promotionsId) {
-		this.promotionsId = promotionsId;
-	}
-
-	public OrdersDomain getOrder() {
-		return order;
-	}
-
-	public void setOrder(OrdersDomain order) {
-		this.order = order;
+	public void setOrders(OrdersDomain orders) {
+		this.orders = orders;
 	}
 
 
