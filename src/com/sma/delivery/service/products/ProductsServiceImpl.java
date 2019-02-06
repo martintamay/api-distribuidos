@@ -23,7 +23,8 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	private IProductsDao productsDao;
 	@Autowired
 	private IEstablishmentsDao establishmentsDao;
-
+	
+	private int a, b =0;
 	
 	@Override
 	@Transactional
@@ -110,6 +111,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
 	public ProductsResult find(String text, Integer page, Integer size) {
 		final List<ProductsDTO> users = new ArrayList<>();
+		
 		for (ProductsDomain domain : productsDao.find(text, page, size)) {
 			final ProductsDTO user = convertDomainToDto(domain);
 			users.add(user);
@@ -125,6 +127,22 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
 	public ProductsResult getAll(Integer page,Integer size) {
 		final List<ProductsDTO> users = new ArrayList<>();
+		
+		
+		if(b == 0) {
+			a=productsDao.findAll(1, 0).size();
+			System.out.println("a es "+a);
+			//getCacheManager().getCache("delivery-cache").put("products_" + page, size);
+		}else {
+			if(b > a) {
+				System.out.println("si b es mayor"+b);
+				a= b;
+				getCacheManager().getCache("delivery-cache").evict("products_" + page+ size);
+				System.out.println("ahora a es "+ a);
+			}
+		}
+		
+		
 		for (ProductsDomain domain : productsDao.findAll(page, size)) {
 			final ProductsDTO user = convertDomainToDto(domain);
 			users.add(user);
