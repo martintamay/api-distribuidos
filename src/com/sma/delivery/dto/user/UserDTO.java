@@ -1,6 +1,5 @@
 package com.sma.delivery.dto.user;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlElement;

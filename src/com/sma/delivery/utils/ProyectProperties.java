@@ -1,41 +1,36 @@
 package com.sma.delivery.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProyectProperties {
+	private static final Logger LOGGER = Logger.getLogger( ProyectProperties.class.getName() );
 	private static Properties props = null;
-	static {
-		setProperties();
+
+	
+	public ProyectProperties () {
+		if (props==null) {
+			setProperties();
+		}
 	}
 
-	public static String getProperty(String propertyName) {
+	public String getProperty(String propertyName) {
 		return props.getProperty(propertyName);
 	}
-
-	private static void setProperties() {
+	
+	private void setProperties() {
 		props = new Properties();
-		InputStream input = null;
-
-		try {
-			System.out.println("Exists :" + new File("WebContent/WEB-INF/config.properties").exists());
-			input = new FileInputStream("WebContent/WEB-INF/config.properties");
-
+		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("/mailer.properties")){
 			// load a properties file
-			props.load(input);
+			props.load(inputStream);
 		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			LOGGER.log(Level.SEVERE, ex.toString(), ex);
+		} catch (NullPointerException e) {
+			LOGGER.log(Level.SEVERE, e.toString(), e); 	
+			throw new NullPointerException();
 		}
 	}
 

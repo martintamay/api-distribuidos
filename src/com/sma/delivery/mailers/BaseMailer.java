@@ -1,53 +1,77 @@
 package com.sma.delivery.mailers;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.nio.file.NoSuchFileException;
 import java.util.Properties;
-import com.sma.delivery.utils.ProyectProperties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+
+import com.sma.delivery.utils.ProyectProperties;
+
 public class BaseMailer { 
-	static Properties mailServerProperties;
-	static Session getMailSession;
-	static MimeMessage generateMailMessage;
+	private static final Logger LOGGER = Logger.getLogger( BaseMailer.class.getName() );
+	protected static ProyectProperties props = new ProyectProperties();
 	
+	
+	/** Main para enviar un correo de prueba usado para debug
+	 */
 	public static void main(String args[]) {
 		String[] recipients = { "martinhtamaym@hotmail.com" };
+		new BaseMailer().send("si se fue", "Hola mundo, eureka, funciona", recipients);
+	}
+	
+	protected boolean send(String subject, String message, String[] recipients) {
 		try {
-			send("Hola mundo, eureka, funciona carajo", "si se fue", recipients);
-		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return send(subject, message, recipients, "text/html");
+		} catch (URISyntaxException e) {
+			Exception ex = new NoSuchFileException("cacerts in classes");
+			LOGGER.log(Level.SEVERE, ex.toString(), ex);
+			return false;
 		}
 	}
 
-	public static void send(String message, String subject, String recipients[]) throws MessagingException {
-
-		System.setProperty("javax.net.ssl.keyStore", ProyectProperties.getProperty("email.trustStore.location"));
-		System.setProperty("javax.net.ssl.trustStore", ProyectProperties.getProperty("email.trustStore.location"));
-		System.setProperty("javax.net.ssl.keyStorePassword", ProyectProperties.getProperty("email.trustStore.password"));
-
-		generateAndSendEmail(message, subject, recipients);
-		System.out.println("\n\n ===> Your Java Program has just sent an Email successfully. Check your email..");
+	protected boolean send(String subject, String message, String[] recipients, String contentType) throws URISyntaxException {
+		// se le dice a java que use un keystore en específico para determinar los ssl seguros (se configura en el .properties)
+		
+		String absolutePath = this.getClass().getClassLoader().getResource("/cacerts").toURI().getPath();
+		System.setProperty("javax.net.ssl.keyStore", absolutePath);
+		System.setProperty("javax.net.ssl.trustStore", absolutePath);
+		System.setProperty("javax.net.ssl.keyStorePassword", props.getProperty("email.trustStore.password"));
+		// se envía el correo
+		try {
+			generateAndSendEmail(subject, message, recipients, contentType);
+		} catch (MessagingException e) {
+			LOGGER.log(Level.SEVERE, e.toString(), e);
+			return false;
+		}
+		return true;
 	}
 
-	public static void generateAndSendEmail(String emailBody, String subject, String recipients[]) throws MessagingException {
-
-		// Step1
-		System.out.println("\n 1st ===> setup Mail Server Properties..");
+	protected void generateAndSendEmail(String subject, String emailBody, String recipients[], String contentType) throws MessagingException {
+		MimeMessage generateMailMessage;
+		Properties mailServerProperties;
+		Session getMailSession;
+		// se configuran los properties para el correo
 		mailServerProperties = System.getProperties();
 
-		mailServerProperties.put("mail.smtp.port", ProyectProperties.getProperty("email.server.port"));
-		mailServerProperties.put("mail.smtp.auth", ProyectProperties.getProperty("email.server.smtpAuth"));
-		mailServerProperties.put("mail.smtp.starttls.enable", ProyectProperties.getProperty("email.server.enablettls"));
-		System.out.println("Mail Server Properties have been setup successfully..");
+		mailServerProperties.put("mail.smtp.port", props.getProperty("email.server.port"));
+		mailServerProperties.put("mail.smtp.auth", props.getProperty("email.server.smtpAuth"));
+		mailServerProperties.put("mail.smtp.starttls.enable", props.getProperty("email.server.enablettls"));
 
-		// Step2
-		System.out.println("\n\n 2nd ===> get Mail Session..");
+		// Se configura la sesión con la cuál se enviará el correo
 		// Se cargan los properties del correo
 		getMailSession = Session.getDefaultInstance(mailServerProperties, null);
 		generateMailMessage = new MimeMessage(getMailSession);
@@ -57,20 +81,16 @@ public class BaseMailer {
 		}
 		// Se setea el mensaje y origen del correo
 		generateMailMessage.setSubject(subject);
-		generateMailMessage.setFrom(new InternetAddress(ProyectProperties.getProperty("email.address")));
-		generateMailMessage.setContent(emailBody, "text/html");
-		System.out.println("Mail Session has been created successfully..");
+		generateMailMessage.setFrom(new InternetAddress(props.getProperty("email.address")));
+		generateMailMessage.setContent(emailBody, contentType);
 
-		// Step3
-		System.out.println("\n\n 3rd ===> Get Session and Send mail");
+		// se obtiene la sesión y se envía el correo
 		final Transport transport = getMailSession.getTransport("smtp");
 
-		// Enter your correct gmail UserID and Password
-		// if you have 2FA enabled then provide App Specific Password
 		transport.connect(
-				ProyectProperties.getProperty("email.server.host"), 
-				ProyectProperties.getProperty("email.address"),
-				ProyectProperties.getProperty("email.password")
+				props.getProperty("email.server.host"), 
+				props.getProperty("email.address"),
+				props.getProperty("email.password")
 			);
 		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 		transport.close();
