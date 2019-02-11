@@ -10,16 +10,16 @@ import com.sma.delivery.domain.roles.ApiClientDomain;
 @Service
 public class ApiClientServiceImpl implements IApiClientService {
 	@Autowired
-	private IApiClientDao _userDao;
+	private IApiClientDao userDao;
 
 	@Transactional
 	public ApiClientDomain getByToken(String token) {
-		return _userDao.getByToken(token);
+		return userDao.getByToken(token);
 	}
 	
 	@Override
 	@Transactional
 	public ApiClientDomain getById(Integer id) {
-		return _userDao.getById(id);
+		return userDao.getById(id);
 	}
 }

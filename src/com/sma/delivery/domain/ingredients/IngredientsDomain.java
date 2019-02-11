@@ -1,24 +1,17 @@
 package com.sma.delivery.domain.ingredients;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
-import com.sma.delivery.domain.user.UserDomain;
-import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 
 
 
 @Entity
-@Table(name = "ingredients")
+@Table(name = "Ingredients")
 public class IngredientsDomain implements BaseDomain {
 
 	@Id

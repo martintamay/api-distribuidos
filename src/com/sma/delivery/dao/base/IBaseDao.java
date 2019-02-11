@@ -4,21 +4,21 @@ import java.util.List;
 
 import com.sma.delivery.domain.base.BaseDomain;
 
-public interface IBaseDao<DOMAIN extends BaseDomain> {
+public interface IBaseDao<D extends BaseDomain> {
 
-	public DOMAIN save(DOMAIN domain);
+	public D save(D domain);
 
-	public DOMAIN getById(Integer domainId);
+	public D getById(Integer domainId);
 
-	public List<DOMAIN> findAll();
+	public List<D> findAll();
 
-	public List<DOMAIN> findAll(Integer page,Integer size);
+	public List<D> findAll(Integer page,Integer size);
 	
-	public DOMAIN update(DOMAIN domain);
+	public D update(D domain);
 	
-	public void delete(DOMAIN domain);
+	public void delete(D domain);
 
-	public List<DOMAIN> find(String text,Integer page,Integer size);	
+	public List<D> find(String text,Integer page,Integer size);	
 
 
 

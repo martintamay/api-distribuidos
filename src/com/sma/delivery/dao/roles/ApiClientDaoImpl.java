@@ -1,5 +1,6 @@
 package com.sma.delivery.dao.roles;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -34,7 +35,7 @@ public class ApiClientDaoImpl extends BaseDaoImpl<ApiClientDomain> implements IA
 	public ApiClientDomain getByToken(String token) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(ApiClientDomain.class);
-		criteria.add(Restrictions.ilike("_token", token));
+		criteria.add(Restrictions.ilike("token", token));
 
 		return (ApiClientDomain) criteria.uniqueResult();
 	}
@@ -42,31 +43,27 @@ public class ApiClientDaoImpl extends BaseDaoImpl<ApiClientDomain> implements IA
 	
 	@Override
 	public ApiClientDomain update(ApiClientDomain domain) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(ApiClientDomain domain) {
-		// TODO Auto-generated method stub
-		
+	public void delete(ApiClientDomain domain) {		
+		// without use
 	}
 
 	@Override
 	public List<ApiClientDomain> find(String text,Integer page, Integer size) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public List<ApiClientDomain> findAll(Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ApiClientDomain.class);
-		return criteria.list();
+		return safeConversion(criteria.list(), ApiClientDomain.class);
 	}
 
 	@Override
 	public List<ApiClientDomain> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
 	}
 }

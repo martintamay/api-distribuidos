@@ -13,37 +13,31 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
-import com.sma.delivery.domain.comments.CommentsDomain;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
-import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
+import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
 
 @Entity
-@Table(name = "products")
+@Table(name = "Products")
 public class ProductsDomain implements BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
-	private Integer _id;
+	private Integer id;
 
-	@Column(name = "name", nullable = false, unique = true)
-	private String _name;
+	@Column(name = "name", nullable = false)
+	private String name;
 	
 	@Column(name = "description", nullable = true)
-	private String _description;
+	private String description;
 	
 	@Column(name = "cost", nullable = false)
-	private Integer _cost;
+	private Integer cost;
 
 	@ManyToOne
 	private EstablishmentsDomain establisment;
 	
-	
 	@OneToMany(mappedBy = "product")
 	private Set<OrdersDetailDomain> orderDetail = new HashSet<>();
-	
-	
-	
-	
 	
 	public Set<OrdersDetailDomain> getOrderDetail() {
 		return orderDetail;
@@ -62,35 +56,35 @@ public class ProductsDomain implements BaseDomain {
 	}
 
 	public Integer getId() {
-		return _id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		_id = id;
+		this.id = id;
 	}
 
 	public String getName() {
-		return _name;
+		return name;
 	}
 
 	public void setName(String name) {
-		_name = name;
+		this.name = name;
 	}
 
 	public String getDescription() {
-		return _description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		_description = description;
+		this.description = description;
 	}
 	
 	public Integer getCost() {
-		return _cost;
+		return cost;
 	}
 
 	public void setCost(Integer cost) {
-		_cost = cost;
+		this.cost = cost;
 	}
 
 }

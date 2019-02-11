@@ -11,22 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.establishments.EstablishmentsDaoImpl;
 import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
-import com.sma.delivery.dto.establishments.EstablishmentsDTO;
-import com.sma.delivery.dto.establishments.EstablishmentsResult;
+import com.sma.delivery.dto.establishments.EstablishmentDTO;
+import com.sma.delivery.dto.establishments.EstablishmentResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
 
 @Service
-public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentsDTO, EstablishmentsDomain, EstablishmentsDaoImpl, EstablishmentsResult> implements IEstablishmentsService {
+public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentDTO, EstablishmentsDomain, EstablishmentsDaoImpl, EstablishmentResult> implements IEstablishmentsService {
 	@Autowired
 	private IEstablishmentsDao establishmentsDao;
 
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'establishments_' + #establishments.id", condition = "#dto.id!=null")
-	public EstablishmentsDTO save(EstablishmentsDTO dto) {
+	public EstablishmentDTO save(EstablishmentDTO dto) {
 		final EstablishmentsDomain domain = convertDtoToDomain(dto);
 		final EstablishmentsDomain establishmentsDomain = establishmentsDao.save(domain);
-		final EstablishmentsDTO newDto = convertDomainToDto(establishmentsDomain);
+		final EstablishmentDTO newDto = convertDomainToDto(establishmentsDomain);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("establishments_" + establishmentsDomain.getId(), newDto);
 		}
@@ -36,67 +36,64 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentsDTO
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'establishments_' + #id")
-	public EstablishmentsDTO getById(Integer id) {
+	public EstablishmentDTO getById(Integer id) {
 		final EstablishmentsDomain domain = establishmentsDao.getById(id);
-		final EstablishmentsDTO dto = convertDomainToDto(domain);
-		return dto;
+		return convertDomainToDto(domain);
 	}
 
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'establishments_' + #id")
-	public EstablishmentsResult getAll() {
-		final List<EstablishmentsDTO> countries = new ArrayList<>();
+	public EstablishmentResult getAll() {
+		final List<EstablishmentDTO> countries = new ArrayList<>();
 		for (EstablishmentsDomain domain : establishmentsDao.findAll()) {
-			final EstablishmentsDTO dto = convertDomainToDto(domain);
+			final EstablishmentDTO dto = convertDomainToDto(domain);
 			countries.add(dto);
 		}
-		final EstablishmentsResult establishmentsResult = new EstablishmentsResult();
+		final EstablishmentResult establishmentsResult = new EstablishmentResult();
 		establishmentsResult.setEstablishments(countries);
 		return establishmentsResult;
 	}
 
 	@Override
-	protected EstablishmentsDTO convertDomainToDto(EstablishmentsDomain domain) {
-		final EstablishmentsDTO dto = new EstablishmentsDTO();
+	protected EstablishmentDTO convertDomainToDto(EstablishmentsDomain domain) {
+		final EstablishmentDTO dto = new EstablishmentDTO();
 		dto.setId(domain.getId());
-		dto.set_name(domain.getName());
-		dto.set_address(domain.getAddress());
-		dto.set_description(domain.getDescription());
-		dto.set_email(domain.getEmail());
-		dto.set_phone_number(domain.getPhoneNumber());
-		dto.set_schedule(domain.getSchedule());
-		System.out.println(domain.getAddress());
+		dto.setName(domain.getName());
+		dto.setAddress(domain.getAddress());
+		dto.setDescription(domain.getDescription());
+		dto.setEmail(domain.getEmail());
+		dto.setPhoneNumber(domain.getPhoneNumber());
+		dto.setSchedule(domain.getSchedule());
 		return dto;
 	}
 
 	@Override
-	protected EstablishmentsDomain convertDtoToDomain(EstablishmentsDTO dto) {
+	protected EstablishmentsDomain convertDtoToDomain(EstablishmentDTO dto) {
 		final EstablishmentsDomain domain = new EstablishmentsDomain();
 		domain.setId(dto.getId());
-		domain.setName(dto.get_name());
-		domain.setAddress(dto.get_address());
-		domain.setDescription(dto.get_description());
-		domain.setEmail(dto.get_email());
-		domain.setPhoneNumber(dto.get_phone_number());
-		domain.setSchedule(dto.get_schedule());
-		System.out.println(dto.get_address());
+		domain.setName(dto.getName());
+		domain.setAddress(dto.getAddress());
+		domain.setDescription(dto.getDescription());
+		domain.setEmail(dto.getEmail());
+		domain.setPhoneNumber(dto.getPhoneNumber());
+		domain.setSchedule(dto.getSchedule());
 		return domain;
 	}
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'establishments_' + #dto.id")
-	public void delete(EstablishmentsDTO dto) {
+	public void delete(EstablishmentDTO dto) {
 		final EstablishmentsDomain establishmentsDomain = convertDtoToDomain(dto);
 		establishmentsDao.delete(establishmentsDomain);
 	}
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'establishments_' + #dto.id")
-	public EstablishmentsDTO update(EstablishmentsDTO dto) {
+	public EstablishmentDTO update(EstablishmentDTO dto) {
 		final EstablishmentsDomain establishmentsDomain = convertDtoToDomain(dto);
 		final EstablishmentsDomain establishments = establishmentsDao.update(establishmentsDomain);
-		final EstablishmentsDTO newDto = convertDomainToDto(establishments);
+		final EstablishmentDTO newDto = convertDomainToDto(establishments);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("establishments_" + establishments.getId(), newDto);
 		}
@@ -106,26 +103,26 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentsDTO
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_est' + #text")
-	public EstablishmentsResult find(String text, Integer page, Integer size) {
-		final List<EstablishmentsDTO> establishments = new ArrayList<>();
+	public EstablishmentResult find(String text, Integer page, Integer size) {
+		final List<EstablishmentDTO> establishments = new ArrayList<>();
 		for (EstablishmentsDomain domain : establishmentsDao.find(text, page, size)) {
-			final EstablishmentsDTO establishment = convertDomainToDto(domain);
+			final EstablishmentDTO establishment = convertDomainToDto(domain);
 			establishments.add(establishment);
 		}
- 		final EstablishmentsResult establishmentsResult = new EstablishmentsResult();
+ 		final EstablishmentResult establishmentsResult = new EstablishmentResult();
 		establishmentsResult.setEstablishments(establishments);
 		return establishmentsResult;
  	}
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_est' + #page + #size")
-	public EstablishmentsResult getAll(Integer page,Integer size) {
-		final List<EstablishmentsDTO> countries = new ArrayList<>();
+	public EstablishmentResult getAll(Integer page,Integer size) {
+		final List<EstablishmentDTO> countries = new ArrayList<>();
 		for (EstablishmentsDomain domain : establishmentsDao.findAll(page,size)) {
-			final EstablishmentsDTO dto = convertDomainToDto(domain);
+			final EstablishmentDTO dto = convertDomainToDto(domain);
 			countries.add(dto);
 		}
-		final EstablishmentsResult establishmentsResult = new EstablishmentsResult();
+		final EstablishmentResult establishmentsResult = new EstablishmentResult();
 		establishmentsResult.setEstablishments(countries);
 		return establishmentsResult;
 	}

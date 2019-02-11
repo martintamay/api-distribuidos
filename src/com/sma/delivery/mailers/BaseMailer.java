@@ -1,6 +1,5 @@
 package com.sma.delivery.mailers;
 
-import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.NoSuchFileException;
 import java.util.Properties;
@@ -14,11 +13,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
-
 import com.sma.delivery.utils.ProyectProperties;
 
 public class BaseMailer { 
@@ -28,7 +22,7 @@ public class BaseMailer {
 	
 	/** Main para enviar un correo de prueba usado para debug
 	 */
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		String[] recipients = { "martinhtamaym@hotmail.com" };
 		new BaseMailer().send("si se fue", "Hola mundo, eureka, funciona", recipients);
 	}
@@ -60,7 +54,7 @@ public class BaseMailer {
 		return true;
 	}
 
-	protected void generateAndSendEmail(String subject, String emailBody, String recipients[], String contentType) throws MessagingException {
+	protected void generateAndSendEmail(String subject, String emailBody, String[] recipients, String contentType) throws MessagingException {
 		MimeMessage generateMailMessage;
 		Properties mailServerProperties;
 		Session getMailSession;

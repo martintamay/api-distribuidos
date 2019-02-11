@@ -9,78 +9,70 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-
-
 import com.sma.delivery.domain.base.BaseDomain;
-import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
+import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
 
 @Entity
-@Table(name = "promotions")
+@Table(name = "Promotions")
 public class PromotionsDomain implements BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
-	private Integer _id;
+	private Integer id;
 
 	@Column(name = "name", nullable = false, unique = true)
-	private String _name;
+	private String name;
 	
 	@Column(name = "available", nullable = true)
-	private String _available;
+	private String available;
 	
-	
+	@Column(name = "enddate", nullable = false)
+	private Time endDate;
 
-	@Column(name = "end_date", nullable = false)
-	private Time _end_date;
-
-	
-	
 	@OneToMany(mappedBy = "promotion")
-	private Set<OrdersDetailDomain> orderDetail = new HashSet<>();
+	private Set<OrdersDetailDomain> orderDetails = new HashSet<>();
 	
-	
-	public Set<OrdersDetailDomain> getOrderDetail() {
-		return orderDetail;
+	public Set<OrdersDetailDomain> getOrderDetails() {
+		return orderDetails;
 	}
 
-	public void setOrderDetail(Set<OrdersDetailDomain> orderDetail) {
-		this.orderDetail = orderDetail;
+	public void setOrderDetails(Set<OrdersDetailDomain> orderDetails) {
+		this.orderDetails = orderDetails;
 	}
 
 	public Integer getId() {
-		return _id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		_id = id;
+		this.id = id;
 	}
 
 	public String getName() {
-		return _name;
+		return name;
 	}
 
 	public void setName(String name) {
-		_name = name;
+		this.name = name;
 	}
 
-	public String get_available() {
-		return _available;
+	public String getAvailable() {
+		return available;
 	}
 
-	public void set_available(String _available) {
-		this._available = _available;
+	public void setAvailable(String available) {
+		this.available = available;
 	}
 
-	public Time get_end_date() {
-		return _end_date;
+	public Time getEndDate() {
+		return endDate;
 	}
 
-	public void set_end_date(Time _end_date) {
-		this._end_date = _end_date;
+	public void setEndDate(Time endDate) {
+		this.endDate = endDate;
 	}
 	
 

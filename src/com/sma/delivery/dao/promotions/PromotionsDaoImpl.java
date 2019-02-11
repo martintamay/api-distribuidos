@@ -31,13 +31,12 @@ public class PromotionsDaoImpl extends BaseDaoImpl<PromotionsDomain> implements 
 	@Override
 	public List<PromotionsDomain> findAll() {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PromotionsDomain.class);
-		return criteria.list();
+		return safeConversion(criteria.list(), PromotionsDomain.class);	
 	}
 
 	@Override
 	public PromotionsDomain update(PromotionsDomain domain) {
-		sessionFactory.getCurrentSession().saveOrUpdate(domain);
-		return domain;
+		return save(domain);
 	}
 
 	@Override
@@ -48,11 +47,11 @@ public class PromotionsDaoImpl extends BaseDaoImpl<PromotionsDomain> implements 
 	@Override
 	public List<PromotionsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PromotionsDomain.class);
-		Criterion Name = Restrictions.like("_name", text);
-		criteria.add(Restrictions.or(Name));
+		Criterion name = Restrictions.like("_name", text);
+		criteria.add(Restrictions.or(name));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), PromotionsDomain.class);	
 	}
 
 	@Override
@@ -60,8 +59,6 @@ public class PromotionsDaoImpl extends BaseDaoImpl<PromotionsDomain> implements 
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PromotionsDomain.class);
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), PromotionsDomain.class);	
 	}
-	
-
 }

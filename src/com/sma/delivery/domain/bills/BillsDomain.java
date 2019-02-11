@@ -1,20 +1,17 @@
 package com.sma.delivery.domain.bills;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.orders.OrdersDomain;
 
 @Entity
-@Table(name = "bills")
+@Table(name = "Bills")
 public class BillsDomain implements BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -61,7 +58,4 @@ public class BillsDomain implements BaseDomain {
 	public void setOrders(OrdersDomain orders) {
 		this.orders = orders;
 	}
-	
-	
-	
 }

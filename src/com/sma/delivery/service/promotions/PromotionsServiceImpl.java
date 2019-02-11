@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.promotions.IPromotionsDao;
 import com.sma.delivery.dao.promotions.PromotionsDaoImpl;
 import com.sma.delivery.domain.promotions.PromotionsDomain;
-import com.sma.delivery.dto.promotions.PromotionsDTO;
-import com.sma.delivery.dto.promotions.PromotionsResult;
+import com.sma.delivery.dto.promotions.PromotionDTO;
+import com.sma.delivery.dto.promotions.PromotionResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
 
 @Service
-public class PromotionsServiceImpl extends BaseServiceImpl<PromotionsDTO, PromotionsDomain, PromotionsDaoImpl, PromotionsResult> implements IPromotionsService {
+public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, PromotionsDomain, PromotionsDaoImpl, PromotionResult> implements IPromotionsService {
 	@Autowired
 	private IPromotionsDao promotionsDao;
 	
@@ -26,10 +26,10 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionsDTO, Promot
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'promotions_' + #romotions.id", condition = "#dto.id!=null")
-	public PromotionsDTO save(PromotionsDTO dto) {
+	public PromotionDTO save(PromotionDTO dto) {
 		final PromotionsDomain promotionsDomain = convertDtoToDomain(dto);
 		final PromotionsDomain promotions = promotionsDao.save(promotionsDomain);
-		final PromotionsDTO newDto = convertDomainToDto(promotions);
+		final PromotionDTO newDto = convertDomainToDto(promotions);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("promotions_" + promotions.getId(), newDto);
 		}
@@ -39,51 +39,50 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionsDTO, Promot
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'promotions_' + #id")
-	public PromotionsDTO getById(Integer id) {
+	public PromotionDTO getById(Integer id) {
 		final PromotionsDomain promotionsDomain = promotionsDao.getById(id);
-		final PromotionsDTO promotionsDTO = convertDomainToDto(promotionsDomain);
-		return promotionsDTO;
+		return convertDomainToDto(promotionsDomain);
 	}
 
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'promotions_' + #id")
-	public PromotionsResult getAll() {
-		final List<PromotionsDTO> promotions = new ArrayList<>();
+	public PromotionResult getAll() {
+		final List<PromotionDTO> promotions = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.findAll()) {
-			final PromotionsDTO user = convertDomainToDto(domain);
+			final PromotionDTO user = convertDomainToDto(domain);
 			promotions.add(user);
 		}
 
-		final PromotionsResult promotionsResult = new PromotionsResult();
+		final PromotionResult promotionsResult = new PromotionResult();
 		promotionsResult.setPromotions(promotions);
 		return promotionsResult;
 	}
 
 	@Override
-	protected PromotionsDTO convertDomainToDto(PromotionsDomain domain) {
-		final PromotionsDTO promotions = new PromotionsDTO();
+	protected PromotionDTO convertDomainToDto(PromotionsDomain domain) {
+		final PromotionDTO promotions = new PromotionDTO();
 		promotions.setId(domain.getId());
 		promotions.setName(domain.getName());
-		promotions.setAvailable(domain.get_available());
-		promotions.setEnd_date(domain.get_end_date());
+		promotions.setAvailable(domain.getAvailable());
+		promotions.setEndDate(domain.getEndDate());
 		return promotions;
 	}
 
 	@Override
-	protected PromotionsDomain convertDtoToDomain(PromotionsDTO dto) {
+	protected PromotionsDomain convertDtoToDomain(PromotionDTO dto) {
 		final PromotionsDomain promotions = new PromotionsDomain();
 		promotions.setId(dto.getId());
 		promotions.setName(dto.getName());
-		promotions.set_available(dto.getAvailable());
-		promotions.set_end_date(dto.getEnd_date());
+		promotions.setAvailable(dto.getAvailable());
+		promotions.setEndDate(dto.getEndDate());
 		return promotions;
 	}
 
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'promotions_' + #dto.id")
-	public void delete(PromotionsDTO dto) {
+	public void delete(PromotionDTO dto) {
 		final PromotionsDomain promotionsDomain = convertDtoToDomain(dto);
 		promotionsDao.delete(promotionsDomain);	
 	}
@@ -91,10 +90,10 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionsDTO, Promot
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'products_' + #dto.id")
-	public PromotionsDTO update(PromotionsDTO dto) {
+	public PromotionDTO update(PromotionDTO dto) {
 		final PromotionsDomain userDomain = convertDtoToDomain(dto);
 		final PromotionsDomain user = promotionsDao.update(userDomain);
-		final PromotionsDTO newDto = convertDomainToDto(user);
+		final PromotionDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("promotions_" + user.getId(), newDto);
 		}
@@ -104,14 +103,14 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionsDTO, Promot
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
-	public PromotionsResult find(String text, Integer page, Integer size) {
-		final List<PromotionsDTO> users = new ArrayList<>();
+	public PromotionResult find(String text, Integer page, Integer size) {
+		final List<PromotionDTO> users = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.find(text, page, size)) {
-			final PromotionsDTO user = convertDomainToDto(domain);
+			final PromotionDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
 
-		final PromotionsResult userResult = new PromotionsResult();
+		final PromotionResult userResult = new PromotionResult();
 		userResult.setPromotions(users);
 		return userResult;
 
@@ -119,14 +118,14 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionsDTO, Promot
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
-	public PromotionsResult getAll(Integer page,Integer size) {
-		final List<PromotionsDTO> users = new ArrayList<>();
+	public PromotionResult getAll(Integer page,Integer size) {
+		final List<PromotionDTO> users = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.findAll(page, size)) {
-			final PromotionsDTO user = convertDomainToDto(domain);
+			final PromotionDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
 
-		final PromotionsResult promotionsResult = new PromotionsResult();
+		final PromotionResult promotionsResult = new PromotionResult();
 		promotionsResult.setPromotions(users);
 		return promotionsResult;
 

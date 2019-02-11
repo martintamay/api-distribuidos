@@ -1,5 +1,6 @@
 package com.sma.delivery.dao.session;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -32,31 +33,27 @@ public class SessionDaoImpl extends BaseDaoImpl<SessionDomain> implements ISessi
 	@Override
 	public List<SessionDomain> findAll(Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(SessionDomain.class);
-		return criteria.list();
+		return safeConversion(criteria.list(), SessionDomain.class);
 	}
 
 	@Override
 	public SessionDomain update(SessionDomain domain) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void delete(SessionDomain domain) {
-		// TODO Auto-generated method stub
-		
+		// empty on purpose
 	}
 
 	@Override
 	public List<SessionDomain> find(String text,Integer page, Integer size) {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
 	}
 
 	@Override
 	public List<SessionDomain> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ArrayList<>();
 	}
 
 }

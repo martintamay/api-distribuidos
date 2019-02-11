@@ -1,24 +1,20 @@
 package com.sma.delivery.domain.comments;
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
-import com.sma.delivery.domain.user.UserDomain;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
+import com.sma.delivery.domain.user.UserDomain;
 
 
 
 @Entity
-@Table(name = "comments")
+@Table(name = "Comments")
 public class CommentsDomain implements BaseDomain {
 
 	@Id
@@ -27,27 +23,27 @@ public class CommentsDomain implements BaseDomain {
 	private Integer id;
 	
 	@Column(name = "title")
-	private String _title;
+	private String title;
 
 	@Column(name = "content")
-	private String _content;
+	private String content;
 
 	
 	@ManyToOne
-	private EstablishmentsDomain _establisment;
+	private EstablishmentsDomain establisment;
 	
 
 	@Column(name = "deleted")
-	private Boolean _deleted;
+	private Boolean deleted;
 	@ManyToOne
-	private UserDomain _user;
+	private UserDomain user;
 
 	public UserDomain getUser() {
-		return _user;
+		return user;
 	}
 
 	public void setUser(UserDomain user) {
-		this._user = user;
+		this.user = user;
 	}
 	
 
@@ -59,36 +55,35 @@ public class CommentsDomain implements BaseDomain {
 		this.id = id;
 	}
 	public String getTitle() {
-		return _title;
+		return title;
 	}
 
 	public void setTitle(String title) {
-		this._title = title;
+		this.title = title;
 	}
 
-	public String get_content() {
-		return _content;
+	public String getContent() {
+		return content;
 	}
 
-	public void set_content(String _content) {
-		this._content = _content;
+	public void setContent(String content) {
+		this.content = content;
 	}
 
-	public EstablishmentsDomain get_establisments() {
-		return _establisment;
+	public EstablishmentsDomain getEstablisment() {
+		return establisment;
 	}
 
-	public void set_establisments(EstablishmentsDomain _establisment) {
-		this._establisment = _establisment;
+	public void setEstablisment(EstablishmentsDomain establisment) {
+		this.establisment = establisment;
 	}
 
 	
-	public Boolean get_deleted() {
-		return _deleted;
+	public Boolean getDeleted() {
+		return deleted;
 	}
 
-	public void set_deleted(Boolean _deleted) {
-		this._deleted = _deleted;
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
-	
 }

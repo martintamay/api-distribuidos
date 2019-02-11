@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
 import com.sma.delivery.domain.ingredients.IngredientsDomain;
-import com.sma.delivery.dao.ingredients.IIngredientsDao;
 
 
 @Repository
@@ -27,8 +26,7 @@ public class IngredientsDaoImpl extends BaseDaoImpl<IngredientsDomain> implement
 	}
 	@Override
 	public IngredientsDomain update(IngredientsDomain domain) {
-		sessionFactory.getCurrentSession().saveOrUpdate(domain);
-		return domain;
+		return save(domain);
 	}
 	@Override
 	public void delete(IngredientsDomain domain) {
@@ -42,8 +40,7 @@ public class IngredientsDaoImpl extends BaseDaoImpl<IngredientsDomain> implement
 		criteria.add(Restrictions.or(id,description));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
-	
+		return safeConversion(criteria.list(), IngredientsDomain.class);
 	}
 	
 	@Override
@@ -54,13 +51,13 @@ public class IngredientsDaoImpl extends BaseDaoImpl<IngredientsDomain> implement
 	@Override
 	public List<IngredientsDomain> findAll() {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(IngredientsDomain.class);
-		return criteria.list();
+		return safeConversion(criteria.list(), IngredientsDomain.class);
 	}
 	@Override
 	public List<IngredientsDomain> findAll(Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(IngredientsDomain.class);
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), IngredientsDomain.class);
 	}
 }

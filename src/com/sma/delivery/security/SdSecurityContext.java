@@ -4,16 +4,16 @@ import java.security.Principal;
 
 import javax.ws.rs.core.SecurityContext;
 
-import com.sma.delivery.domain.session.SessionDomain;
 import com.sma.delivery.domain.roles.ApiClientDomain;
+import com.sma.delivery.domain.session.SessionDomain;
 
 public class SdSecurityContext implements SecurityContext {
-	private final ApiClientDomain _apiClient;
-	private final SessionDomain _session;
+	private final ApiClientDomain apiClient;
+	private final SessionDomain session;
 
 	public SdSecurityContext(SessionDomain session, ApiClientDomain apiClient) {
-		_session = session;
-		_apiClient = apiClient;
+		this.session = session;
+		this.apiClient = apiClient;
 	}
 
 	@Override
@@ -23,28 +23,17 @@ public class SdSecurityContext implements SecurityContext {
 
 	@Override
 	public Principal getUserPrincipal() {
-		return _apiClient;
+		return apiClient;
 	}
 
 	@Override
 	public boolean isSecure() {
-		return _session.isSecure();
+		return session.isSecure();
 	}
 
 	@Override
 	public boolean isUserInRole(String role) {
-		/*if (null == _session || !_session.isActive()) {
-			Response denied = Response.status(Response.Status.FORBIDDEN).entity("Permission denied").build();
-			throw new WebApplicationException(denied);
-		}*/
-
-		try {
-			return _apiClient.getRoles().equals(ApiClientDomain.Role.valueOf(role));
-		} catch (Exception e) {
-			System.err.println(e);
-			throw e;
-		}
-		// return false;
+		return apiClient.getRoles().equals(ApiClientDomain.Role.valueOf(role));
 	}
 
 }

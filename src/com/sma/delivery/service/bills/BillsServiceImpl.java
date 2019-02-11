@@ -4,22 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sma.delivery.dao.bills.BillsDaoImpl;
 import com.sma.delivery.dao.bills.IBillsDao;
 import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.domain.bills.BillsDomain;
-import com.sma.delivery.dto.bills.BillsDTO;
-import com.sma.delivery.dto.bills.BillsResult;
-import com.sma.delivery.dto.comments.CommentsDTO;
+import com.sma.delivery.dto.bills.BillDTO;
+import com.sma.delivery.dto.bills.BillResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
 
 @Service
-public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, BillsDaoImpl, BillsResult> implements IBillsService {
+public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, BillsDaoImpl, BillResult> implements IBillsService {
 	@Autowired
 	private IBillsDao billsDao;
 	
@@ -29,10 +28,10 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'bills_' + #bills.id", condition = "#dto.id!=null")
-	public BillsDTO save(BillsDTO dto) {
+	public BillDTO save(BillDTO dto) {
 		final BillsDomain domain = convertDtoToDomain(dto);
 		final BillsDomain billsDomain = billsDao.save(domain);
-		final BillsDTO newDto = convertDomainToDto(domain);
+		final BillDTO newDto = convertDomainToDto(domain);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("bills_" + domain.getId(), newDto);
 		}
@@ -42,7 +41,7 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'bills_' + #id")
-	public BillsDTO getById(Integer id) {
+	public BillDTO getById(Integer id) {
 		final BillsDomain domain = billsDao.getById(id);
 		return convertDomainToDto(domain);
 	}
@@ -50,46 +49,45 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'bills_' + #id")
-	public BillsResult getAll() {
-		final List<BillsDTO> bills = new ArrayList<>();
+	public BillResult getAll() {
+		final List<BillDTO> bills = new ArrayList<>();
 		for (BillsDomain domain : billsDao.findAll()) {
-			final BillsDTO dto = convertDomainToDto(domain);
+			final BillDTO dto = convertDomainToDto(domain);
 			bills.add(dto);
 		}
-		final BillsResult billsResult = new BillsResult();
+		final BillResult billsResult = new BillResult();
 		billsResult.setBills(bills);
 		return billsResult;
 	}
 
 	@Override
-	protected BillsDTO convertDomainToDto(BillsDomain domain) {
-		final BillsDTO dto = new BillsDTO();
+	protected BillDTO convertDomainToDto(BillsDomain domain) {
+		final BillDTO dto = new BillDTO();
 		dto.setId(domain.getId());
 		dto.setTotal(domain.getTotal());
 		dto.setIva(domain.getIva10());
-		dto.setOrder_id(domain.getOrders().getId());
+		dto.setOrderId(domain.getOrders().getId());
 
 		return dto;
 	}
 
 	@Override
-	protected BillsDomain convertDtoToDomain(BillsDTO dto) {
+	protected BillsDomain convertDtoToDomain(BillDTO dto) {
 		final BillsDomain domain = new BillsDomain();
 		domain.setId(dto.getId());
 		domain.setTotal(dto.getTotal());
 		domain.setIva10(dto.getIva());
-		//domain.setOrders(ordersDao.getById(1));
-		domain.setOrders(ordersDao.getById(dto.getOrder_id()));
+		domain.setOrders(ordersDao.getById(dto.getOrderId()));
 		return domain;
 	}
 
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'bills_' + #dto.id")
-	public BillsDTO update(BillsDTO dto) {
+	public BillDTO update(BillDTO dto) {
 		final BillsDomain clientDomain = convertDtoToDomain(dto);
 		final BillsDomain client = billsDao.update(clientDomain);
-		final BillsDTO newDto = convertDomainToDto(client);
+		final BillDTO newDto = convertDomainToDto(client);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("bills_" + client.getId(), newDto);
 		}
@@ -99,7 +97,7 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'bills_' + #dto.id")
-	public void delete(BillsDTO dto) {
+	public void delete(BillDTO dto) {
 		final BillsDomain billsDomain = convertDtoToDomain(dto);
 		billsDao.delete(billsDomain);	
 	}
@@ -107,27 +105,27 @@ public class BillsServiceImpl extends BaseServiceImpl<BillsDTO, BillsDomain, Bil
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_bil' + #text")
-	public BillsResult find(String text, Integer page, Integer size) {
-		final List<BillsDTO> bills = new ArrayList<>();
+	public BillResult find(String text, Integer page, Integer size) {
+		final List<BillDTO> bills = new ArrayList<>();
 		for (BillsDomain domain : billsDao.find(text, page, size)) {
-			final BillsDTO user = convertDomainToDto(domain);
+			final BillDTO user = convertDomainToDto(domain);
 			bills.add(user);
 		}
 
-		final BillsResult billsResult = new BillsResult();
+		final BillResult billsResult = new BillResult();
 		billsResult.setBills(bills);
 		return billsResult;
 	}
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_bil' + #page + #size")
-	public BillsResult getAll(Integer page,Integer size) {
-		final List<BillsDTO> bills = new ArrayList<>();
+	public BillResult getAll(Integer page,Integer size) {
+		final List<BillDTO> bills = new ArrayList<>();
 		for (BillsDomain domain : billsDao.findAll(page,size)) {
-			final BillsDTO dto = convertDomainToDto(domain);
+			final BillDTO dto = convertDomainToDto(domain);
 			bills.add(dto);
 		}
-		final BillsResult billsResult = new BillsResult();
+		final BillResult billsResult = new BillResult();
 		billsResult.setBills(bills);
 		return billsResult;
 	}

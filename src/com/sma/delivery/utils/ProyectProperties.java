@@ -8,11 +8,11 @@ import java.util.logging.Logger;
 
 public class ProyectProperties {
 	private static final Logger LOGGER = Logger.getLogger( ProyectProperties.class.getName() );
-	private static Properties props = null;
+	private static Properties props = new Properties();
 
 	
 	public ProyectProperties () {
-		if (props==null) {
+		if (props.size() <= 0) {
 			setProperties();
 		}
 	}
@@ -22,9 +22,8 @@ public class ProyectProperties {
 	}
 	
 	private void setProperties() {
-		props = new Properties();
+		// se carga el archivo properties WEB-INF/classes/mailer.properties
 		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("/mailer.properties")){
-			// load a properties file
 			props.load(inputStream);
 		} catch (IOException ex) {
 			LOGGER.log(Level.SEVERE, ex.toString(), ex);

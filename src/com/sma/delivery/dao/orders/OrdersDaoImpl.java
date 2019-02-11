@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
-import com.sma.delivery.dao.orders.IOrdersDao;
-import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 import com.sma.delivery.domain.orders.OrdersDomain;
 
 @Repository
@@ -33,17 +31,15 @@ public class OrdersDaoImpl extends BaseDaoImpl<OrdersDomain> implements IOrdersD
 	@Override
 	public List<OrdersDomain> findAll() {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDomain.class);
-		return criteria.list();
+		return safeConversion(criteria.list(), OrdersDomain.class);
 	}
-	//aca
+
 	@Override
 	public OrdersDomain update(OrdersDomain domain) {
-		sessionFactory.getCurrentSession().saveOrUpdate(domain);
-		return domain;
+		return save(domain);
 	}
 	@Override
 	public void delete(OrdersDomain domain) {
-		System.out.println(domain.getId());
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 
@@ -54,14 +50,14 @@ public class OrdersDaoImpl extends BaseDaoImpl<OrdersDomain> implements IOrdersD
 		criteria.add(Restrictions.or(address));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), OrdersDomain.class);
 	}
 	@Override
 	public List<OrdersDomain> findAll(Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDomain.class);
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), OrdersDomain.class);
 	}
 	
 

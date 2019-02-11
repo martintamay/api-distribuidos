@@ -18,54 +18,54 @@ import com.sma.delivery.domain.base.BaseDomain;
 @Table(name = "api_client")
 public class ApiClientDomain implements BaseDomain, Principal  {
 	public enum Role {
-		Editor, Visitor, Contributor;
-	};
+		EDITOR, VISITOR, CONTRIBUTOR;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
-	private Integer _id;
+	private Integer id;
 
 	@Column(name = "name")
-	private String _name;
+	private String name;
 
 	@Column(name = "token")
-	private String _token;
+	private String token;
 	
 	@Column(name = "role")
 	@Enumerated(EnumType.STRING) 
-	private Role _role;
+	private Role role;
 
 	public Integer getId() {
-		return _id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		_id = id;
+		this.id = id;
 	}
 
 	public String getToken() {
-		return _token;
+		return token;
 	}
 
 	public void setToken(String token) {
-		_token = token;
+		this.token = token;
 	}
 
 	public Role getRoles() {
-		return _role;
+		return role;
 	}
 
 	public void setRoles(Role role) {
-		_role = role;
+		this.role = role;
 	}
 
 	@Override
 	public String getName() {
-		return _name;
+		return name;
 	}
 
 	public void setName(String name) {
-		_name = name;
+		this.name = name;
 	}
 }

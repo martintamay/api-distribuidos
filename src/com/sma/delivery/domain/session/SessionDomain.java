@@ -17,69 +17,69 @@ public class SessionDomain implements BaseDomain {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id", nullable = false, unique = true)
-	private Integer _id;
+	private Integer id;
 
 	@Column(name = "userId")
-	private Integer _userId;
+	private Integer userId;
 
 	@Column(name = "active")
-	private boolean _active;
+	private boolean active;
 
 	@Column(name = "secure")
-	private boolean _secure;
+	private boolean secure;
 
 	@Column(name = "createTime")
-	private Date _createTime;
+	private Date createTime;
 
 	@Column(name = "lastAccessedTime")
-	private Date _lastAccessedTime;
+	private Date lastAccessedTime;
 
 	public Integer getId() {
-		return _id;
+		return id;
 	}
 
 	public void setId(Integer id) {
-		_id = id;
+		this.id = id;
 	}
 
 	public Integer getUserId() {
-		return _userId;
+		return userId;
 	}
 
 	public void setUserId(Integer userId) {
-		_userId = userId;
+		this.userId = userId;
 	}
 
 	public boolean isActive() {
-		return _active;
+		return active;
 	}
 
 	public void setActive(boolean active) {
-		_active = active;
+		this.active = active;
 	}
 
 	public boolean isSecure() {
-		return _secure;
+		return secure;
 	}
 
 	public void setSecure(boolean secure) {
-		_secure = secure;
+		this.secure = secure;
 	}
 
 	public Date getCreateTime() {
-		return _createTime;
+		return createTime;
 	}
 
 	public void setCreateTime(Date createTime) {
-		_createTime = createTime;
+		this.createTime = createTime;
 	}
 
 	public Date getLastAccessedTime() {
-		return _lastAccessedTime;
+		return lastAccessedTime;
 	}
 
 	public void setLastAccessedTime(Date lastAccessedTime) {
-		_lastAccessedTime = lastAccessedTime;
+		this.lastAccessedTime = lastAccessedTime;
 	}
 
 }

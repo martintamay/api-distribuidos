@@ -7,7 +7,6 @@ import javax.ws.rs.ext.Provider;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import com.sun.jersey.api.container.filter.RolesAllowedResourceFilterFactory;
 import com.sun.jersey.api.model.AbstractMethod;
 import com.sun.jersey.spi.container.ResourceFilter;
@@ -16,7 +15,7 @@ import com.sun.jersey.spi.container.ResourceFilter;
 @Provider
 public class SdResourceFilterFactory extends RolesAllowedResourceFilterFactory {
 	@Autowired
-	private SdSecurityContextFilter _securityContextFilter;
+	private SdSecurityContextFilter securityContextFilter;
 
 	@Override
 	public List<ResourceFilter> create(AbstractMethod am) {
@@ -26,7 +25,7 @@ public class SdResourceFilterFactory extends RolesAllowedResourceFilterFactory {
 		}
 
 		final List<ResourceFilter> filters = new ArrayList<>(rolesFilters);
-		filters.add(_securityContextFilter);
+		filters.add(securityContextFilter);
 		return filters;
 	}
 }

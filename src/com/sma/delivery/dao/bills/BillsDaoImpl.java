@@ -3,15 +3,13 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
 import com.sma.delivery.domain.bills.BillsDomain;
-import com.sma.delivery.domain.user.UserDomain;
 
 @Repository
 public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao{
@@ -32,7 +30,7 @@ public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao
 	@Override
 	public List<BillsDomain> findAll() {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BillsDomain.class);
-		return criteria.list();
+		return safeConversion(criteria.list(), BillsDomain.class);
 	}
 
 	@Override
@@ -44,20 +42,18 @@ public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao
 
 	@Override
 	public void delete(BillsDomain domain) {
-		System.out.println(domain.getId());
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 
 	@Override
 	public List<BillsDomain> find(String text,Integer page, Integer size) {
-		// TODO Auto-generated method stub
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(BillsDomain.class);
-		Criterion iva10 = Restrictions.like("_iva10", text);
-		Criterion total = Restrictions.like("_total", text);
+		Criterion iva10 = Restrictions.like("iva10", text);
+		Criterion total = Restrictions.like("total", text);
 		criteria.add(Restrictions.or(total,iva10));
 		criteria.setFirstResult((page - 1) * size); 
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), BillsDomain.class);
 		
 	}
 	@Override
@@ -66,7 +62,7 @@ public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao
 		
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return criteria.list();
+		return safeConversion(criteria.list(), BillsDomain.class);
 	}
 }
 

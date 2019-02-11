@@ -8,16 +8,16 @@ import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.dto.base.BaseDTO;
 import com.sma.delivery.dto.base.BaseResult;
 
-public abstract class BaseServiceImpl<DTO extends BaseDTO, DOMAIN extends BaseDomain, DAO extends BaseDaoImpl<DOMAIN>, RESULT extends BaseResult<DTO>> implements IBaseService<DTO, DOMAIN, DAO, RESULT> {
+public abstract class BaseServiceImpl<D extends BaseDTO, O extends BaseDomain, A extends BaseDaoImpl<O>, R extends BaseResult<D>> implements IBaseService<D, O, A, R> {
 
 	@Autowired
-	private CacheManager _cacheManager;
+	private CacheManager cacheManager;
 
 	protected CacheManager getCacheManager() {
-		return _cacheManager;
+		return cacheManager;
 	}
-	protected abstract DTO convertDomainToDto(DOMAIN domain);
+	protected abstract D convertDomainToDto(O domain);
 
-	protected abstract DOMAIN convertDtoToDomain(DTO dto);
+	protected abstract O convertDtoToDomain(D dto);
 
 }

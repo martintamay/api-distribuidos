@@ -3,21 +3,21 @@ package com.sma.delivery.dto.base;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class BaseResult<DTO extends BaseDTO> implements Serializable {
+public abstract class BaseResult<D extends BaseDTO> implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private List<DTO> _dtos;
+	private List<D> dtos;
 
-	protected List<DTO> getList() {
-		return _dtos;
+	protected List<D> getList() {
+		return dtos;
 	}
 
-	protected void setList(List<DTO> dtos) {
-		_dtos = dtos;
+	protected void setList(List<D> dtos) {
+		this.dtos = dtos;
 	}
 
 	public Integer getTotal() {
-		return null == _dtos ? 0 : _dtos.size();
+		return null == dtos ? 0 : dtos.size();
 	}
 }

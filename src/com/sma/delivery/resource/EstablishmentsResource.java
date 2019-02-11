@@ -7,13 +7,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sma.delivery.dto.establishments.EstablishmentsDTO;
-import com.sma.delivery.dto.establishments.EstablishmentsResult;
+import com.sma.delivery.dto.establishments.EstablishmentDTO;
+import com.sma.delivery.dto.establishments.EstablishmentResult;
 import com.sma.delivery.service.establishments.IEstablishmentsService;
 
 @Path("/establishments")
@@ -26,47 +25,47 @@ public class EstablishmentsResource {
 	@GET
 	@Path("/search/{page}/{size}/{text}")
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+	public EstablishmentResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
 		return establishmentsService.find(text,page,size);
 	}
 	
 	@GET
 	@Path("/{id}")
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsDTO getById(@PathParam("id") Integer establishmentsId) {
+	public EstablishmentDTO getById(@PathParam("id") Integer establishmentsId) {
 		return establishmentsService.getById(establishmentsId);
 	}
 
 	@GET
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsResult getAll() {
+	public EstablishmentResult getAll() {
 		return establishmentsService.getAll();
 	}
 	
 	@GET
 	@Path("/{page}/{size}")
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsResult getAll(@PathParam("page") Integer page, @PathParam("size") Integer size) {
+	public EstablishmentResult getAll(@PathParam("page") Integer page, @PathParam("size") Integer size) {
 		return establishmentsService.getAll(page, size);
 	}
 
 	@POST
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsDTO save(EstablishmentsDTO establishments) {
+	public EstablishmentDTO save(EstablishmentDTO establishments) {
 		return establishmentsService.save(establishments);
 	}
 	
 	@DELETE
 	@Path("/{id}")
 	public void delete(@PathParam("id") Integer establishmentsId) {
-		EstablishmentsDTO establishment = establishmentsService.getById(establishmentsId);
+		EstablishmentDTO establishment = establishmentsService.getById(establishmentsId);
 		establishmentsService.delete(establishment);
 	}
 	
 	@PUT
 	@Path("/{id}")
 	@Produces({"application/xml", "application/json"})
-	public EstablishmentsDTO update(EstablishmentsDTO establishments, @PathParam("id") Integer establishmentsId) {
+	public EstablishmentDTO update(EstablishmentDTO establishments, @PathParam("id") Integer establishmentsId) {
 		establishments.setId(establishmentsId);
 		return establishmentsService.update(establishments);
 	}

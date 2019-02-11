@@ -10,29 +10,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sma.delivery.dao.establishments.IEstablishmentsDao;
-import com.sma.delivery.dao.products.ProductsDaoImpl;
 import com.sma.delivery.dao.products.IProductsDao;
+import com.sma.delivery.dao.products.ProductsDaoImpl;
 import com.sma.delivery.domain.products.ProductsDomain;
-import com.sma.delivery.dto.products.ProductsDTO;
-import com.sma.delivery.dto.products.ProductsResult;
+import com.sma.delivery.dto.products.ProductDTO;
+import com.sma.delivery.dto.products.ProductResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
 
 @Service
-public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDomain, ProductsDaoImpl, ProductsResult> implements IProductsService {
+public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDomain, ProductsDaoImpl, ProductResult> implements IProductsService {
 	@Autowired
 	private IProductsDao productsDao;
 	@Autowired
 	private IEstablishmentsDao establishmentsDao;
 	
-	private int a, b =0;
-	
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'products_' + #products.id", condition = "#dto.id!=null")
-	public ProductsDTO save(ProductsDTO dto) {
+	public ProductDTO save(ProductDTO dto) {
 		final ProductsDomain productsDomain = convertDtoToDomain(dto);
 		final ProductsDomain product = productsDao.save(productsDomain);
-		final ProductsDTO newDto = convertDomainToDto(product);
+		final ProductDTO newDto = convertDomainToDto(product);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("products_" + product.getId(), newDto);
 		}
@@ -42,53 +40,52 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'products_' + #id")
-	public ProductsDTO getById(Integer id) {
+	public ProductDTO getById(Integer id) {
 		final ProductsDomain productsDomain = productsDao.getById(id);
-		final ProductsDTO productsDTO = convertDomainToDto(productsDomain);
-		return productsDTO;
+		return convertDomainToDto(productsDomain);
 	}
 
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'products_' + #id")
-	public ProductsResult getAll() {
-		final List<ProductsDTO> products = new ArrayList<>();
+	public ProductResult getAll() {
+		final List<ProductDTO> products = new ArrayList<>();
 		for (ProductsDomain domain : productsDao.findAll()) {
-			final ProductsDTO user = convertDomainToDto(domain);
+			final ProductDTO user = convertDomainToDto(domain);
 			products.add(user);
 		}
 
-		final ProductsResult productsResult = new ProductsResult();
+		final ProductResult productsResult = new ProductResult();
 		productsResult.setProducts(products);
 		return productsResult;
 	}
 
 	@Override
-	protected ProductsDTO convertDomainToDto(ProductsDomain domain) {
-		final ProductsDTO product = new ProductsDTO();
+	protected ProductDTO convertDomainToDto(ProductsDomain domain) {
+		final ProductDTO product = new ProductDTO();
 		product.setId(domain.getId());
 		product.setName(domain.getName());
 		product.setDescription(domain.getDescription());
 		product.setCost((domain.getCost()));
-		product.setEstablishments(domain.getEstablisment().getId());
+		product.setEstablishmentId(domain.getEstablisment().getId());
 		return product;
 	}
 
 	@Override
-	protected ProductsDomain convertDtoToDomain(ProductsDTO dto) {
+	protected ProductsDomain convertDtoToDomain(ProductDTO dto) {
 		final ProductsDomain product = new ProductsDomain();
 		product.setId(dto.getId());
 		product.setName(dto.getName());
 		product.setDescription(dto.getDescription());
 		product.setCost((dto.getCost()));
-		product.setEstablisment(establishmentsDao.getById(dto.getEstablishments()));
+		product.setEstablisment(establishmentsDao.getById(dto.getEstablishmentId()));
 		return product;
 	}
 
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'products_' + #dto.id")
-	public void delete(ProductsDTO dto) {
+	public void delete(ProductDTO dto) {
 		final ProductsDomain productsDomain = convertDtoToDomain(dto);
 		productsDao.delete(productsDomain);	
 	}
@@ -96,10 +93,10 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'products_' + #dto.id")
-	public ProductsDTO update(ProductsDTO dto) {
+	public ProductDTO update(ProductDTO dto) {
 		final ProductsDomain userDomain = convertDtoToDomain(dto);
 		final ProductsDomain user = productsDao.update(userDomain);
-		final ProductsDTO newDto = convertDomainToDto(user);
+		final ProductDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), newDto);
 		}
@@ -109,15 +106,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
-	public ProductsResult find(String text, Integer page, Integer size) {
-		final List<ProductsDTO> users = new ArrayList<>();
+	public ProductResult find(String text, Integer page, Integer size) {
+		final List<ProductDTO> users = new ArrayList<>();
 		
 		for (ProductsDomain domain : productsDao.find(text, page, size)) {
-			final ProductsDTO user = convertDomainToDto(domain);
+			final ProductDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
 
-		final ProductsResult userResult = new ProductsResult();
+		final ProductResult userResult = new ProductResult();
 		userResult.setProducts(users);
 		return userResult;
 
@@ -125,30 +122,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductsDTO, ProductsDo
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
-	public ProductsResult getAll(Integer page,Integer size) {
-		final List<ProductsDTO> users = new ArrayList<>();
-		
-		
-		if(b == 0) {
-			a=productsDao.findAll(1, 0).size();
-			System.out.println("a es "+a);
-			//getCacheManager().getCache("delivery-cache").put("products_" + page, size);
-		}else {
-			if(b > a) {
-				System.out.println("si b es mayor"+b);
-				a= b;
-				getCacheManager().getCache("delivery-cache").evict("products_" + page+ size);
-				System.out.println("ahora a es "+ a);
-			}
-		}
-		
+	public ProductResult getAll(Integer page,Integer size) {
+		final List<ProductDTO> users = new ArrayList<>();		
 		
 		for (ProductsDomain domain : productsDao.findAll(page, size)) {
-			final ProductsDTO user = convertDomainToDto(domain);
+			final ProductDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
 
-		final ProductsResult productsResult = new ProductsResult();
+		final ProductResult productsResult = new ProductResult();
 		productsResult.setProducts(users);
 		return productsResult;
 

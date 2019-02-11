@@ -1,26 +1,24 @@
 package com.sma.delivery.domain.orders;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.bills.BillsDomain;
-import com.sma.delivery.domain.comments.CommentsDomain;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
-import com.sma.delivery.domain.ordersDetail.OrdersDetailDomain;
+import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
 import com.sma.delivery.domain.user.UserDomain;
 @Entity
-@Table(name = "orders")
+@Table(name = "Orders")
 public class OrdersDomain implements BaseDomain {
 
 	@Id

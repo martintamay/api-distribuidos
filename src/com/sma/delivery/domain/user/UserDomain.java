@@ -1,6 +1,5 @@
 package com.sma.delivery.domain.user;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,8 +27,8 @@ public class UserDomain implements BaseDomain {
 	@Column(name = "id", nullable = false, unique = true)
 	private Integer id;
 
-	@OneToMany(mappedBy = "_user")
-	private Set<CommentsDomain> _comments = new HashSet<>();
+	@OneToMany(mappedBy = "user")
+	private Set<CommentsDomain> comments = new HashSet<>();
 
 
 	@Column(name = "email")
@@ -47,11 +46,11 @@ public class UserDomain implements BaseDomain {
 	@Column(name = "address")
 	private String address;
 
-	@Column(name = "phone_number")
-	private String phone_number;
+	@Column(name = "phoneNumber")
+	private String phoneNumber;
 
-	@Column(name = "creation_date")
-	private Timestamp creation_date;
+	@Column(name = "creationDate")
+	private Timestamp creationDate;
 
 	@OneToMany(mappedBy = "user")
 	private Set<OrdersDomain> order = new HashSet<>();
@@ -75,11 +74,11 @@ public class UserDomain implements BaseDomain {
 
 
 	public Set<CommentsDomain> getComments() {
-		return _comments;
+		return comments;
 	}
 
 	public void setComments(Set<CommentsDomain> comments) {
-		this._comments = comments;
+		this.comments = comments;
 	}
 
 	public String getFirstName() {
@@ -125,19 +124,19 @@ public class UserDomain implements BaseDomain {
 	}
 
 	public String getPhoneNumber() {
-		return phone_number;
+		return phoneNumber;
 	}
 
-	public void setPhoneNumber(String phone_number) {
-		this.phone_number = phone_number;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	public Timestamp getCreationDate() {
-		return creation_date;
+		return creationDate;
 	}
 
-	public void setCreationDate(Timestamp timestamp) {
-		this.creation_date = timestamp;
+	public void setCreationDate(Timestamp creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	public void setLastName(String lastName) {

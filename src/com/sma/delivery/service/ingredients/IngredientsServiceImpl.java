@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.ingredients.IIngredientsDao;
 import com.sma.delivery.dao.ingredients.IngredientsDaoImpl;
 import com.sma.delivery.domain.ingredients.IngredientsDomain;
-import com.sma.delivery.dto.ingredients.IngredientsDTO;
-import com.sma.delivery.dto.ingredients.IngredientsResult;
+import com.sma.delivery.dto.ingredients.IngredientDTO;
+import com.sma.delivery.dto.ingredients.IngredientResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
 
 @Service
-public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, IngredientsDomain, IngredientsDaoImpl, IngredientsResult> implements IIngredientsService {
+public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, IngredientsDomain, IngredientsDaoImpl, IngredientResult> implements IIngredientsService {
 	@Autowired
 	private IIngredientsDao ingredientsDao;
 	
@@ -25,10 +25,10 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'ingredients_' + #ingredients.id", condition = "#dto.id!=null")
-	public IngredientsDTO save(IngredientsDTO dto) {
+	public IngredientDTO save(IngredientDTO dto) {
 		final IngredientsDomain ingredientsDomain = convertDtoToDomain(dto);
 		final IngredientsDomain ingredients = ingredientsDao.save(ingredientsDomain);
-		final IngredientsDTO newDto = convertDomainToDto(ingredients);
+		final IngredientDTO newDto = convertDomainToDto(ingredients);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("ingredients_" + ingredients.getId(), newDto);
 		}
@@ -38,37 +38,36 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'ingredients_' + #id")
-	public IngredientsDTO getById(Integer id) {
+	public IngredientDTO getById(Integer id) {
 		final IngredientsDomain ingredientsDomain = ingredientsDao.getById(id);
-		final IngredientsDTO ingredientsDTO = convertDomainToDto(ingredientsDomain);
-		return ingredientsDTO;
+		return convertDomainToDto(ingredientsDomain);
 	}
 
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache", key = "'ingredients_' + #id")
-	public IngredientsResult getAll() {
-		final List<IngredientsDTO> ingredients = new ArrayList<>();
+	public IngredientResult getAll() {
+		final List<IngredientDTO> ingredients = new ArrayList<>();
 		for (IngredientsDomain domain : ingredientsDao.findAll()) {
-			final IngredientsDTO user = convertDomainToDto(domain);
+			final IngredientDTO user = convertDomainToDto(domain);
 			ingredients.add(user);
 		}
 
-		final IngredientsResult ingredientsResult = new IngredientsResult();
+		final IngredientResult ingredientsResult = new IngredientResult();
 		ingredientsResult.setIngredients(ingredients);
 		return ingredientsResult;
 	}
 
 	@Override
-	protected IngredientsDTO convertDomainToDto(IngredientsDomain domain) {
-		final IngredientsDTO ingredients = new IngredientsDTO();
+	protected IngredientDTO convertDomainToDto(IngredientsDomain domain) {
+		final IngredientDTO ingredients = new IngredientDTO();
 		ingredients.setId(domain.getId());
 		ingredients.setDescription(domain.getDescription());
 		return ingredients;
 	}
 
 	@Override
-	protected IngredientsDomain convertDtoToDomain(IngredientsDTO dto) {
+	protected IngredientsDomain convertDtoToDomain(IngredientDTO dto) {
 		final IngredientsDomain ingredients = new IngredientsDomain();
 		ingredients.setId(dto.getId());
 		ingredients.setDescription(dto.getDescription());
@@ -79,7 +78,7 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'ingredients_' + #dto.id")
-	public void delete(IngredientsDTO dto) {
+	public void delete(IngredientDTO dto) {
 		final IngredientsDomain ingredientsDomain = convertDtoToDomain(dto);
 		ingredientsDao.delete(ingredientsDomain);	
 	}
@@ -87,10 +86,10 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'productsType_' + #dto.id")
-	public IngredientsDTO update(IngredientsDTO dto) {
+	public IngredientDTO update(IngredientDTO dto) {
 		final IngredientsDomain userDomain = convertDtoToDomain(dto);
 		final IngredientsDomain user = ingredientsDao.update(userDomain);
-		final IngredientsDTO newDto = convertDomainToDto(user);
+		final IngredientDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("ingredients_" + user.getId(), newDto);
 		}
@@ -100,14 +99,14 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
-	public IngredientsResult find(String text, Integer page, Integer size) {
-		final List<IngredientsDTO> users = new ArrayList<>();
+	public IngredientResult find(String text, Integer page, Integer size) {
+		final List<IngredientDTO> users = new ArrayList<>();
 		for (IngredientsDomain domain : ingredientsDao.find(text, page, size)) {
-			final IngredientsDTO user = convertDomainToDto(domain);
+			final IngredientDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
 
-		final IngredientsResult userResult = new IngredientsResult();
+		final IngredientResult userResult = new IngredientResult();
 		userResult.setIngredients(users);
 		return userResult;
 
@@ -115,14 +114,14 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientsDTO, Ingr
 	@Override
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
-	public IngredientsResult getAll(Integer page,Integer size) {
-		final List<IngredientsDTO> users = new ArrayList<>();
+	public IngredientResult getAll(Integer page,Integer size) {
+		final List<IngredientDTO> users = new ArrayList<>();
 		for (IngredientsDomain domain : ingredientsDao.findAll(page, size)) {
-			final IngredientsDTO user = convertDomainToDto(domain);
+			final IngredientDTO user = convertDomainToDto(domain);
 			users.add(user);
 		}
 
-		final IngredientsResult ingredientsResult = new IngredientsResult();
+		final IngredientResult ingredientsResult = new IngredientResult();
 		ingredientsResult.setIngredients(users);
 		return ingredientsResult;
 

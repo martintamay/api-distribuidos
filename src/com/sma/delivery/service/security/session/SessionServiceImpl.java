@@ -11,18 +11,18 @@ import com.sma.delivery.domain.session.SessionDomain;
 public class SessionServiceImpl implements ISessionService {
 
 	@Autowired
-	private ISessionDao _sessionDao;
+	private ISessionDao sessionDao;
 
 	@Override
 	@Transactional
 	public SessionDomain getById(Integer id) {
-		return _sessionDao.getById(id);
+		return sessionDao.getById(id);
 	}
 
 	@Override
 	@Transactional
 	public SessionDomain save(SessionDomain domain) {
-		return _sessionDao.save(domain);
+		return sessionDao.save(domain);
 	}
 
 }
