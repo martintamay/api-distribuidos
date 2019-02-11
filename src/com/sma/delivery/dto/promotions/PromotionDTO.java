@@ -1,4 +1,5 @@
 package com.sma.delivery.dto.promotions;
+import java.sql.Date;
 import java.sql.Time;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -11,7 +12,7 @@ public class PromotionDTO extends BaseDTO{
 private static final long serialVersionUID = 1L;
 	private String name;
 	private String available;
-	private Time endDate;
+	private Date endDate;
 
 	
 	@XmlElement
@@ -30,10 +31,10 @@ private static final long serialVersionUID = 1L;
 		this.available = available;
 	}
 	@XmlElement
-	public Time getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Time endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	

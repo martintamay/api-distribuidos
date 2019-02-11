@@ -1,5 +1,6 @@
 package com.sma.delivery.domain.promotions;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,14 +24,14 @@ public class PromotionsDomain implements BaseDomain {
 	@Column(name = "id", nullable = false, unique = true)
 	private Integer id;
 
-	@Column(name = "name", nullable = false, unique = true)
+	@Column(name = "name", nullable = false)
 	private String name;
 	
 	@Column(name = "available", nullable = true)
 	private String available;
 	
 	@Column(name = "enddate", nullable = false)
-	private Time endDate;
+	private Date endDate;
 
 	@OneToMany(mappedBy = "promotion")
 	private Set<OrdersDetailDomain> orderDetails = new HashSet<>();
@@ -67,11 +68,11 @@ public class PromotionsDomain implements BaseDomain {
 		this.available = available;
 	}
 
-	public Time getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Time endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 	
