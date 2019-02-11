@@ -1,6 +1,6 @@
 package com.sma.delivery.dto.promotions;
 import java.sql.Date;
-import java.sql.Time;
+
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

@@ -1,13 +1,11 @@
 package com.sma.delivery.dao.establishments;
 
 import java.util.List;
-import java.util.logging.Level;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +14,6 @@ import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 
 @Repository
 public class EstablishmentsDaoImpl extends BaseDaoImpl<EstablishmentsDomain> implements IEstablishmentsDao{
-	private static final Logger LOGGER = Logger.getLogger( EstablishmentsDaoImpl.class.getName() );
 
 	@Autowired
 	private SessionFactory sessionFactory;
