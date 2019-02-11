@@ -23,7 +23,7 @@ public class ProyectProperties {
 	
 	private void setProperties() {
 		// se carga el archivo properties WEB-INF/classes/mailer.properties
-		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("/mailer.properties")){
+		try (InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("/runtime.properties")){
 			props.load(inputStream);
 		} catch (IOException ex) {
 			LOGGER.log(Level.SEVERE, ex.toString(), ex);
