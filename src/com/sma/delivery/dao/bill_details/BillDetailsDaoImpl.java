@@ -1,8 +1,11 @@
 package com.sma.delivery.dao.bill_details;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -76,5 +79,25 @@ public class BillDetailsDaoImpl extends BaseDaoImpl<BillsDetailsDomain> implemen
 		return safeConversion(criteria.list(), BillsDetailsDomain.class);
 	}
 	
+	@Override
+	public List<BillsDetailsDomain> findAllBy(Map<String, String> args) {
+		if(args.containsKey("billId")){
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("select * from bills_details where _bills_id=:billId");
+			query.addEntity(BillsDetailsDomain.class); // Define el tipo de resultado de la consulta
+			query.setString("billId", args.get("billId"));
+			return query.list();
+		}
+		return new ArrayList<>();
+	}
+	
+	@Override
+	public void deleteByBill(Integer id) {
+		if(id!=null){
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("delete from bills_details where _bills_id=:billId");
+			query.addEntity(BillsDetailsDomain.class); // Define el tipo de resultado de la consulta
+			query.setInteger("billId", id);
+			query.executeUpdate();
+		}
+	}
 
 }

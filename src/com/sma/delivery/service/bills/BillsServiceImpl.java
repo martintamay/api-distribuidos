@@ -13,9 +13,11 @@ import com.sma.delivery.dao.bills.BillsDaoImpl;
 import com.sma.delivery.dao.bills.IBillsDao;
 import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.domain.bills.BillsDomain;
+
 import com.sma.delivery.dto.bills.BillDTO;
 import com.sma.delivery.dto.bills.BillResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
+import com.sma.delivery.service.bill_details.IBillsDetailsService;
 
 @Service
 public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, BillsDaoImpl, BillResult> implements IBillsService {
@@ -24,7 +26,8 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 	
 	@Autowired
 	private IOrdersDao ordersDao;
-	
+	@Autowired
+	private IBillsDetailsService billsDetailsService;
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'bills_' + #bills.id", condition = "#dto.id!=null")
@@ -34,6 +37,10 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 		final BillDTO newDto = convertDomainToDto(domain);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("bills_" + domain.getId(), newDto);
+		}
+		for(BillsDetailsDTO detail: dto.getBillsDetails()){
+			detail.setBill(dto);
+			billsDetailsService.save(details);
 		}
 		return convertDomainToDto(billsDomain);
 	}

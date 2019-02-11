@@ -1,13 +1,17 @@
 package com.sma.delivery.domain.bills;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
+import com.sma.delivery.domain.bills_details.BillsDetailsDomain;
 import com.sma.delivery.domain.orders.OrdersDomain;
 
 @Entity
@@ -24,9 +28,9 @@ public class BillsDomain implements BaseDomain {
 	@Column(name = "iva10")
 	private Integer iva10;
 	
-	@ManyToOne
-	private OrdersDomain orders;
-	
+	@OneToMany(mappedBy = "bills")
+	private Set<BillsDetailsDomain> billsDetails = new HashSet<>();
+
 	public Integer getId() {
 		return id;
 	}

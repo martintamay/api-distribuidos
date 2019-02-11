@@ -10,12 +10,15 @@ import org.springframework.stereotype.Repository;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
 import com.sma.delivery.domain.bills.BillsDomain;
+import com.sma.delivery.service.bill_details.IBillsDetailsService;
 
 @Repository
 public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao{
 	@Autowired
 	private SessionFactory sessionFactory;
-
+	
+	@Autowired
+	private IBillsDetailsService billsDetailsService;
 	@Override
 	public BillsDomain save(BillsDomain domain) {
 		sessionFactory.getCurrentSession().save(domain);

@@ -141,6 +141,25 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		billsResult.setBillsDetails(bills);
 		return billsResult;
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BillDetailResult getAllBy(Map<String,String> args){
+		final List<BillDetailDTO> billsDetails = new ArrayList<>();
+		for (BillsDetailsDomain domain : billsDetailsDao.findAllBy(args)){
+			final BillDetailDTO dto = convertDomainToDto(domain);
+			billsDetails.add(dto);
+		}
+		final BillDetailResult billsDetailsResult = new BillDetailResult();
+		billsDetailsResult.setBillsDetails(billsDetails);
+		return billsDetailsResult;
+	}
+	
+	@Override
+	public void deleteByBills(Integer id){
+		billsDetailsDao.deleteByBill(id);
+	}
+	
 
 }
 

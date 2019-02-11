@@ -1,5 +1,8 @@
 package com.sma.delivery.resource;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -69,6 +72,15 @@ public class BillDetailsResource {
 	public BillDetailDTO update(BillDetailDTO bills, @PathParam("id") Integer billsId) {
 		bills.setId(billsId);
 		return billsDetailsService.update(bills);
+	}
+	
+	@GET
+	@Path("/billId/{billId}")
+	@Produces("application/xml")
+	public BillDetailResult getAllBy(@PathParam("billId") String billId){
+		Map<String, String> args = new HashMap<>();
+		args.put("billId", billId);
+		return billsDetailsService.getAllBy(args);
 	}
 	
 }
