@@ -1,4 +1,4 @@
-package com.sma.delivery.dao.roles;
+package com.sma.delivery.dao.api_clients;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.sma.delivery.dao.base.BaseDaoImpl;
-import com.sma.delivery.domain.roles.ApiClientDomain;
+import com.sma.delivery.domain.api_clients.ApiClientDomain;
 
 @Repository
 public class ApiClientDaoImpl extends BaseDaoImpl<ApiClientDomain> implements IApiClientDao {
