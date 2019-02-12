@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -30,20 +31,20 @@ public class CommentsServiceImpl extends BaseServiceImpl<CommentDTO, CommentsDom
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'comments_' + #comment.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'commentsA_' + #comment.id", condition = "#dto.id!=null")
 	public CommentDTO save(CommentDTO dto) {
 		final CommentsDomain domain = convertDtoToDomain(dto);
 		final CommentsDomain commentsDomain = commentsDao.save(domain);
 		final CommentDTO newDto = convertDomainToDto(domain);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("comments_" + domain.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("commentsA_" + domain.getId(), newDto);
 		}
 		return convertDomainToDto(commentsDomain);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'comments_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'commentsA_' + #id")
 	public CommentDTO getById(Integer id) {
 		final CommentsDomain domain = commentsDao.getById(id);
 		return convertDomainToDto(domain);
@@ -51,12 +52,14 @@ public class CommentsServiceImpl extends BaseServiceImpl<CommentDTO, CommentsDom
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'comments_' + #id")
 	public CommentResult getAll() {
 		final List<CommentDTO> comments = new ArrayList<>();
 		for (CommentsDomain domain : commentsDao.findAll()) {
 			final CommentDTO dto = convertDomainToDto(domain);
 			comments.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("commentsA_" + dto.getId(), dto);
+			}
 		}
 		final CommentResult commentsResult = new CommentResult();
 		commentsResult.setComments(comments);
@@ -103,20 +106,20 @@ public class CommentsServiceImpl extends BaseServiceImpl<CommentDTO, CommentsDom
 		}
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'comments_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'commentsA_' + #dto.id")
 	public CommentDTO update(CommentDTO dto) {
 		final CommentsDomain clientDomain = convertDtoToDomain(dto);
 		final CommentsDomain client = commentsDao.update(clientDomain);
 		final CommentDTO newDto = convertDomainToDto(client);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("comments_" + client.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("commentsA_" + client.getId(), newDto);
 		}
 		return convertDomainToDto(client);
 	}
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'comments_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'commentsA_' + #dto.id")
 	public void delete(CommentDTO dto) {
 		final CommentsDomain commentsDomain = convertDtoToDomain(dto);
 		commentsDao.delete(commentsDomain);	
@@ -130,6 +133,9 @@ public class CommentsServiceImpl extends BaseServiceImpl<CommentDTO, CommentsDom
 		for (CommentsDomain domain : commentsDao.find(text,page, size)) {
 			final CommentDTO user = convertDomainToDto(domain);
 			comments.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("commentsA_" + user.getId(), user);
+			}
 		}
 
 		final CommentResult commentsResult = new CommentResult();
@@ -138,12 +144,14 @@ public class CommentsServiceImpl extends BaseServiceImpl<CommentDTO, CommentsDom
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_com' + #page + #size")
 	public CommentResult getAll(Integer page,Integer size) {
 		final List<CommentDTO> comments = new ArrayList<>();
 		for (CommentsDomain domain : commentsDao.findAll(page,size)) {
 			final CommentDTO dto = convertDomainToDto(domain);
 			comments.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("commentsA_" + dto.getId(), dto);
+			}
 		}
 		final CommentResult commentsResult = new CommentResult();
 		commentsResult.setComments(comments);

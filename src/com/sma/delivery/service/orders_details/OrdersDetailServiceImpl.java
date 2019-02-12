@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -38,20 +39,20 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'ordersDetail_' + #ordersDetail.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #ordersDetail.id", condition = "#dto.id!=null")
 	public OrderDetailDTO save(OrderDetailDTO dto) {
 		final OrdersDetailDomain domain = convertDtoToDomain(dto);
 		final OrdersDetailDomain ordersDomain = ordersDetailDao.save(domain);
 		final OrderDetailDTO newDto = convertDomainToDto(ordersDomain);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("ordersDetail_" + ordersDomain.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + ordersDomain.getId(), newDto);
 		}
 		return convertDomainToDto(ordersDomain);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'ordersDetail_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'ordersDetailA_' + #id")
 	public OrderDetailDTO getById(Integer id) {
 		final OrdersDetailDomain domain = ordersDetailDao.getById(id);
 		return convertDomainToDto(domain);
@@ -59,12 +60,14 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'ordersDetail_' + #id")
 	public OrderDetailResult getAll() {
 		final List<OrderDetailDTO> orders = new ArrayList<>();
 		for (OrdersDetailDomain domain : ordersDetailDao.findAll()) {
 			final OrderDetailDTO dto = convertDomainToDto(domain);
 			orders.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + dto.getId(), dto);
+			}
 		}
 		final OrderDetailResult commentsResult = new OrderDetailResult();
 		commentsResult.setOrdersDetail(orders);
@@ -103,32 +106,34 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'ordersDetail_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
 	public void delete(OrderDetailDTO dto) {
 		final OrdersDetailDomain userDomain = convertDtoToDomain(dto);
 		ordersDetailDao.delete(userDomain);	
 	}
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'ordersDetail_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
 	public OrderDetailDTO update(OrderDetailDTO dto) {
 		final OrdersDetailDomain userDomain = convertDtoToDomain(dto);
 		final OrdersDetailDomain user = ordersDetailDao.update(userDomain);
 		final OrderDetailDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("ordersDetail_" + user.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + user.getId(), newDto);
 		}
 		return convertDomainToDto(user);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'busqueda_od' + #text")
 	public OrderDetailResult find(String text, Integer page, Integer size) {
 		final List<OrderDetailDTO> orders = new ArrayList<>();
 		for (OrdersDetailDomain domain : ordersDetailDao.find(text, page, size)) {
 			final OrderDetailDTO order = convertDomainToDto(domain);
 			orders.add(order);
+			if (order.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + order.getId(), order);
+			}
 		}
 
 		final OrderDetailResult ordersResult = new OrderDetailResult();
@@ -137,12 +142,14 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_od' + #page + #size")
 	public OrderDetailResult getAll(Integer page,Integer size) {
 		final List<OrderDetailDTO> orders = new ArrayList<>();
 		for (OrdersDetailDomain domain : ordersDetailDao.findAll(page,size)) {
 			final OrderDetailDTO dto = convertDomainToDto(domain);
 			orders.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + dto.getId(), dto);
+			}
 		}
 		final OrderDetailResult commentsResult = new OrderDetailResult();
 		commentsResult.setOrdersDetail(orders);

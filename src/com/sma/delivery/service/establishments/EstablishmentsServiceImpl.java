@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,20 +23,20 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentDTO,
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'establishments_' + #establishments.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'establishmentsA_' + #establishments.id", condition = "#dto.id!=null")
 	public EstablishmentDTO save(EstablishmentDTO dto) {
 		final EstablishmentsDomain domain = convertDtoToDomain(dto);
 		final EstablishmentsDomain establishmentsDomain = establishmentsDao.save(domain);
 		final EstablishmentDTO newDto = convertDomainToDto(establishmentsDomain);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("establishments_" + establishmentsDomain.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("establishmentsA_" + establishmentsDomain.getId(), newDto);
 		}
 		return convertDomainToDto(establishmentsDomain);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'establishments_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'establishmentsA_' + #id")
 	public EstablishmentDTO getById(Integer id) {
 		final EstablishmentsDomain domain = establishmentsDao.getById(id);
 		return convertDomainToDto(domain);
@@ -43,7 +44,7 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentDTO,
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'establishments_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'establishmentsA_' + #id")
 	public EstablishmentResult getAll() {
 		final List<EstablishmentDTO> countries = new ArrayList<>();
 		for (EstablishmentsDomain domain : establishmentsDao.findAll()) {
@@ -82,32 +83,34 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentDTO,
 	}
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'establishments_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'establishmentsA_' + #dto.id")
 	public void delete(EstablishmentDTO dto) {
 		final EstablishmentsDomain establishmentsDomain = convertDtoToDomain(dto);
 		establishmentsDao.delete(establishmentsDomain);
 	}
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'establishments_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'establishmentAs_' + #dto.id")
 	public EstablishmentDTO update(EstablishmentDTO dto) {
 		final EstablishmentsDomain establishmentsDomain = convertDtoToDomain(dto);
 		final EstablishmentsDomain establishments = establishmentsDao.update(establishmentsDomain);
 		final EstablishmentDTO newDto = convertDomainToDto(establishments);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("establishments_" + establishments.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("establishmentsA_" + establishments.getId(), newDto);
 		}
 		return convertDomainToDto(establishments);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'busqueda_est' + #text")
 	public EstablishmentResult find(String text, Integer page, Integer size) {
 		final List<EstablishmentDTO> establishments = new ArrayList<>();
 		for (EstablishmentsDomain domain : establishmentsDao.find(text, page, size)) {
 			final EstablishmentDTO establishment = convertDomainToDto(domain);
 			establishments.add(establishment);
+			if (establishment.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("establishmentsA_" + establishment.getId(), establishment);
+			}
 		}
  		final EstablishmentResult establishmentsResult = new EstablishmentResult();
 		establishmentsResult.setEstablishments(establishments);
@@ -115,12 +118,14 @@ public class EstablishmentsServiceImpl extends BaseServiceImpl<EstablishmentDTO,
  	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_est' + #page + #size")
 	public EstablishmentResult getAll(Integer page,Integer size) {
 		final List<EstablishmentDTO> countries = new ArrayList<>();
 		for (EstablishmentsDomain domain : establishmentsDao.findAll(page,size)) {
 			final EstablishmentDTO dto = convertDomainToDto(domain);
 			countries.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("establishmentsA_" + dto.getId(), dto);
+			}
 		}
 		final EstablishmentResult establishmentsResult = new EstablishmentResult();
 		establishmentsResult.setEstablishments(countries);

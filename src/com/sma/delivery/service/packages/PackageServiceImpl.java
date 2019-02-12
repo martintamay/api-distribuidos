@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -25,20 +26,20 @@ public class PackageServiceImpl extends BaseServiceImpl<PackageDTO, PackageDomai
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'package_' + #package.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'packageA_' + #package.id", condition = "#dto.id!=null")
 	public PackageDTO save(PackageDTO dto) {
 		final PackageDomain packageDomain = convertDtoToDomain(dto);
 		final PackageDomain packaged = packageDao.save(packageDomain);
 		final PackageDTO newDto = convertDomainToDto(packaged);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("package_" + packaged.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("packageA_" + packaged.getId(), newDto);
 		}
 		return convertDomainToDto(packaged);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'package_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'packageA_' + #id")
 	public PackageDTO getById(Integer id) {
 		final PackageDomain packageDomain = packageDao.getById(id);
 		return convertDomainToDto(packageDomain);
@@ -46,12 +47,14 @@ public class PackageServiceImpl extends BaseServiceImpl<PackageDTO, PackageDomai
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'package_' + #id")
 	public PackageResult getAll() {
 		final List<PackageDTO> packaged = new ArrayList<>();
 		for (PackageDomain domain : packageDao.findAll()) {
 			final PackageDTO user = convertDomainToDto(domain);
 			packaged.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("packageA_" + user.getId(), user);
+			}
 		}
 
 		final PackageResult packageResult = new PackageResult();
@@ -79,7 +82,7 @@ public class PackageServiceImpl extends BaseServiceImpl<PackageDTO, PackageDomai
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'package_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'packageA_' + #dto.id")
 	public void delete(PackageDTO dto) {
 		final PackageDomain packageDomain = convertDtoToDomain(dto);
 		packageDao.delete(packageDomain);	
@@ -87,25 +90,27 @@ public class PackageServiceImpl extends BaseServiceImpl<PackageDTO, PackageDomai
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'package_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'packageA_' + #dto.id")
 	public PackageDTO update(PackageDTO dto) {
 		final PackageDomain userDomain = convertDtoToDomain(dto);
 		final PackageDomain user = packageDao.update(userDomain);
 		final PackageDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("package_" + user.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("packageA_" + user.getId(), newDto);
 		}
 		return convertDomainToDto(user);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
 	public PackageResult find(String text, Integer page, Integer size) {
 		final List<PackageDTO> users = new ArrayList<>();
 		for (PackageDomain domain : packageDao.find(text, page, size)) {
 			final PackageDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("packageA_" + user.getId(), user);
+			}
 		}
 
 		final PackageResult userResult = new PackageResult();
@@ -115,12 +120,14 @@ public class PackageServiceImpl extends BaseServiceImpl<PackageDTO, PackageDomai
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
 	public PackageResult getAll(Integer page,Integer size) {
 		final List<PackageDTO> users = new ArrayList<>();
 		for (PackageDomain domain : packageDao.findAll(page, size)) {
 			final PackageDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("packageA_" + user.getId(), user);
+			}
 		}
 
 		final PackageResult packageResult = new PackageResult();

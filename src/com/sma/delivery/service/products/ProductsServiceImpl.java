@@ -27,20 +27,20 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'products_' + #products.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'productsA_' + #products.id", condition = "#dto.id!=null")
 	public ProductDTO save(ProductDTO dto) {
 		final ProductsDomain productsDomain = convertDtoToDomain(dto);
 		final ProductsDomain product = productsDao.save(productsDomain);
 		final ProductDTO newDto = convertDomainToDto(product);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("products_" + product.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("productsA_" + product.getId(), newDto);
 		}
 		return convertDomainToDto(product);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'products_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'productsA_' + #id")
 	public ProductDTO getById(Integer id) {
 		final ProductsDomain productsDomain = productsDao.getById(id);
 		return convertDomainToDto(productsDomain);
@@ -54,7 +54,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 			final ProductDTO user = convertDomainToDto(domain);
 			products.add(user);
 			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), user);
+				getCacheManager().getCache("delivery-cache").put("productsA_" + user.getId(), user);
 			}
 		}
 
@@ -87,7 +87,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 
 	@Override
 	@Transactional
-	@CacheEvict(value = "delivery-cache", key = "'products_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'productsA_' + #dto.id")
 	public void delete(ProductDTO dto) {
 		final ProductsDomain productsDomain = convertDtoToDomain(dto);
 		productsDao.delete(productsDomain);	
@@ -95,13 +95,13 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'products_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'productsA_' + #dto.id")
 	public ProductDTO update(ProductDTO dto) {
 		final ProductsDomain userDomain = convertDtoToDomain(dto);
 		final ProductsDomain user = productsDao.update(userDomain);
 		final ProductDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("productsA_" + user.getId(), newDto);
 		}
 		return convertDomainToDto(user);
 	}
@@ -115,7 +115,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 			final ProductDTO user = convertDomainToDto(domain);
 			users.add(user);
 			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), user);
+				getCacheManager().getCache("delivery-cache").put("productsA_" + user.getId(), user);
 			}
 		}
 
@@ -133,7 +133,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 			final ProductDTO user = convertDomainToDto(domain);
 			users.add(user);
 			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), user);
+				getCacheManager().getCache("delivery-cache").put("productsA_" + user.getId(), user);
 			}
 		}
 

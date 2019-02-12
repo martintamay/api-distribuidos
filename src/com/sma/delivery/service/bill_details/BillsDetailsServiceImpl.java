@@ -28,13 +28,13 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'billsDetails_' + #billsDetails.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'billsDetailsA_' + #billsDetails.id", condition = "#dto.id!=null")
 	public BillDetailDTO save(BillDetailDTO dto) {
 		final BillsDetailsDomain domain = convertDtoToDomain(dto);
 		final BillsDetailsDomain billsDomain = billsDetailsDao.save(domain);
 		final BillDetailDTO newDto = convertDomainToDto(domain);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("billsDeails_" + domain.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("billsDeailsA_" + domain.getId(), newDto);
 		}
 		return convertDomainToDto(billsDomain);
 	}
@@ -49,12 +49,14 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'billsDetails_' + #id")
 	public BillDetailResult getAll() {
 		final List<BillDetailDTO> bills = new ArrayList<>();
 		for (BillsDetailsDomain domain : billsDetailsDao.findAll()) {
 			final BillDetailDTO dto = convertDomainToDto(domain);
 			bills.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+			}
 		}
 		final BillDetailResult billsResult = new BillDetailResult();
 		billsResult.setBillsDetails(bills);
@@ -123,6 +125,9 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		for (BillsDetailsDomain domain : billsDetailsDao.find(text, page, size)) {
 			final BillDetailDTO user = convertDomainToDto(domain);
 			bills.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + user.getId(), user);
+			}
 		}
 
 		final BillDetailResult billsResult = new BillDetailResult();
@@ -131,12 +136,14 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_bid' + #page + #size")
 	public BillDetailResult getAll(Integer page,Integer size) {
 		final List<BillDetailDTO> bills = new ArrayList<>();
 		for (BillsDetailsDomain domain : billsDetailsDao.findAll(page,size)) {
 			final BillDetailDTO dto = convertDomainToDto(domain);
 			bills.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+			}
 		}
 		final BillDetailResult billsResult = new BillDetailResult();
 		billsResult.setBillsDetails(bills);
@@ -150,6 +157,9 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		for (BillsDetailsDomain domain : billsDetailsDao.findAllBy(args)){
 			final BillDetailDTO dto = convertDomainToDto(domain);
 			billsDetails.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+			}
 		}
 		final BillDetailResult billsDetailsResult = new BillDetailResult();
 		billsDetailsResult.setBillsDetails(billsDetails);

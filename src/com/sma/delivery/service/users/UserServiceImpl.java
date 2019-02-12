@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'user_' + #user.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'userA_' + #user.id", condition = "#dto.id!=null")
 	public UserDTO save(UserDTO dto) {
 		final UserDomain userDomain = convertDtoToDomain(dto);
 		final RolesDomain roleDomain = rolesDao.getById(1);
@@ -41,14 +42,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 		final UserDomain userWithRoles = userDao.save(userDomain);
 		final UserDTO newDto = convertDomainToDto(userWithRoles);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("user_" + userWithRoles.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("userA_" + userWithRoles.getId(), newDto);
 		}
 		return convertDomainToDto(userWithRoles);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'user_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'userA_' + #id")
 	public RoleResult getRoles(Integer id) {
 		final List<RoleDTO> roles = new ArrayList<>();
 		for (RolesDomain domain : userDao.getById(id).getRoles()) {
@@ -64,7 +65,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'user_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'userA_' + #id")
 	public UserDTO getById(Integer id) {
 		final UserDomain userDomain = userDao.getById(id);
 		return convertDomainToDto(userDomain);
@@ -73,12 +74,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'user_' + #id")
 	public UserResult getAll() {
 		final List<UserDTO> users = new ArrayList<>();
 		for (UserDomain domain : userDao.findAll()) {
 			final UserDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("userA_" + user.getId(), user);
+			}
 		}
 
 		final UserResult userResult = new UserResult();
@@ -129,7 +132,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'user_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'userA_' + #dto.id")
 	public void delete(UserDTO dto) {
 		final UserDomain userDomain = convertDtoToDomain(dto);
 		userDao.delete(userDomain);
@@ -137,13 +140,13 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'user_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'userA_' + #dto.id")
 	public UserDTO update(UserDTO dto) {
 		final UserDomain userDomain = convertDtoToDomain(dto);
 		final UserDomain user = userDao.update(userDomain);
 		final UserDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("user_" + user.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("userA_" + user.getId(), newDto);
 		}
 		return convertDomainToDto(user);
 	}
@@ -152,7 +155,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'user_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'userA_' + #dto.id")
 	public RoleResult addRole(Integer userId, Integer roleId) {
 		// se obtienen el userDomain y roleDomain
 		final UserDomain userDomain = userDao.getById(userId);
@@ -173,12 +176,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'busqueda_use' + #text")
 	public UserResult find(String text,Integer page,Integer size) {
 		final List<UserDTO> users = new ArrayList<>();
 		for (UserDomain domain : userDao.find(text,page,size)) {
 			final UserDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("userA_" + user.getId(), user);
+			}
 		}
 
 		final UserResult userResult = new UserResult();
@@ -189,12 +194,14 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_use' + #page + #size")
 	public UserResult getAll(Integer page,Integer size) {
 		final List<UserDTO> users = new ArrayList<>();
 		for (UserDomain domain : userDao.findAll(page, size)) {
 			final UserDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("userA_" + user.getId(), user);
+			}
 		}
 
 		final UserResult userResult = new UserResult();

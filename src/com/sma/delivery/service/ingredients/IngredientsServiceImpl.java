@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, Ingre
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'ingredients_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'ingredientsA_' + #id")
 	public IngredientDTO getById(Integer id) {
 		final IngredientsDomain ingredientsDomain = ingredientsDao.getById(id);
 		return convertDomainToDto(ingredientsDomain);
@@ -45,12 +46,14 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, Ingre
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'ingredients_' + #id")
 	public IngredientResult getAll() {
 		final List<IngredientDTO> ingredients = new ArrayList<>();
 		for (IngredientsDomain domain : ingredientsDao.findAll()) {
 			final IngredientDTO user = convertDomainToDto(domain);
 			ingredients.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ingredientsA_" + user.getId(), user);
+			}
 		}
 
 		final IngredientResult ingredientsResult = new IngredientResult();
@@ -77,7 +80,7 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, Ingre
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'ingredients_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'ingredientsA_' + #dto.id")
 	public void delete(IngredientDTO dto) {
 		final IngredientsDomain ingredientsDomain = convertDtoToDomain(dto);
 		ingredientsDao.delete(ingredientsDomain);	
@@ -85,25 +88,27 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, Ingre
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'productsType_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'ingredientsA_' + #dto.id")
 	public IngredientDTO update(IngredientDTO dto) {
 		final IngredientsDomain userDomain = convertDtoToDomain(dto);
 		final IngredientsDomain user = ingredientsDao.update(userDomain);
 		final IngredientDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("ingredients_" + user.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("ingredientsA_" + user.getId(), newDto);
 		}
 		return convertDomainToDto(user);
 	}
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
 	public IngredientResult find(String text, Integer page, Integer size) {
 		final List<IngredientDTO> users = new ArrayList<>();
 		for (IngredientsDomain domain : ingredientsDao.find(text, page, size)) {
 			final IngredientDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ingredientsA_" + user.getId(), user);
+			}
 		}
 
 		final IngredientResult userResult = new IngredientResult();
@@ -113,12 +118,14 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, Ingre
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
 	public IngredientResult getAll(Integer page,Integer size) {
 		final List<IngredientDTO> users = new ArrayList<>();
 		for (IngredientsDomain domain : ingredientsDao.findAll(page, size)) {
 			final IngredientDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ingredientsA_" + user.getId(), user);
+			}
 		}
 
 		final IngredientResult ingredientsResult = new IngredientResult();
