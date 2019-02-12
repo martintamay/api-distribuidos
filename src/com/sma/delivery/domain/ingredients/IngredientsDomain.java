@@ -1,12 +1,17 @@
 package com.sma.delivery.domain.ingredients;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
+import com.sma.delivery.domain.products.ProductsDomain;
 
 
 
@@ -22,6 +27,16 @@ public class IngredientsDomain implements BaseDomain {
 	@Column(name = "description")
 	private String description;
 
+	@ManyToMany(mappedBy = "ingredients")
+	private Set<ProductsDomain> products = new HashSet<>();
+	
+	public Set<ProductsDomain> getIngredientsHasProducts() {
+		return products;
+	}
+
+	public void setIngredientsHasProducts(Set<ProductsDomain> products) {
+		this.products = products;
+	}
 	
 	public Integer getId() {
 		return id;

@@ -1,7 +1,9 @@
 package com.sma.delivery.domain.user;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -9,6 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -17,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.comments.CommentsDomain;
 import com.sma.delivery.domain.orders.OrdersDomain;
+import com.sma.delivery.domain.roles.RolesDomain;
 
 @Entity
 @Table(name = "user")
@@ -30,6 +36,21 @@ public class UserDomain implements BaseDomain {
 	@OneToMany(mappedBy = "user")
 	private Set<CommentsDomain> comments = new HashSet<>();
 
+	@ManyToMany
+	@JoinTable(
+		name = "user_roles",
+		joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
+		inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")}
+	)
+	private List<RolesDomain> roles = new ArrayList<>();
+	
+	public List<RolesDomain> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<RolesDomain> roles) {
+		this.roles = roles;
+	}
 
 	@Column(name = "email")
 	private String email;

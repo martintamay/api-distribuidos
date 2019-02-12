@@ -12,8 +12,10 @@ import javax.ws.rs.QueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sma.delivery.dto.roles.RoleResult;
 import com.sma.delivery.dto.users.UserDTO;
 import com.sma.delivery.dto.users.UserResult;
+import com.sma.delivery.service.roles.IRolesService;
 import com.sma.delivery.service.users.IUserService;
 
 @Path("/users")
@@ -29,6 +31,21 @@ public class UsersResource {
 	public UserDTO getById(@PathParam("id") Integer userId) {
 		return userService.getById(userId);
 	}
+	
+	@GET
+	@Path("/{id}/roles")
+	@Produces({"application/xml", "application/json"})
+	public RoleResult getRolesById(@PathParam("id") Integer userId) {
+		return userService.getRoles(userId);
+	}
+	
+	@POST
+	@Path("/{id}/roles/{roleId}")
+	@Produces({"application/xml", "application/json"})
+	public RoleResult addRole(@PathParam("id") Integer userId, @PathParam("roleId") Integer roleId) {
+		return userService.addRole(userId, roleId);
+	}
+
 
 	@GET
 	@Path("/search/{page}/{size}/{text}")

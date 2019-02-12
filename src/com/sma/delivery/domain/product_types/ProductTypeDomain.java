@@ -1,12 +1,17 @@
 package com.sma.delivery.domain.product_types;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
+import com.sma.delivery.domain.products.ProductsDomain;
 
 
 
@@ -39,12 +44,14 @@ public class ProductTypeDomain implements BaseDomain {
 		this.description = description;
 	}
 
-
+	@ManyToMany(mappedBy = "productTypes")
+	private Set<ProductsDomain> products = new HashSet<>();
 	
-	
-	
-	
+	public Set<ProductsDomain> getProductTypesHasProducts() {
+		return products;
+	}
 
-
-
+	public void setProductTypesHasProducts(Set<ProductsDomain> products) {
+		this.products = products;
+	}
 }

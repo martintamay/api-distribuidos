@@ -4,7 +4,7 @@ import java.security.Principal;
 
 import javax.ws.rs.core.SecurityContext;
 
-import com.sma.delivery.domain.roles.ApiClientDomain;
+import com.sma.delivery.domain.api_clients.ApiClientDomain;
 import com.sma.delivery.domain.session.SessionDomain;
 
 public class SdSecurityContext implements SecurityContext {

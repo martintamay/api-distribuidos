@@ -8,13 +8,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
+import com.sma.delivery.domain.ingredients.IngredientsDomain;
 import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
+import com.sma.delivery.domain.product_types.ProductTypeDomain;
 
 @Entity
 @Table(name = "Products")
@@ -35,6 +40,39 @@ public class ProductsDomain implements BaseDomain {
 
 	@ManyToOne
 	private EstablishmentsDomain establisment;
+
+
+	@ManyToMany
+	@JoinTable(
+		name = "product_ingredients",
+		joinColumns = {@JoinColumn(name="product_id", referencedColumnName="id")},
+		inverseJoinColumns = {@JoinColumn(name="ingredient_id", referencedColumnName="id")}
+	)
+	private Set<IngredientsDomain> ingredients = new HashSet<>();
+	
+	public Set<IngredientsDomain> getIngredients() {
+		return ingredients;
+	}
+
+	public void setIngredients(Set<IngredientsDomain> ingredients) {
+		this.ingredients = ingredients;
+	}
+
+	@ManyToMany
+	@JoinTable(
+		name = "product_product_types",
+		joinColumns = {@JoinColumn(name="product_id", referencedColumnName="id")},
+		inverseJoinColumns = {@JoinColumn(name="producttype_id", referencedColumnName="id")}
+	)
+	private Set<ProductTypeDomain> productTypes = new HashSet<>();
+	
+	public Set<ProductTypeDomain> getProductTypes() {
+		return productTypes;
+	}
+
+	public void setProductTypes(Set<ProductTypeDomain> productTypes) {
+		this.productTypes = productTypes;
+	}
 	
 	@OneToMany(mappedBy = "product")
 	private Set<OrdersDetailDomain> orderDetail = new HashSet<>();
