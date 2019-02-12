@@ -66,7 +66,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		final BillDetailDTO dto = new BillDetailDTO();
 		dto.setId(domain.getId());
 		dto.setAmount(domain.getAmount());
-		dto.setIva10(domain.getIva10());
+		dto.setIva(domain.getIva10());
 		dto.setBill(domain.getBill().getId());
 		return dto;
 	}

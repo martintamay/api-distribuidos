@@ -23,7 +23,7 @@ public class BillDetailDTO extends BaseDTO{
 		return iva10;
 	}
 
-	public void setIva10(Integer iva10) {
+	public void setIva(Integer iva10) {
 		this.iva10 = iva10;
 	}
 	@XmlElement
