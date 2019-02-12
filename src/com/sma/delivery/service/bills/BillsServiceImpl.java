@@ -98,6 +98,10 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("bills_" + client.getId(), newDto);
 		}
+		for(BillDetailDTO detail: dto.getBillsDetails()){
+			detail.setBill(newDto.getId());
+			billsDetailsService.update(detail);
+		}
 		return convertDomainToDto(client);
 	}
 	
