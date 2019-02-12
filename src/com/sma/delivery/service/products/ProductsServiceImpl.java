@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -47,12 +48,14 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'products_' + #id")
 	public ProductResult getAll() {
 		final List<ProductDTO> products = new ArrayList<>();
 		for (ProductsDomain domain : productsDao.findAll()) {
 			final ProductDTO user = convertDomainToDto(domain);
 			products.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), user);
+			}
 		}
 
 		final ProductResult productsResult = new ProductResult();
@@ -84,7 +87,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'products_' + #dto.id")
+	@CacheEvict(value = "delivery-cache", key = "'products_' + #dto.id")
 	public void delete(ProductDTO dto) {
 		final ProductsDomain productsDomain = convertDtoToDomain(dto);
 		productsDao.delete(productsDomain);	
@@ -105,13 +108,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'busqueda_pro' + #text")
 	public ProductResult find(String text, Integer page, Integer size) {
 		final List<ProductDTO> users = new ArrayList<>();
 		
 		for (ProductsDomain domain : productsDao.find(text, page, size)) {
 			final ProductDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), user);
+			}
 		}
 
 		final ProductResult userResult = new ProductResult();
@@ -121,13 +126,15 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
 	public ProductResult getAll(Integer page,Integer size) {
 		final List<ProductDTO> users = new ArrayList<>();		
 		
 		for (ProductsDomain domain : productsDao.findAll(page, size)) {
 			final ProductDTO user = convertDomainToDto(domain);
 			users.add(user);
+			if (user.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("products_" + user.getId(), user);
+			}
 		}
 
 		final ProductResult productsResult = new ProductResult();
