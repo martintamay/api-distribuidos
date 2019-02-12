@@ -45,6 +45,7 @@ public class BillsDaoImpl  extends BaseDaoImpl<BillsDomain> implements IBillsDao
 
 	@Override
 	public void delete(BillsDomain domain) {
+		sessionFactory.getCurrentSession().clear();
 		sessionFactory.getCurrentSession().delete(domain);
 	}
 

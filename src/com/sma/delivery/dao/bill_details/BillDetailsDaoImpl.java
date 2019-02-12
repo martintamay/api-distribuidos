@@ -82,7 +82,7 @@ public class BillDetailsDaoImpl extends BaseDaoImpl<BillsDetailsDomain> implemen
 	@Override
 	public List<BillsDetailsDomain> findAllBy(Map<String, String> args) {
 		if(args.containsKey("billId")){
-			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("select * from bills_details where _bills_id=:billId");
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("select * from billdetails where bill_id=:billId");
 			query.addEntity(BillsDetailsDomain.class); // Define el tipo de resultado de la consulta
 			query.setString("billId", args.get("billId"));
 			return query.list();
@@ -93,7 +93,7 @@ public class BillDetailsDaoImpl extends BaseDaoImpl<BillsDetailsDomain> implemen
 	@Override
 	public void deleteByBill(Integer id) {
 		if(id!=null){
-			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("delete from bills_details where _bills_id=:billId");
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("delete from billdetails where bill_id=:billId");
 			query.addEntity(BillsDetailsDomain.class); // Define el tipo de resultado de la consulta
 			query.setInteger("billId", id);
 			query.executeUpdate();

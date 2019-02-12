@@ -13,9 +13,9 @@ import com.sma.delivery.dao.bills.BillsDaoImpl;
 import com.sma.delivery.dao.bills.IBillsDao;
 import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.domain.bills.BillsDomain;
-
 import com.sma.delivery.dto.bills.BillDTO;
 import com.sma.delivery.dto.bills.BillResult;
+import com.sma.delivery.dto.bills_details.BillDetailDTO;
 import com.sma.delivery.service.base.BaseServiceImpl;
 import com.sma.delivery.service.bill_details.IBillsDetailsService;
 
@@ -38,9 +38,9 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("bills_" + domain.getId(), newDto);
 		}
-		for(BillsDetailsDTO detail: dto.getBillsDetails()){
-			detail.setBill(dto);
-			billsDetailsService.save(details);
+		for(BillDetailDTO detail: dto.getBillsDetails()){
+			detail.setBill(newDto.getId());
+			billsDetailsService.save(detail);
 		}
 		return convertDomainToDto(billsDomain);
 	}
@@ -106,6 +106,7 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 	@CachePut(value = "delivery-cache", key = "'bills_' + #dto.id")
 	public void delete(BillDTO dto) {
 		final BillsDomain billsDomain = convertDtoToDomain(dto);
+		billsDetailsService.deleteByBills(dto.getId());
 		billsDao.delete(billsDomain);	
 	}
 

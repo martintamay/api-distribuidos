@@ -7,8 +7,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.bills_details.BillsDetailsDomain;
@@ -28,9 +32,20 @@ public class BillsDomain implements BaseDomain {
 	@Column(name = "iva10")
 	private Integer iva10;
 	
-	@OneToMany(mappedBy = "bills")
+	@ManyToOne
+	private OrdersDomain orders;
+	
+	@Cascade(CascadeType.ALL)
+	@OneToMany(mappedBy = "bill")
 	private Set<BillsDetailsDomain> billsDetails = new HashSet<>();
-
+	
+	public Set<BillsDetailsDomain> getBillsDetails() {
+		return billsDetails;
+	}
+	
+	public void setBillsDetails(Set<BillsDetailsDomain> billsDetails) {
+		this.billsDetails = billsDetails;
+	}
 	public Integer getId() {
 		return id;
 	}
