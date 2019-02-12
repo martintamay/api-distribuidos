@@ -1,6 +1,7 @@
 package com.sma.delivery.dao.base;
 
 import java.util.ArrayList;
+
 import com.sma.delivery.domain.base.BaseDomain;
 
 public abstract class BaseDaoImpl<D extends BaseDomain> implements IBaseDao<D> {

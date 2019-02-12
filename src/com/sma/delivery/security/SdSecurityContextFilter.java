@@ -12,7 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.sma.delivery.domain.roles.ApiClientDomain;
+import com.sma.delivery.domain.api_clients.ApiClientDomain;
 import com.sma.delivery.domain.session.SessionDomain;
 import com.sma.delivery.service.security.roles.IApiClientService;
 import com.sma.delivery.service.security.session.ISessionService;
