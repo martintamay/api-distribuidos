@@ -14,9 +14,12 @@ import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.dao.products.IProductsDao;
 import com.sma.delivery.dao.products.ProductsDaoImpl;
 import com.sma.delivery.domain.products.ProductsDomain;
+import com.sma.delivery.dto.bills_details.BillDetailDTO;
+import com.sma.delivery.dto.ingredients_products.IngredientsProductsDTO;
 import com.sma.delivery.dto.products.ProductDTO;
 import com.sma.delivery.dto.products.ProductResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
+import com.sma.delivery.service.ingredients_products.IIngredientsProductsService;
 
 @Service
 public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDomain, ProductsDaoImpl, ProductResult> implements IProductsService {
@@ -25,6 +28,8 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 	@Autowired
 	private IEstablishmentsDao establishmentsDao;
 	
+	@Autowired
+	private IIngredientsProductsService ingredientsProductsService;
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'productsA_' + #products.id", condition = "#dto.id!=null")
@@ -34,6 +39,10 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 		final ProductDTO newDto = convertDomainToDto(product);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("productsA_" + product.getId(), newDto);
+		}
+		for(IngredientsProductsDTO detail: dto.getIngredientsProducts()){
+			detail.setProduct(newDto.getId());
+			ingredientsProductsService.save(detail);
 		}
 		return convertDomainToDto(product);
 	}
@@ -102,6 +111,10 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 		final ProductDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("productsA_" + user.getId(), newDto);
+		}
+		for(IngredientsProductsDTO detail: dto.getIngredientsProducts()){
+			detail.setProduct(newDto.getId());
+			ingredientsProductsService.update(detail);
 		}
 		return convertDomainToDto(user);
 	}

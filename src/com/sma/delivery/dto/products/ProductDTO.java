@@ -1,8 +1,12 @@
 package com.sma.delivery.dto.products;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.sma.delivery.dto.base.BaseDTO;
+import com.sma.delivery.dto.ingredients_products.IngredientsProductsDTO;
 @XmlRootElement(name = "product")
 public class ProductDTO extends BaseDTO{
 
@@ -13,6 +17,7 @@ private static final long serialVersionUID = 1L;
 	private String description;
 	private int cost;
 	private Integer establishmentId;
+	private Set<IngredientsProductsDTO> ingredientsProducts = new HashSet<>();
 
 	@XmlElement
 	public Integer getEstablishmentId() {
@@ -45,8 +50,15 @@ private static final long serialVersionUID = 1L;
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
+	@XmlElement
+	public Set<IngredientsProductsDTO> getIngredientsProducts() {
+		return ingredientsProducts;
 
-
+	}
+	
+	public void setIngredientsProducts(Set<IngredientsProductsDTO> ingredientsProducts) {
+		this.ingredientsProducts = ingredientsProducts;
+	}
 
 
 }
