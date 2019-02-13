@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.establishments.EstablishmentsDomain;
 import com.sma.delivery.domain.ingredients.IngredientsDomain;
+import com.sma.delivery.domain.ingredients_products.IngredientsProductsDomain;
 import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
 import com.sma.delivery.domain.product_types.ProductTypeDomain;
 
@@ -69,6 +70,8 @@ public class ProductsDomain implements BaseDomain {
 	public Set<ProductTypeDomain> getProductTypes() {
 		return productTypes;
 	}
+	@OneToMany(mappedBy = "product")
+	private Set<IngredientsProductsDomain> ingredientsProducts = new HashSet<>();
 
 	public void setProductTypes(Set<ProductTypeDomain> productTypes) {
 		this.productTypes = productTypes;
@@ -123,6 +126,14 @@ public class ProductsDomain implements BaseDomain {
 
 	public void setCost(Integer cost) {
 		this.cost = cost;
+	}
+
+	public Set<IngredientsProductsDomain> getIngredientsProducts() {
+		return ingredientsProducts;
+	}
+
+	public void setIngredientsProducts(Set<IngredientsProductsDomain> ingredientsProducts) {
+		this.ingredientsProducts = ingredientsProducts;
 	}
 
 }

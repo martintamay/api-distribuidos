@@ -8,9 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
+import com.sma.delivery.domain.ingredients_products.IngredientsProductsDomain;
 import com.sma.delivery.domain.products.ProductsDomain;
 
 
@@ -26,6 +28,9 @@ public class IngredientsDomain implements BaseDomain {
 	
 	@Column(name = "description")
 	private String description;
+	
+	@OneToMany(mappedBy = "ingredient")
+	private Set<IngredientsProductsDomain> ingredientsProducts = new HashSet<>();
 
 	@ManyToMany(mappedBy = "ingredients")
 	private Set<ProductsDomain> products = new HashSet<>();
