@@ -30,7 +30,6 @@ public class RolesResource {
 	}
 
 	@GET
-	@RolesAllowed({ "Admin" })
 	@Produces({"application/xml", "application/json"})
 	public RoleResult getAll() {
 		return roleService.getAll();

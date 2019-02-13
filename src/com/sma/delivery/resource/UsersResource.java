@@ -1,5 +1,6 @@
 package com.sma.delivery.resource;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
 import com.sma.delivery.dto.roles.RoleResult;
 import com.sma.delivery.dto.users.UserDTO;
 import com.sma.delivery.dto.users.UserResult;
-import com.sma.delivery.service.roles.IRolesService;
 import com.sma.delivery.service.users.IUserService;
 
 @Path("/users")
@@ -39,7 +39,7 @@ public class UsersResource {
 		return userService.getRoles(userId);
 	}
 	
-	@POST
+	@PUT
 	@Path("/{id}/roles/{roleId}")
 	@Produces({"application/xml", "application/json"})
 	public RoleResult addRole(@PathParam("id") Integer userId, @PathParam("roleId") Integer roleId) {
@@ -90,6 +90,7 @@ public class UsersResource {
 
 	@PUT
 	@Path("/{id}")
+	//@RolesAllowed({ "Admin" })
 	@Produces({"application/xml", "application/json"})
 	public UserDTO update(UserDTO user, @PathParam("id") Integer userId) {
 		user.setId(userId);

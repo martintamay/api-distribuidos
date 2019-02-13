@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:cache="http://www.springframework.org/schema/cache"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
@@ -10,7 +11,9 @@
     http://www.springframework.org/schema/tx
     http://www.springframework.org/schema/tx/spring-tx.xsd
     http://www.springframework.org/schema/cache
-    http://www.springframework.org/schema/cache/spring-cache-3.1.xsd">
+    http://www.springframework.org/schema/cache/spring-cache-3.1.xsd
+    http://www.springframework.org/schema/task 
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<tx:annotation-driven transaction-manager="transactionManager" />
 
@@ -20,8 +23,15 @@
 	<context:component-scan base-package="com.sma.delivery.service"/>
 	<context:component-scan base-package="com.sma.delivery.resource" />
 	<context:component-scan base-package="com.sma.delivery.security" />
+	<context:component-scan base-package="com.sma.delivery.scheduling"/>
+	<context:component-scan base-package="com.sma.delivery.mailers"/>
 
-
+	<task:scheduled-tasks scheduler="promotionsScheduler">
+        <task:scheduled ref="promotionsSchedulerService" method="sendPromotions" cron="${cron.sendPromos}" />
+    </task:scheduled-tasks>
+ 
+    <task:scheduler id="promotionsScheduler"/>
+	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="${db.jdbc}" />
@@ -47,7 +57,6 @@
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager"
 		p:sessionFactory-ref="sessionFactory">
 	</bean>
-
 
 	<!-- Cache Configuration -->
 	<import resource="cacheContext.xml" />

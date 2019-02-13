@@ -38,8 +38,8 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 		final UserDomain userDomain = convertDtoToDomain(dto);
 		final RolesDomain roleDomain = rolesDao.getById(1);
 		final UserDomain user = userDao.save(userDomain);
-		userDomain.getRoles().add(roleDomain);
-		final UserDomain userWithRoles = userDao.save(userDomain);
+		user.getRoles().add(roleDomain);
+		final UserDomain userWithRoles = userDao.save(user);
 		final UserDTO newDto = convertDomainToDto(userWithRoles);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("userA_" + userWithRoles.getId(), newDto);
@@ -155,7 +155,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'userA_' + #dto.id")
 	public RoleResult addRole(Integer userId, Integer roleId) {
 		// se obtienen el userDomain y roleDomain
 		final UserDomain userDomain = userDao.getById(userId);

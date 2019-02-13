@@ -51,6 +51,8 @@ public class SdSecurityContextFilter implements ResourceFilter, ContainerRequest
 				final String token = request.getHeaderValue("token");
 				if (!StringUtils.isNotBlank(token) || !checkToken(token)) {
 					Response denied = Response.status(Response.Status.FORBIDDEN).entity("Permission denied").build();
+					if (StringUtils.isNotBlank(token)) LOGGER.log(Level.INFO, "Connection without token or invalid token");
+					else LOGGER.log(Level.INFO, String.format("token check: %s > Invalid Token", token));
 					throw new WebApplicationException(denied);
 				}
 				session.setUserId(user.getId());
@@ -74,7 +76,6 @@ public class SdSecurityContextFilter implements ResourceFilter, ContainerRequest
 		for (String approvedToken : approvedTokens) {
 			if (approvedToken.trim().equals(token.trim())) return true;
 		}
-		LOGGER.log(Level.INFO, String.format("token check: %s > Invalid Token", token));
 		return false;
 	}
 
