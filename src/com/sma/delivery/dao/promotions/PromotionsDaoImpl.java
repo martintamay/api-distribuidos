@@ -47,7 +47,7 @@ public class PromotionsDaoImpl extends BaseDaoImpl<PromotionsDomain> implements 
 	@Override
 	public List<PromotionsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PromotionsDomain.class);
-		Criterion name = Restrictions.like("_name", text);
+		Criterion name = Restrictions.like("name", text);
 		criteria.add(Restrictions.or(name));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);

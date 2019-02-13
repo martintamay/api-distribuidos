@@ -1,7 +1,10 @@
 package com.sma.delivery.service.promotions;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -13,15 +16,24 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.promotions.IPromotionsDao;
 import com.sma.delivery.dao.promotions.PromotionsDaoImpl;
 import com.sma.delivery.domain.promotions.PromotionsDomain;
+import com.sma.delivery.dto.bills_details.BillDetailDTO;
+import com.sma.delivery.dto.product_has_promotions.ProductHasPromotionDTO;
 import com.sma.delivery.dto.promotions.PromotionDTO;
 import com.sma.delivery.dto.promotions.PromotionResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
+import com.sma.delivery.service.bill_details.IBillsDetailsService;
+import com.sma.delivery.service.product_has_promotions.IProductHasPromotionsService;
+import com.sma.delivery.utils.ProyectProperties;
 
 @Service
 public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, PromotionsDomain, PromotionsDaoImpl, PromotionResult> implements IPromotionsService {
+	private static final Logger LOGGER = Logger.getLogger( ProyectProperties.class.getName() );
+
 	@Autowired
 	private IPromotionsDao promotionsDao;
-	
+
+	@Autowired
+	private IProductHasPromotionsService productHasPromotionsService;
 
 	
 	@Override
@@ -34,6 +46,11 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("promotionsA_" + promotions.getId(), newDto);
 		}
+		for(ProductHasPromotionDTO detail: dto.getProductHasPromotionsDTO()){
+			detail.setProductId(newDto.getId());
+			productHasPromotionsService.save(detail);
+		}
+		if (dto.getProductHasPromotionsDTO().isEmpty()) LOGGER.log(Level.INFO, "Promotion vacío recibido");
 		return convertDomainToDto(promotions);
 	}
 
@@ -50,10 +67,10 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 	public PromotionResult getAll() {
 		final List<PromotionDTO> promotions = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.findAll()) {
-			final PromotionDTO user = convertDomainToDto(domain);
-			promotions.add(user);
-			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("promotionsA_" + user.getId(), user);
+			final PromotionDTO dto = convertDomainToDto(domain);
+			promotions.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("promotionsA_" + dto.getId(), dto);
 			}
 		}
 
@@ -68,7 +85,7 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 		promotions.setId(domain.getId());
 		promotions.setName(domain.getName());
 		promotions.setAvailable(domain.getAvailable());
-		promotions.setEndDate(domain.getEndDate());
+		promotions.setEndDate(domain.getEndDate().toString());
 		return promotions;
 	}
 
@@ -78,7 +95,7 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 		promotions.setId(dto.getId());
 		promotions.setName(dto.getName());
 		promotions.setAvailable(dto.getAvailable());
-		promotions.setEndDate(dto.getEndDate());
+		promotions.setEndDate(Date.valueOf(dto.getEndDate()));
 		return promotions;
 	}
 
@@ -94,29 +111,29 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'promotionsA_' + #dto.id")
 	public PromotionDTO update(PromotionDTO dto) {
-		final PromotionsDomain userDomain = convertDtoToDomain(dto);
-		final PromotionsDomain user = promotionsDao.update(userDomain);
-		final PromotionDTO newDto = convertDomainToDto(user);
+		final PromotionsDomain promotionDomain = convertDtoToDomain(dto);
+		final PromotionsDomain promotion = promotionsDao.update(promotionDomain);
+		final PromotionDTO newDto = convertDomainToDto(promotion);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("promotionsA_" + user.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("promotionsA_" + promotion.getId(), newDto);
 		}
-		return convertDomainToDto(user);
+		return convertDomainToDto(promotion);
 	}
 
 	@Override
 	@Transactional
 	public PromotionResult find(String text, Integer page, Integer size) {
-		final List<PromotionDTO> users = new ArrayList<>();
+		final List<PromotionDTO> promotions = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.find(text, page, size)) {
-			final PromotionDTO user = convertDomainToDto(domain);
-			users.add(user);
-			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("promotionsA_" + user.getId(), user);
+			final PromotionDTO dto = convertDomainToDto(domain);
+			promotions.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("promotionsA_" + dto.getId(), dto);
 			}
 		}
 
 		final PromotionResult userResult = new PromotionResult();
-		userResult.setPromotions(users);
+		userResult.setPromotions(promotions);
 		return userResult;
 
 	}
@@ -124,17 +141,17 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 	@Transactional
 	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
 	public PromotionResult getAll(Integer page,Integer size) {
-		final List<PromotionDTO> users = new ArrayList<>();
+		final List<PromotionDTO> promotions = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.findAll(page, size)) {
-			final PromotionDTO user = convertDomainToDto(domain);
-			users.add(user);
-			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("promotionsA_" + user.getId(), user);
+			final PromotionDTO dto = convertDomainToDto(domain);
+			promotions.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("promotionsA_" + dto.getId(), dto);
 			}
 		}
 
 		final PromotionResult promotionsResult = new PromotionResult();
-		promotionsResult.setPromotions(users);
+		promotionsResult.setPromotions(promotions);
 		return promotionsResult;
 
 	}

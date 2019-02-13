@@ -1,4 +1,4 @@
-package com.sma.delivery.domain.orders_details;
+package com.sma.delivery.domain.product_has_promotions;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,13 +8,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
-import com.sma.delivery.domain.orders.OrdersDomain;
-import com.sma.delivery.domain.packages.PackageDomain;
 import com.sma.delivery.domain.products.ProductsDomain;
 import com.sma.delivery.domain.promotions.PromotionsDomain;
 @Entity
-@Table(name = "OrdersDetail")
-public class OrdersDetailDomain implements BaseDomain {
+@Table(name = "ProductHasPromotions")
+public class ProductHasPromotionsDomain implements BaseDomain {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,17 +28,10 @@ public class OrdersDetailDomain implements BaseDomain {
 	@Column(name = "comment")
 	private String comment;
 
-	
-	@ManyToOne
-	private OrdersDomain orders;
-	@ManyToOne
-	private PromotionsDomain promotion;	
-	@ManyToOne
-	private PackageDomain packages;
-	
-	
 	@ManyToOne
 	private ProductsDomain product;
+	@ManyToOne
+	private PromotionsDomain promotion;
 	
 	public ProductsDomain getProduct() {
 		return product;
@@ -56,14 +47,6 @@ public class OrdersDetailDomain implements BaseDomain {
 
 	public void setPromotion(PromotionsDomain promotion) {
 		this.promotion = promotion;
-	}
-
-	public PackageDomain getPackages() {
-		return packages;
-	}
-
-	public void setPackages(PackageDomain packages) {
-		this.packages = packages;
 	}
 
 	public Integer getId() {
@@ -97,19 +80,4 @@ public class OrdersDetailDomain implements BaseDomain {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
-
-	public OrdersDomain getOrders() {
-		return orders;
-	}
-
-	public void setOrders(OrdersDomain orders) {
-		this.orders = orders;
-	}
-
-
-	
-	
-	
-
 }

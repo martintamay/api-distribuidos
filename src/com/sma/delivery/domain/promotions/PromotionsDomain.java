@@ -1,8 +1,9 @@
 package com.sma.delivery.domain.promotions;
 
 import java.sql.Date;
-
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
+import com.sma.delivery.domain.product_has_promotions.ProductHasPromotionsDomain;
 
 @Entity
 @Table(name = "Promotions")
@@ -35,13 +37,24 @@ public class PromotionsDomain implements BaseDomain {
 
 	@OneToMany(mappedBy = "promotion")
 	private Set<OrdersDetailDomain> orderDetails = new HashSet<>();
-	
+
 	public Set<OrdersDetailDomain> getOrderDetails() {
 		return orderDetails;
 	}
 
 	public void setOrderDetails(Set<OrdersDetailDomain> orderDetails) {
 		this.orderDetails = orderDetails;
+	}
+
+	@OneToMany(mappedBy = "promotion")
+	private List<ProductHasPromotionsDomain> productsHasPromotions = new ArrayList<>();
+	
+	public List<ProductHasPromotionsDomain> getProductHasPromotions(){
+		return productsHasPromotions;
+	}
+
+	public void setProductHasPromotionsDomain(List<ProductHasPromotionsDomain> productsHasPromotions) {
+		this.productsHasPromotions = productsHasPromotions;
 	}
 
 	public Integer getId() {
