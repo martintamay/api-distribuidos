@@ -7,5 +7,7 @@ import com.sma.delivery.dto.roles.RoleResult;
 import com.sma.delivery.service.base.IBaseService;
 
 public interface IRolesService extends IBaseService<RoleDTO, RolesDomain, RolesDaoImpl ,RoleResult> {
+
+	public RoleResult findByUserId(Integer userId);
 }
 

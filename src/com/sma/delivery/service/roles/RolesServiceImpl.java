@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.sma.delivery.dao.roles.IRolesDao;
 import com.sma.delivery.dao.roles.RolesDaoImpl;
+import com.sma.delivery.dao.users.IUserDao;
 import com.sma.delivery.domain.roles.RolesDomain;
 import com.sma.delivery.dto.roles.RoleDTO;
 import com.sma.delivery.dto.roles.RoleResult;
@@ -20,6 +21,8 @@ import com.sma.delivery.service.base.BaseServiceImpl;
 public class RolesServiceImpl extends BaseServiceImpl<RoleDTO, RolesDomain, RolesDaoImpl ,RoleResult> implements IRolesService {	
 	@Autowired
 	private IRolesDao rolesDao;
+	@Autowired
+	private IUserDao userDao;
 	
 	@Override
 	@Transactional
@@ -92,6 +95,20 @@ public class RolesServiceImpl extends BaseServiceImpl<RoleDTO, RolesDomain, Role
 	public void delete(RoleDTO dto) {
 		final RolesDomain rolesDomain = convertDtoToDomain(dto);
 		rolesDao.delete(rolesDomain);	
+	}
+	
+	@Override
+	@Transactional
+	public RoleResult findByUserId(Integer userId) {
+		final List<RoleDTO> roles = new ArrayList<>();
+		for (RolesDomain domain : userDao.getById(userId).getRoles()) {
+			final RoleDTO role = convertDomainToDto(domain);
+			roles.add(role);
+		}
+
+		final RoleResult rolesResult = new RoleResult();
+		rolesResult.setRoles(roles);
+		return rolesResult;
 	}
 	
 	@Override
