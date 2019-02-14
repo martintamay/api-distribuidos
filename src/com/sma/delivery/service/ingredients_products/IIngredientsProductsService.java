@@ -13,5 +13,5 @@ public interface IIngredientsProductsService extends IBaseService<IngredientsPro
 
 	IngredientsProductsResult getAllBy(Map<String, String> args);
 
-	void deleteByIngredientsProducts(Integer ingredientId, Integer productId);
+	void deleteByProducts(Integer productId);
 }

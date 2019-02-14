@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.sma.delivery.dto.base.BaseDTO;
-@XmlRootElement(name = "ingredients_products")
+@XmlRootElement(name = "ingredient_product")
 public class IngredientsProductsDTO extends BaseDTO{
 	
 	private static final long serialVersionUID = 1L;

@@ -10,5 +10,5 @@ public interface IIngredientsProductsDao extends IBaseDao<IngredientsProductsDom
 	
 	List<IngredientsProductsDomain> findAllBy(Map<String, String> args);
 
-	void deleteByBill(Integer ingredientId, Integer productId);
+	void deleteByProduct(Integer productId);
 }

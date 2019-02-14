@@ -71,22 +71,20 @@ public class IngredientsProductsDaoImpl extends BaseDaoImpl<IngredientsProductsD
 	
 	@Override
 	public List<IngredientsProductsDomain> findAllBy(Map<String, String> args) {
-		if(args.containsKey("billId")){
-			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("select * from billdetails where bill_id=:billId");
+		if(args.containsKey("productId")){
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("select * from ingredientsProducts where product_id=:productId");
 			query.addEntity(IngredientsProductsDomain.class); // Define el tipo de resultado de la consulta
-			query.setString("billId", args.get("billId"));
+			query.setString("productId", args.get("productId"));
 			return query.list();
 		}
 		return new ArrayList<>();
 	}
 	
 	@Override
-	public void deleteByBill(Integer ingredientId, Integer productId) {
-			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("delete from billdetails where ingredient_id=:ingredientId and product_id =:productId");
-			query.addEntity(IngredientsProductsDomain.class); // Define el tipo de resultado de la consulta
-			query.setInteger("ingredientId", ingredientId);
-			query.setInteger("productId", ingredientId);
+	public void deleteByProduct(Integer productId) {
+			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("delete from ingredientsProducts where product_id =:productId");
+			query.addEntity(IngredientsProductsDomain.class);
+			query.setInteger("productId", productId);
 			query.executeUpdate();
 	}
-
 }

@@ -172,8 +172,8 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 	}
 	
 	@Override
-	public void deleteByIngredientsProducts(Integer ingredientId, Integer productId){
-		ingredientsProductsDao.deleteByBill(ingredientId, productId);
+	public void deleteByProducts(Integer productId){
+		ingredientsProductsDao.deleteByProduct(productId);
 	}
 
 }

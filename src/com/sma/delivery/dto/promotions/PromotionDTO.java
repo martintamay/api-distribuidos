@@ -15,7 +15,6 @@ private static final long serialVersionUID = 1L;
 	private String endDate;
 	private List<ProductHasPromotionDTO> productHasPromotions = new ArrayList<>();
 
-	
 	@XmlElement
 	public String getName() {
 		return name;
@@ -47,7 +46,4 @@ private static final long serialVersionUID = 1L;
 	public void setProductHasPromotionsDTO(List<ProductHasPromotionDTO> productHasPromotions) {
 		this.productHasPromotions = productHasPromotions;
 	}
-
-
-
 }

@@ -98,6 +98,7 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 	@Transactional
 	@CacheEvict(value = "delivery-cache", key = "'productsA_' + #dto.id")
 	public void delete(ProductDTO dto) {
+		ingredientsProductsService.deleteByProducts(dto.getId());
 		final ProductsDomain productsDomain = convertDtoToDomain(dto);
 		productsDao.delete(productsDomain);	
 	}

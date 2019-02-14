@@ -75,11 +75,10 @@ public class IngredientsProductsResource {
 	}
 	
 	@GET
-	@Path("/billId/{ingredientId}/{productId}")
+	@Path("/productId/{productId}")
 	@Produces("application/xml")
-	public IngredientsProductsResult getAllBy(@PathParam("ingredientId") String ingredientId, @PathParam("productId") String productId){
+	public IngredientsProductsResult getAllBy(@PathParam("productId") String productId){
 		Map<String, String> args = new HashMap<>();
-		args.put("ingredientId", ingredientId);
 		args.put("productId", productId);
 		return ingredientsProductsService.getAllBy(args);
 	}
