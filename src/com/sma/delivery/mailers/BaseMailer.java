@@ -41,6 +41,7 @@ public class BaseMailer {
 		// se le dice a java que use un keystore en específico para determinar los ssl seguros (se configura en el .properties)
 		
 		String absolutePath = this.getClass().getClassLoader().getResource("/cacerts").toURI().getPath();
+		LOGGER.log(Level.INFO, "Cacerts en path: "+absolutePath);
 		System.setProperty("javax.net.ssl.keyStore", absolutePath);
 		System.setProperty("javax.net.ssl.trustStore", absolutePath);
 		System.setProperty("javax.net.ssl.keyStorePassword", props.getProperty("email.trustStore.password"));
