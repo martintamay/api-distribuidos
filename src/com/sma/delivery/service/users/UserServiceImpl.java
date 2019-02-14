@@ -49,12 +49,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserDTO, UserDomain, UserDa
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'userA_' + #id")
 	public RoleResult getRoles(Integer id) {
 		final List<RoleDTO> roles = new ArrayList<>();
 		for (RolesDomain domain : userDao.getById(id).getRoles()) {
 			final RoleDTO role = convertDomainToDto(domain);
 			roles.add(role);
+			if (role.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("roleA_" + role.getId(), role);
+			}
+			
 		}
 
 		final RoleResult roleResult = new RoleResult();
