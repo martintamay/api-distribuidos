@@ -27,6 +27,18 @@ public class BillsDetailsDomain implements BaseDomain {
 
 	@Column(name = "iva10")
 	private Integer iva10;
+	
+	@Column(name = "iva5")
+	private Integer iva5;
+	
+	@Column(name = "exenta")
+	private Integer exenta;
+	
+	@Column(name = "unitary")
+	private Integer unitary;
+	
+	@Column(name = "quantity")
+	private Integer quantity;
 
 	
 	@ManyToOne
@@ -64,5 +76,43 @@ public class BillsDetailsDomain implements BaseDomain {
 
 	public void setIva10(Integer iva10) {
 		this.iva10 = iva10;
+	}
+
+	public Integer getIva5() {
+		return iva5;
+	}
+
+	public void setIva5(Integer iva5) {
+		this.iva5 = iva5;
+	}
+
+	public Integer getExenta() {
+		return exenta;
+	}
+
+	public void setExenta(Integer exenta) {
+		this.exenta = exenta;
+	}
+
+	public Integer getUnitary() {
+		return unitary;
+	}
+
+	public void setUnitary(Integer unitary) {
+		this.unitary = unitary;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
 	}	
+	
+	
 }

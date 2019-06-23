@@ -68,7 +68,11 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		final BillDetailDTO dto = new BillDetailDTO();
 		dto.setId(domain.getId());
 		dto.setAmount(domain.getAmount());
-		dto.setIva(domain.getIva10());
+		dto.setIva10(domain.getIva10());
+		dto.setIva5(domain.getIva5());
+		dto.setExenta(domain.getExenta());
+		dto.setUnitary(domain.getUnitary());
+		dto.setQuantity(domain.getQuantity());
 		dto.setBill(domain.getBill().getId());
 		return dto;
 	}
@@ -78,7 +82,11 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		final BillsDetailsDomain domain = new BillsDetailsDomain();
 		domain.setId(dto.getId());
 		domain.setTotal(dto.getAmount());
-		domain.setIva10(dto.getIva());
+		domain.setIva10(dto.getIva10());
+		domain.setIva5(dto.getIva5());
+		domain.setExenta(dto.getExenta());
+		domain.setUnitary(dto.getUnitary());
+		domain.setQuantity(dto.getQuantity());
 		domain.setBill(billsDao.getById(dto.getBill()));
 		return domain;
 	}
