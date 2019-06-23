@@ -75,7 +75,16 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 		final BillDTO dto = new BillDTO();
 		dto.setId(domain.getId());
 		dto.setTotal(domain.getTotal());
-		dto.setIva(domain.getIva10());
+		dto.setIva10(domain.getIva10());
+		dto.setIva5(domain.getIva5());
+		dto.setNombre(domain.getNombre());
+		dto.setDireccion(domain.getDireccion());
+		dto.setTimbrado(domain.getTimbrado());
+		dto.setRuc(domain.getRuc());
+		dto.setNum1(domain.getNum1());
+		dto.setNum2(domain.getNum2());
+		dto.setNum3(domain.getNum3());
+		dto.setFecha(domain.getFecha());
 		dto.setOrderId(domain.getOrders().getId());
 
 		return dto;
@@ -86,7 +95,16 @@ public class BillsServiceImpl extends BaseServiceImpl<BillDTO, BillsDomain, Bill
 		final BillsDomain domain = new BillsDomain();
 		domain.setId(dto.getId());
 		domain.setTotal(dto.getTotal());
-		domain.setIva10(dto.getIva());
+		domain.setIva10(dto.getIva10());
+		domain.setIva5(dto.getIva5());
+		domain.setNombre(dto.getNombre());
+		domain.setDireccion(dto.getDireccion());
+		domain.setTimbrado(dto.getTimbrado());
+		domain.setRuc(dto.getRuc());
+		domain.setNum1(dto.getNum1());
+		domain.setNum2(dto.getNum2());
+		domain.setNum3(dto.getNum3());
+		domain.setFecha(dto.getFecha());
 		domain.setOrders(ordersDao.getById(dto.getOrderId()));
 		return domain;
 	}
