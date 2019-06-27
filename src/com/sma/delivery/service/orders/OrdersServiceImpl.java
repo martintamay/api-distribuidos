@@ -9,6 +9,8 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sma.delivery.dao.establishments.IEstablishmentsDao;
@@ -31,9 +33,10 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	private IOrdersDao ordersDao;
 
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 	@CachePut(value = "delivery-cache", key = "'ordersA_' + #order.id", condition = "#dto.id!=null")
 	public OrderDTO save(OrderDTO dto) {
+		//System.out.println(propagation);
 		final OrdersDomain domain = convertDtoToDomain(dto);
 		final OrdersDomain ordersDomain = ordersDao.save(domain);
 		final OrderDTO newDto = convertDomainToDto(ordersDomain);
@@ -44,7 +47,7 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	}
 
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.READ_UNCOMMITTED, propagation = Propagation.REQUIRED)
 	@Cacheable(value = "delivery-cache", key = "'ordersA_' + #id")
 	public OrderDTO getById(Integer id) {
 		final OrdersDomain domain = ordersDao.getById(id);
