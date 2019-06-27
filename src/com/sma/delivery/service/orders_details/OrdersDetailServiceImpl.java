@@ -2,6 +2,7 @@ package com.sma.delivery.service.orders_details;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -18,7 +19,10 @@ import com.sma.delivery.dao.orders_details.OrdersDetailDaoImpl;
 import com.sma.delivery.dao.packages.IPackageDao;
 import com.sma.delivery.dao.products.IProductsDao;
 import com.sma.delivery.dao.promotions.IPromotionsDao;
+import com.sma.delivery.domain.bills_details.BillsDetailsDomain;
 import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
+import com.sma.delivery.dto.bills_details.BillDetailDTO;
+import com.sma.delivery.dto.bills_details.BillDetailResult;
 import com.sma.delivery.dto.order_details.OrderDetailDTO;
 import com.sma.delivery.dto.order_details.OrderDetailResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
@@ -156,6 +160,27 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 		final OrderDetailResult commentsResult = new OrderDetailResult();
 		commentsResult.setOrdersDetail(orders);
 		return commentsResult;
+	}
+	@Override
+	@Transactional(readOnly = true)
+	public OrderDetailResult getAllBy(Map<String,String> args){
+		final List<OrderDetailDTO> billsDetails = new ArrayList<>();
+		for (OrdersDetailDomain domain : ordersDetailDao.findAllBy(args)){
+			final OrderDetailDTO dto = convertDomainToDto(domain);
+			billsDetails.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+			}
+		}
+		final OrderDetailResult billsDetailsResult = new OrderDetailResult();
+		billsDetailsResult.setOrdersDetail(billsDetails);
+		return billsDetailsResult;
+	}
+	
+	
+	@Override
+	public void deleteByOrders(Integer id){
+		ordersDetailDao.deleteByOrder(id);
 	}
 
 }

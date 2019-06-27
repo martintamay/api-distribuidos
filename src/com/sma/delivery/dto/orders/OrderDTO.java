@@ -1,8 +1,13 @@
 package com.sma.delivery.dto.orders;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.sma.delivery.dto.base.BaseDTO;
+import com.sma.delivery.dto.bills_details.BillDetailDTO;
+import com.sma.delivery.dto.order_details.OrderDetailDTO;
 @XmlRootElement(name = "order")
 public class OrderDTO extends BaseDTO{
 	
@@ -16,8 +21,20 @@ private static final long serialVersionUID = 1L;
 	private Integer totalCost;
 	private Integer establishmentId;
 	private Integer userId;
+	private Set<OrderDetailDTO> orderDetails = new HashSet<>();
 
 	
+	@XmlElement
+	public Set<OrderDetailDTO> getOrderDetails() {
+		return orderDetails;
+
+	}
+	
+	public void setOrderDetails(Set<OrderDetailDTO> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+
 	@XmlElement
 	public Integer getUserId() {
 		return userId;

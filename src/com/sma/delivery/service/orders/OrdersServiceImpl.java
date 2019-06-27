@@ -18,9 +18,11 @@ import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.dao.orders.OrdersDaoImpl;
 import com.sma.delivery.dao.users.IUserDao;
 import com.sma.delivery.domain.orders.OrdersDomain;
+import com.sma.delivery.dto.order_details.OrderDetailDTO;
 import com.sma.delivery.dto.orders.OrderDTO;
 import com.sma.delivery.dto.orders.OrderResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
+import com.sma.delivery.service.orders_details.IOrdersDetailService;
 
 @Service
 public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, OrdersDaoImpl, OrderResult> implements IOrdersService {
@@ -31,7 +33,8 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	private IUserDao userDao;
 	@Autowired
 	private IOrdersDao ordersDao;
-
+	@Autowired
+	private IOrdersDetailService orderDetailsService;
 	@Override
 	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 	@CachePut(value = "delivery-cache", key = "'ordersA_' + #order.id", condition = "#dto.id!=null")
@@ -42,6 +45,10 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 		final OrderDTO newDto = convertDomainToDto(ordersDomain);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("ordersA_" + ordersDomain.getId(), newDto);
+		}
+		for(OrderDetailDTO detail: dto.getOrderDetails()){
+			detail.setOrderId(newDto.getId());
+			orderDetailsService.save(detail);
 		}
 		return convertDomainToDto(ordersDomain);
 	}
@@ -104,6 +111,8 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	@CacheEvict(value = "delivery-cache", key = "'ordersA_' + #dto.id")
 	public void delete(OrderDTO dto) {
 		final OrdersDomain userDomain = convertDtoToDomain(dto);
+		orderDetailsService.deleteByOrders(dto.getId());
+
 		ordersDao.delete(userDomain);	
 	}
 	@Override
@@ -115,6 +124,10 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 		final OrderDTO newDto = convertDomainToDto(user);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("ordersA_" + user.getId(), newDto);
+		}
+		for(OrderDetailDTO detail: dto.getOrderDetails()){
+			detail.setOrderId(newDto.getId());
+			orderDetailsService.update(detail);
 		}
 		return convertDomainToDto(user);
 	}
