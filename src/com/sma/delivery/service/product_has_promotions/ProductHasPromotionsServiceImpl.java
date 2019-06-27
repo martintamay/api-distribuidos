@@ -1,8 +1,8 @@
 package com.sma.delivery.service.product_has_promotions;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -114,18 +114,17 @@ public class ProductHasPromotionsServiceImpl extends BaseServiceImpl<ProductHasP
 	@Override
 	@Transactional
 	public ProductHasPromotionResult find(String text, Integer page, Integer size) {
-		final List<ProductHasPromotionDTO> users = new ArrayList<>();
+		final List<ProductHasPromotionDTO> productsPromotion = new ArrayList<>();
 		for (ProductHasPromotionsDomain domain : productHasPromotionsDao.find(text, page, size)) {
 			final ProductHasPromotionDTO dto = convertDomainToDto(domain);
-			users.add(dto);
+			productsPromotion.add(dto);
 			if (dto.getId() != null) {
 				getCacheManager().getCache("delivery-cache").put("productHasPromotionsA_" + dto.getId(), dto);
 			}
 		}
-
-		final ProductHasPromotionResult userResult = new ProductHasPromotionResult();
-		return userResult;
-
+		final ProductHasPromotionResult productsPromotionResult = new ProductHasPromotionResult();
+		productsPromotionResult.setProductHasPromotions(productsPromotion);
+		return productsPromotionResult;
 	}
 	@Override
 	@Transactional
@@ -140,8 +139,31 @@ public class ProductHasPromotionsServiceImpl extends BaseServiceImpl<ProductHasP
 			}
 		}
 
-		return new ProductHasPromotionResult();
+		final ProductHasPromotionResult productsPromotionResult = new ProductHasPromotionResult();
+		productsPromotionResult.setProductHasPromotions(producHasPromotions);
+		return productsPromotionResult;
 
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public ProductHasPromotionResult getAllBy(Map<String,String> args){
+		final List<ProductHasPromotionDTO> productPromotions = new ArrayList<>();
+		for (ProductHasPromotionsDomain domain : productHasPromotionsDao.findAllBy(args)){
+			final ProductHasPromotionDTO dto = convertDomainToDto(domain);
+			productPromotions.add(dto);
+			if (dto.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+			}
+		}
+		final ProductHasPromotionResult productsPromotionResult = new ProductHasPromotionResult();
+		productsPromotionResult.setProductHasPromotions(productPromotions);
+		return productsPromotionResult;
+	}
+
+	@Override
+	public void deleteByPromotion(Integer promotionId) {
+		productHasPromotionsDao.deleteByPromotion(promotionId);
 	}
 
 }
