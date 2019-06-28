@@ -10,8 +10,6 @@ import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import com.sma.delivery.dto.ingredients_products.IngredientsProductsDTO;
 import com.sma.delivery.dto.products.ProductDTO;
 import com.sma.delivery.dto.products.ProductResult;
 import com.sma.delivery.service.products.IProductsService;

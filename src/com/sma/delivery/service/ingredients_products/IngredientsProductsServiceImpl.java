@@ -18,7 +18,7 @@ import com.sma.delivery.domain.ingredients_products.IngredientsProductsDomain;
 import com.sma.delivery.dto.ingredients_products.IngredientsProductsDTO;
 import com.sma.delivery.dto.ingredients_products.IngredientsProductsResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
-import com.sma.delivery.service.ingredients_products.IIngredientsProductsService;
+
 
 @Service
 public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsProductsDTO, IngredientsProductsDomain, IngredientsProductsDaoImpl, IngredientsProductsResult> implements IIngredientsProductsService {

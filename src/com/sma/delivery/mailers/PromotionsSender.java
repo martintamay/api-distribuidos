@@ -4,17 +4,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.hibernate.FlushMode;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.orm.hibernate3.SessionFactoryUtils;
-import org.springframework.orm.hibernate3.SessionHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
-
-import com.sma.delivery.dao.users.IUserDao;
-import com.sma.delivery.domain.user.UserDomain;
 import com.sma.delivery.dto.users.UserDTO;
 import com.sma.delivery.service.users.IUserService;
 import com.sma.delivery.utils.ProyectProperties;

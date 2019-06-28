@@ -14,7 +14,6 @@ import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.dao.products.IProductsDao;
 import com.sma.delivery.dao.products.ProductsDaoImpl;
 import com.sma.delivery.domain.products.ProductsDomain;
-import com.sma.delivery.dto.bills_details.BillDetailDTO;
 import com.sma.delivery.dto.ingredients_products.IngredientsProductsDTO;
 import com.sma.delivery.dto.products.ProductDTO;
 import com.sma.delivery.dto.products.ProductResult;

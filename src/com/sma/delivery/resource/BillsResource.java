@@ -67,7 +67,6 @@ public class BillsResource {
 	@Produces({"application/xml", "application/json"})
 	public BillDTO update(BillDTO bills, @PathParam("id") Integer billsId) {
 		bills.setId(billsId);
-		System.out.println("actualizando..............."+bills.getBillsDetails().size());
 		return billsService.update(bills);
 	}
 	

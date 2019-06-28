@@ -39,7 +39,6 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
 	@CachePut(value = "delivery-cache", key = "'ordersA_' + #order.id", condition = "#dto.id!=null")
 	public OrderDTO save(OrderDTO dto) {
-		//System.out.println(propagation);
 		final OrdersDomain domain = convertDtoToDomain(dto);
 		final OrdersDomain ordersDomain = ordersDao.save(domain);
 		final OrderDTO newDto = convertDomainToDto(ordersDomain);

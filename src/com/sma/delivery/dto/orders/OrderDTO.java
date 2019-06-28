@@ -1,13 +1,11 @@
 package com.sma.delivery.dto.orders;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import com.sma.delivery.dto.base.BaseDTO;
-import com.sma.delivery.dto.bills_details.BillDetailDTO;
 import com.sma.delivery.dto.order_details.OrderDetailDTO;
+
 @XmlRootElement(name = "order")
 public class OrderDTO extends BaseDTO{
 	

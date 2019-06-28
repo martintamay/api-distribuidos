@@ -11,9 +11,7 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import com.sma.delivery.dao.base.BaseDaoImpl;
-import com.sma.delivery.domain.ingredients_products.IngredientsProductsDomain;
 import com.sma.delivery.domain.product_has_promotions.ProductHasPromotionsDomain;
 
 @Repository
