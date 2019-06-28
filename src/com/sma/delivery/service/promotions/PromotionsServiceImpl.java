@@ -16,12 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.promotions.IPromotionsDao;
 import com.sma.delivery.dao.promotions.PromotionsDaoImpl;
 import com.sma.delivery.domain.promotions.PromotionsDomain;
-import com.sma.delivery.dto.bills_details.BillDetailDTO;
 import com.sma.delivery.dto.product_has_promotions.ProductHasPromotionDTO;
 import com.sma.delivery.dto.promotions.PromotionDTO;
 import com.sma.delivery.dto.promotions.PromotionResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
-import com.sma.delivery.service.bill_details.IBillsDetailsService;
 import com.sma.delivery.service.product_has_promotions.IProductHasPromotionsService;
 import com.sma.delivery.utils.ProyectProperties;
 
@@ -47,10 +45,10 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 			getCacheManager().getCache("delivery-cache").put("promotionsA_" + promotions.getId(), newDto);
 		}
 		for(ProductHasPromotionDTO detail: dto.getProductHasPromotionsDTO()){
-			detail.setProductId(newDto.getId());
+			detail.setPromotionId(newDto.getId());
 			productHasPromotionsService.save(detail);
 		}
-		if (dto.getProductHasPromotionsDTO().isEmpty()) LOGGER.log(Level.INFO, "Promotion vacío recibido");
+		if (dto.getProductHasPromotionsDTO().isEmpty()) LOGGER.log(Level.INFO, "Promotion vacï¿½o recibido");
 		return convertDomainToDto(promotions);
 	}
 
@@ -104,6 +102,7 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 	@CacheEvict(value = "delivery-cache", key = "'promotionsA_' + #dto.id")
 	public void delete(PromotionDTO dto) {
 		final PromotionsDomain promotionsDomain = convertDtoToDomain(dto);
+		productHasPromotionsService.deleteByPromotion(dto.getId());
 		promotionsDao.delete(promotionsDomain);	
 	}
 
@@ -116,6 +115,10 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 		final PromotionDTO newDto = convertDomainToDto(promotion);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("promotionsA_" + promotion.getId(), newDto);
+		}
+		for(ProductHasPromotionDTO detail: dto.getProductHasPromotionsDTO()){
+			detail.setPromotionId(newDto.getId());
+			productHasPromotionsService.update(detail);
 		}
 		return convertDomainToDto(promotion);
 	}
