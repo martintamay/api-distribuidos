@@ -74,6 +74,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		dto.setUnitary(domain.getUnitary());
 		dto.setQuantity(domain.getQuantity());
 		dto.setBill(domain.getBill().getId());
+		dto.setProduct(domain.getProduct());
 		return dto;
 	}
 
@@ -88,6 +89,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		domain.setUnitary(dto.getUnitary());
 		domain.setQuantity(dto.getQuantity());
 		domain.setBill(billsDao.getById(dto.getBill()));
+		domain.setProduct(dto.getProduct());
 		return domain;
 	}
 

@@ -68,8 +68,16 @@ public class BillDetailDTO extends BaseDTO{
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}	
+
+	public String getProduct() {
+		return product;
 	}
-	
+
+	public void setProduct(String product) {
+		this.product = product;
+	}
+
 	private Integer amount;
 	private Integer iva10;
 	private Integer bill;
@@ -77,4 +85,5 @@ public class BillDetailDTO extends BaseDTO{
 	private Integer exenta;
 	private Integer unitary;
 	private Integer quantity;
+	private String product;
 }
