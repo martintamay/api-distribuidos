@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -58,12 +59,12 @@ public class CommentsDaoImpl extends BaseDaoImpl<CommentsDomain> implements ICom
 	@Override
 	public List<CommentsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(CommentsDomain.class);
-		Criterion title = Restrictions.like("_title", text);
-		Criterion content = Restrictions.like("_content", text);
+		Criterion title = Restrictions.like("title", text, MatchMode.START);
+		Criterion content = Restrictions.like("content", text, MatchMode.START);
 		criteria.add(Restrictions.or(title,content));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
-		return safeConversion(criteria.list(), CommentsDomain.class);		
+		return safeConversion(criteria.list(), CommentsDomain.class);
 	}
 	@Override
 	public List<CommentsDomain> findAll(Integer page, Integer size) {

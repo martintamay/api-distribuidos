@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,13 +46,16 @@ public class OrdersDaoImpl extends BaseDaoImpl<OrdersDomain> implements IOrdersD
 
 	@Override
 	public List<OrdersDomain> find(String text, Integer page, Integer size) {
-		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDomain.class);
-		Criterion address = Restrictions.like("address", text);
-		criteria.add(Restrictions.or(address));
-		criteria.setFirstResult((page - 1) * size);
-		criteria.setMaxResults(size);
-		return safeConversion(criteria.list(), OrdersDomain.class);
-	}
+			final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDomain.class);
+			Criterion address = Restrictions.like("address", text, MatchMode.START);
+			Criterion state = Restrictions.like("state", text, MatchMode.START);
+			Criterion contact = Restrictions.like("contactNumber", text, MatchMode.START);
+			
+			criteria.add(Restrictions.or(address,state,contact));
+			criteria.setFirstResult((page - 1) * size);
+			criteria.setMaxResults(size);
+			return safeConversion(criteria.list(), OrdersDomain.class);
+		}
 	@Override
 	public List<OrdersDomain> findAll(Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDomain.class);

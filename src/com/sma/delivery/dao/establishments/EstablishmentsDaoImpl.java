@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -34,8 +35,8 @@ public class EstablishmentsDaoImpl extends BaseDaoImpl<EstablishmentsDomain> imp
 	@Override
 	public List<EstablishmentsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(EstablishmentsDomain.class);
-		Criterion firstName = Restrictions.like("name", text);
-		Criterion description = Restrictions.like("description", text);
+		Criterion firstName = Restrictions.like("name", text, MatchMode.START);
+		Criterion description = Restrictions.like("description", text, MatchMode.START);
 		criteria.add(Restrictions.or(firstName,description));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
