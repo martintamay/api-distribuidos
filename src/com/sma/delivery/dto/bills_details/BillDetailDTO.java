@@ -70,12 +70,12 @@ public class BillDetailDTO extends BaseDTO{
 		this.quantity = quantity;
 	}	
 
-	public String getProduct() {
-		return product;
+	public Integer getProductId() {
+		return productId;
 	}
 
-	public void setProduct(String product) {
-		this.product = product;
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
 
 	private Integer amount;
@@ -85,5 +85,5 @@ public class BillDetailDTO extends BaseDTO{
 	private Integer exenta;
 	private Integer unitary;
 	private Integer quantity;
-	private String product;
+	private Integer productId;
 }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.bill_details.BillDetailsDaoImpl;
 import com.sma.delivery.dao.bill_details.IBillsDetailsDao;
 import com.sma.delivery.dao.bills.IBillsDao;
+import com.sma.delivery.dao.products.IProductsDao;
 import com.sma.delivery.domain.bills_details.BillsDetailsDomain;
 import com.sma.delivery.dto.bills_details.BillDetailDTO;
 import com.sma.delivery.dto.bills_details.BillDetailResult;
@@ -25,6 +26,8 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 	
 	@Autowired
 	private IBillsDao billsDao;
+	@Autowired
+	private IProductsDao productsDao;
 	
 	@Override
 	@Transactional
@@ -74,7 +77,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		dto.setUnitary(domain.getUnitary());
 		dto.setQuantity(domain.getQuantity());
 		dto.setBill(domain.getBill().getId());
-		dto.setProduct(domain.getProduct());
+		dto.setProductId(domain.getProduct().getId());
 		return dto;
 	}
 
@@ -89,7 +92,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		domain.setUnitary(dto.getUnitary());
 		domain.setQuantity(dto.getQuantity());
 		domain.setBill(billsDao.getById(dto.getBill()));
-		domain.setProduct(dto.getProduct());
+		domain.setProduct(productsDao.getById(dto.getProductId()));
 		return domain;
 	}
 
