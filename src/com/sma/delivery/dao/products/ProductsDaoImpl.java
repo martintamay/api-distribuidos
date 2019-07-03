@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,13 +46,15 @@ public class ProductsDaoImpl extends BaseDaoImpl<ProductsDomain> implements IPro
 	}
 	
 	@Override
-	public List<ProductsDomain> find(String text, Integer page, Integer size) {
+	public List<ProductsDomain> find(String text,Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ProductsDomain.class);
-		Criterion name = Restrictions.like("name", text);
-		criteria.add(Restrictions.or(name));
-		criteria.setFirstResult((page - 1) * size);
+		Criterion name = Restrictions.like("name", text, MatchMode.START);
+		Criterion description = Restrictions.like("description", text, MatchMode.START);
+		criteria.add(Restrictions.or(name,description));
+		criteria.setFirstResult((page - 1) * size); 
 		criteria.setMaxResults(size);
 		return safeConversion(criteria.list(), ProductsDomain.class);
+		
 	}
 
 	@Override

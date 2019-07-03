@@ -9,6 +9,8 @@ import javax.persistence.Table;
 
 import com.sma.delivery.domain.base.BaseDomain;
 import com.sma.delivery.domain.bills.BillsDomain;
+import com.sma.delivery.domain.orders.OrdersDomain;
+import com.sma.delivery.domain.products.ProductsDomain;
 
 
 
@@ -40,17 +42,18 @@ public class BillsDetailsDomain implements BaseDomain {
 	@Column(name = "quantity")
 	private Integer quantity;
 	
-	@Column(name = "product")
-	private String product;
+	@ManyToOne
+	private ProductsDomain product;
 
 	@ManyToOne
 	private BillsDomain bill;
 	
-	public String getProduct() {
+
+	public ProductsDomain getProduct() {
 		return product;
 	}
 
-	public void setProduct(String product) {
+	public void setProduct(ProductsDomain product) {
 		this.product = product;
 	}
 

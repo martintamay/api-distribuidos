@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -47,8 +48,9 @@ public class PromotionsDaoImpl extends BaseDaoImpl<PromotionsDomain> implements 
 	@Override
 	public List<PromotionsDomain> find(String text, Integer page, Integer size) {
 		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(PromotionsDomain.class);
-		Criterion name = Restrictions.like("name", text);
-		criteria.add(Restrictions.or(name));
+		Criterion name = Restrictions.like("name", text,MatchMode.START);
+		Criterion available = Restrictions.like("available", text,MatchMode.START);
+		criteria.add(Restrictions.or(name,available));
 		criteria.setFirstResult((page - 1) * size);
 		criteria.setMaxResults(size);
 		return safeConversion(criteria.list(), PromotionsDomain.class);	
