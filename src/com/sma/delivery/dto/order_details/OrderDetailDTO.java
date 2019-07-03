@@ -8,7 +8,7 @@ public class OrderDetailDTO extends BaseDTO{
 	
 	private static final long serialVersionUID = 1L;
 	private int cost;
-	private int cuantity;
+	private int quantity;
 	private String comment;
 	private Integer orderId;
 	private Integer packageId;
@@ -35,11 +35,11 @@ public class OrderDetailDTO extends BaseDTO{
 	}
 	
 	@XmlElement
-	public int getCuantity() {
-		return cuantity;
+	public int getQuantity() {
+		return quantity;
 	}
-	public void setCuantity(int cuantity) {
-		this.cuantity = cuantity;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 	
 	@XmlElement
@@ -51,7 +51,7 @@ public class OrderDetailDTO extends BaseDTO{
 	}
 	
 	@XmlElement
-	public int getPackage() {
+	public Integer getPackageId() {
 		return packageId;
 	}
 	public void setPackageId(Integer packageId) {

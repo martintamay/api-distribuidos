@@ -16,9 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.dao.orders.OrdersDaoImpl;
+import com.sma.delivery.dao.orders_details.IOrdersDetailDao;
 import com.sma.delivery.dao.users.IUserDao;
 import com.sma.delivery.domain.orders.OrdersDomain;
+import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
 import com.sma.delivery.dto.order_details.OrderDetailDTO;
+import com.sma.delivery.dto.order_details.OrderDetailResult;
 import com.sma.delivery.dto.orders.OrderDTO;
 import com.sma.delivery.dto.orders.OrderResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
@@ -33,6 +36,8 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	private IUserDao userDao;
 	@Autowired
 	private IOrdersDao ordersDao;
+	@Autowired
+	private IOrdersDetailDao ordersDetailDao;
 	@Autowired
 	private IOrdersDetailService orderDetailsService;
 	@Override

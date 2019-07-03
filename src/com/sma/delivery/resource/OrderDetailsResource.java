@@ -35,6 +35,13 @@ public class OrderDetailsResource {
 	public OrderDetailResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
 		return ordersDetailService.find(text, page, size);
 	}
+	
+	@GET
+	@Path("/by-order-id/{orderId}")
+	@Produces({"application/xml", "application/json"})
+	public OrderDetailResult byOrderId(@PathParam("orderId") Integer orderId) {
+		return ordersDetailService.getByOrderId(orderId);
+	}
 
 
 	@GET

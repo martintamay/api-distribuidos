@@ -9,7 +9,7 @@ import com.sma.delivery.dto.base.BaseResult;
 
 
 
-@XmlRootElement(name = "orders_details")
+@XmlRootElement(name = "orders_detail")
 public class OrderDetailResult extends BaseResult<OrderDetailDTO>{
 	
 	private static final long serialVersionUID = 1L;

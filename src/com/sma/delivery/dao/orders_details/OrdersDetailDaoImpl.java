@@ -1,6 +1,5 @@
 package com.sma.delivery.dao.orders_details;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,14 +64,14 @@ public class OrdersDetailDaoImpl extends BaseDaoImpl<OrdersDetailDomain> impleme
 	}
 	@Override
 	public List<OrdersDetailDomain> findAllBy(Map<String, String> args) {
-		if(args.containsKey("orderId")){
-			SQLQuery query = sessionFactory.getCurrentSession().createSQLQuery("select * from orderdetails where order_id=:orderId");
-			query.addEntity(OrdersDetailDomain.class); // Define el tipo de resultado de la consulta
-			query.setString("orderId", args.get("orderId"));
-			return query.list();
+		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(OrdersDetailDomain.class);
+		if(args.containsKey(BY_ORDER_ID)){
+			criteria.createCriteria("orders", "orders");
+			criteria.add(Restrictions.eq("orders.id", Integer.parseInt(args.get(BY_ORDER_ID))));
 		}
-		return new ArrayList<>();
+		return safeConversion(criteria.list(), OrdersDetailDomain.class);	
 	}
+	
 	
 	@Override
 	public void deleteByOrder(Integer id) {

@@ -1,6 +1,7 @@
 package com.sma.delivery.service.orders_details;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,9 @@ import com.sma.delivery.dao.packages.IPackageDao;
 import com.sma.delivery.dao.products.IProductsDao;
 import com.sma.delivery.dao.promotions.IPromotionsDao;
 import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
+import com.sma.delivery.domain.packages.PackageDomain;
+import com.sma.delivery.domain.products.ProductsDomain;
+import com.sma.delivery.domain.promotions.PromotionsDomain;
 import com.sma.delivery.dto.order_details.OrderDetailDTO;
 import com.sma.delivery.dto.order_details.OrderDetailResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
@@ -82,12 +86,15 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 		final OrderDetailDTO dto = new OrderDetailDTO();
 		dto.setId(domain.getId());
 		dto.setCost(domain.getCost());
-		dto.setCuantity(domain.getCuantity());
+		dto.setQuantity(domain.getQuantity());
 		dto.setComment(domain.getComment());
-		dto.setPackageId(domain.getPackages().getId());
-		dto.setProductId(domain.getProduct().getId());
+		PackageDomain packageD = domain.getPackages();
+		dto.setPackageId(packageD != null ? packageD.getId() : 0);
+		ProductsDomain product = domain.getProduct();
+		dto.setProductId(product != null ? product.getId() : 0);
+		PromotionsDomain promotion = domain.getPromotion();
+		dto.setPromotionId(promotion != null ? promotion.getId() : 0);
 		dto.setOrderId(domain.getOrders().getId());
-		dto.setPromotionId(domain.getPromotion().getId());
 
 		
 		return dto;
@@ -98,9 +105,9 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 		final OrdersDetailDomain domain = new OrdersDetailDomain();
 		domain.setId(dto.getId());
 		domain.setCost(dto.getCost());
-		domain.setCuantity(dto.getCuantity());
+		domain.setQuantity(dto.getQuantity());
 		domain.setComment(dto.getComment());
-		domain.setPackages(packageDao.getById(dto.getPackage()));
+		domain.setPackages(packageDao.getById(dto.getPackageId()));
 		domain.setProduct(productsDao.getById(dto.getProductId()));
 		domain.setOrders(ordersDao.getById(dto.getOrderId()));
 		domain.setPromotion(promotionsDao.getById(dto.getPromotionId()));
@@ -143,6 +150,27 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 		ordersResult.setOrdersDetail(orders);
 		return ordersResult;
 	}
+	
+
+	@Override
+	@Transactional
+	public OrderDetailResult getByOrderId(Integer orderId) {
+		final List<OrderDetailDTO> orders = new ArrayList<>();
+		Map<String,String> filter = new HashMap<>();
+		filter.put(IOrdersDetailDao.BY_ORDER_ID, orderId.toString());
+		for (OrdersDetailDomain domain : ordersDetailDao.findAllBy(filter)) {
+			final OrderDetailDTO order = convertDomainToDto(domain);
+			orders.add(order);
+			if (order.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + order.getId(), order);
+			}
+		}
+
+		final OrderDetailResult ordersResult = new OrderDetailResult();
+		ordersResult.setOrdersDetail(orders);
+		return ordersResult;
+	}
+	
 	@Override
 	@Transactional
 	public OrderDetailResult getAll(Integer page,Integer size) {

@@ -21,11 +21,11 @@ public class OrdersDetailDomain implements BaseDomain {
 	@Column(name = "id", nullable = false, unique = true)
 	private Integer id;
 
-	@Column(name = "cost", unique = true)
+	@Column(name = "cost")
 	private int cost;
 
-	@Column(name = "cuantity")
-	private int cuantity;
+	@Column(name = "quantity")
+	private int quantity;
 
 	@Column(name = "comment")
 	private String comment;
@@ -82,12 +82,12 @@ public class OrdersDetailDomain implements BaseDomain {
 		this.cost = cost;
 	}
 
-	public int getCuantity() {
-		return cuantity;
+	public int getQuantity() {
+		return quantity;
 	}
 
-	public void setCuantity(int cuantity) {
-		this.cuantity = cuantity;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 
 	public String getComment() {
