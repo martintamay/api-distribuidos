@@ -33,7 +33,7 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'billsDetailsA_' + #billsDetails.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'ingredientsProductsA_' + #ingredientsProducts.id", condition = "#dto.id!=null")
 	public IngredientsProductsDTO save(IngredientsProductsDTO dto) {
 		final IngredientsProductsDomain domain = convertDtoToDomain(dto);
 		final IngredientsProductsDomain ingredientsProductsDomain = ingredientsProductsDao.save(domain);
@@ -46,7 +46,7 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache", key = "'billsDetails_' + #id")
+	@Cacheable(value = "delivery-cache", key = "'ingredientsProductsA_' + #id")
 	public IngredientsProductsDTO getById(Integer id) {
 		final IngredientsProductsDomain domain = ingredientsProductsDao.getById(id);
 		return convertDomainToDto(domain);
@@ -60,7 +60,7 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 			final IngredientsProductsDTO dto = convertDomainToDto(domain);
 			ingredientsProducts.add(dto);
 			if (dto.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+				getCacheManager().getCache("delivery-cache").put("ingredientsProductsA_" + dto.getId(), dto);
 			}
 		}
 		final IngredientsProductsResult ingredientsProductsResult = new IngredientsProductsResult();
@@ -103,20 +103,20 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 		}
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'billsDetails_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'ingredientsProductsA_' + #dto.id")
 	public IngredientsProductsDTO update(IngredientsProductsDTO dto) {
 		final IngredientsProductsDomain ingredientsProductsDomain = convertDtoToDomain(dto);
 		final IngredientsProductsDomain ingredientsProducts = ingredientsProductsDao.update(ingredientsProductsDomain);
 		final IngredientsProductsDTO newDto = convertDomainToDto(ingredientsProducts);
 		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("billsDetails_" + ingredientsProducts.getId(), newDto);
+			getCacheManager().getCache("delivery-cache").put("ingredientsProductsA_" + ingredientsProducts.getId(), newDto);
 		}
 		return convertDomainToDto(ingredientsProducts);
 	}
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'billsDetails_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'ingredientsProductsA_' + #dto.id")
 	public void delete(IngredientsProductsDTO dto) {
 		final IngredientsProductsDomain ingredientsProductsDomain = convertDtoToDomain(dto);
 		ingredientsProductsDao.delete(ingredientsProductsDomain);	
@@ -131,7 +131,7 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 			final IngredientsProductsDTO user = convertDomainToDto(domain);
 			ingredientsProducts.add(user);
 			if (user.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + user.getId(), user);
+				getCacheManager().getCache("delivery-cache").put("ingredientsProductsA_" + user.getId(), user);
 			}
 		}
 
@@ -147,7 +147,7 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 			final IngredientsProductsDTO dto = convertDomainToDto(domain);
 			ingredientsProducts.add(dto);
 			if (dto.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+				getCacheManager().getCache("delivery-cache").put("ingredientsProductsA_" + dto.getId(), dto);
 			}
 		}
 		final IngredientsProductsResult ingredientsProductsResult = new IngredientsProductsResult();
@@ -163,7 +163,7 @@ public class IngredientsProductsServiceImpl extends BaseServiceImpl<IngredientsP
 			final IngredientsProductsDTO dto = convertDomainToDto(domain);
 			ingredientsProducts.add(dto);
 			if (dto.getId() != null) {
-				getCacheManager().getCache("delivery-cache").put("billsDetailsA_" + dto.getId(), dto);
+				getCacheManager().getCache("delivery-cache").put("ingredientsProductsA_" + dto.getId(), dto);
 			}
 		}
 		final IngredientsProductsResult ingredientsProductsResult = new IngredientsProductsResult();

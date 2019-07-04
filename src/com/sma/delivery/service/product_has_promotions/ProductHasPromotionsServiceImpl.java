@@ -128,7 +128,6 @@ public class ProductHasPromotionsServiceImpl extends BaseServiceImpl<ProductHasP
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_pro_has_pro' + #page + #size")
 	public ProductHasPromotionResult getAll(Integer page,Integer size) {
 		final List<ProductHasPromotionDTO> producHasPromotions = new ArrayList<>();
 		for (ProductHasPromotionsDomain domain : productHasPromotionsDao.findAll(page, size)) {
