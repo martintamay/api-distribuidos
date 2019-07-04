@@ -22,7 +22,7 @@ public class PackageDomain implements BaseDomain {
 	@Column(name = "id", nullable = false, unique = true)
 	private Integer id;
 
-	@Column(name = "name", nullable = false, unique = true)
+	@Column(name = "name", nullable = false)
 	private String name;
 	
 	@Column(name = "cost", nullable = false)

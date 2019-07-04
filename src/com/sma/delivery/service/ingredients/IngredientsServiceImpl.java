@@ -25,7 +25,7 @@ public class IngredientsServiceImpl extends BaseServiceImpl<IngredientDTO, Ingre
 	
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'ingredients_' + #ingredients.id", condition = "#dto.id!=null")
+	@CachePut(value = "delivery-cache", key = "'ingredientsA_' + #ingredients.id", condition = "#dto.id!=null")
 	public IngredientDTO save(IngredientDTO dto) {
 		final IngredientsDomain ingredientsDomain = convertDtoToDomain(dto);
 		final IngredientsDomain ingredients = ingredientsDao.save(ingredientsDomain);

@@ -142,7 +142,6 @@ public class PromotionsServiceImpl extends BaseServiceImpl<PromotionDTO, Promoti
 	}
 	@Override
 	@Transactional
-	@Cacheable(value = "delivery-cache",  key = "'pagina_pro' + #page + #size")
 	public PromotionResult getAll(Integer page,Integer size) {
 		final List<PromotionDTO> promotions = new ArrayList<>();
 		for (PromotionsDomain domain : promotionsDao.findAll(page, size)) {
