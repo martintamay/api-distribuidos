@@ -48,7 +48,7 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	
 	
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #ordersDetail.id", condition = "#dto.id!=null")
 	public OrderDetailDTO save(OrderDetailDTO dto) {
 		final OrdersDetailDomain detailDomain = convertDtoToDomain(dto);
