@@ -2,6 +2,7 @@ package com.sma.delivery.dao.products;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -56,6 +57,23 @@ public class ProductsDaoImpl extends BaseDaoImpl<ProductsDomain> implements IPro
 		return safeConversion(criteria.list(), ProductsDomain.class);
 		
 	}
+
+	@Override
+	public List<ProductsDomain> findByEstablishment(Integer establishmentId, String text, Integer page, Integer size) {
+		final Criteria criteria = sessionFactory.getCurrentSession().createCriteria(ProductsDomain.class);
+		Criterion name = Restrictions.like("name", text, MatchMode.START);
+		criteria.createCriteria("establisment", "establisment");
+		Criterion est = Restrictions.eq("establisment.id", establishmentId);
+		criteria.add(Restrictions.and(name, est));
+		criteria.setFirstResult((page - 1) * size); 
+		criteria.setMaxResults(size);
+		
+		Logger log = Logger.getLogger(ProductsDaoImpl.class);
+		log.info("criteria "+criteria.toString());
+		
+		return safeConversion(criteria.list(), ProductsDomain.class);
+	}	
+	
 
 	@Override
 	public List<ProductsDomain> findAll(Integer page, Integer size) {

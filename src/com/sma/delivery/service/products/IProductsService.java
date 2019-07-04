@@ -8,4 +8,6 @@ import com.sma.delivery.service.base.IBaseService;
 
 public interface IProductsService extends IBaseService<ProductDTO, ProductsDomain, ProductsDaoImpl, ProductResult> {
 
+	ProductResult findByEstablishment(Integer establishmentId, String text, Integer page, Integer size);
+
 }

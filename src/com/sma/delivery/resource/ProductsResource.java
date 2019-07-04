@@ -34,6 +34,15 @@ public class ProductsResource {
 	public ProductResult find(@PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
 		return productsService.find(text, page, size);
 	}
+	
+	@GET
+	@Path("/establishment/{establishmentId}/{page}/{size}/{text}")
+	@Produces({"application/xml", "application/json"})
+	public ProductResult find(@PathParam("establishmentId") Integer establishmentId, @PathParam("page") Integer page,@PathParam("size") Integer size,@PathParam("text") String text) {
+		return productsService.findByEstablishment(establishmentId, text, page, size);
+	}
+	
+	
 	@GET
 	@Path("/{page}/{size}")
 	@Produces({"application/xml", "application/json"})

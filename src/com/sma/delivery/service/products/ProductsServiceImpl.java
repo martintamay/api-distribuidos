@@ -137,6 +137,26 @@ public class ProductsServiceImpl extends BaseServiceImpl<ProductDTO, ProductsDom
 		return userResult;
 
 	}
+	
+
+	@Override
+	@Transactional
+	public ProductResult findByEstablishment(Integer establishmentId, String text, Integer page, Integer size) {
+		final List<ProductDTO> products = new ArrayList<>();
+		
+		for (ProductsDomain domain : productsDao.findByEstablishment(establishmentId, text, page, size)) {
+			final ProductDTO product = convertDomainToDto(domain);
+			products.add(product);
+			if (product.getId() != null) {
+				getCacheManager().getCache("delivery-cache").put("productsA_" + product.getId(), product);
+			}
+		}
+
+		final ProductResult productResult = new ProductResult();
+		productResult.setProducts(products);
+		return productResult;
+
+	}
 	@Override
 	@Transactional
 	public ProductResult getAll(Integer page,Integer size) {

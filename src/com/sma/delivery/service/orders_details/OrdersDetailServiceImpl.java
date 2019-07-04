@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -27,6 +28,7 @@ import com.sma.delivery.domain.promotions.PromotionsDomain;
 import com.sma.delivery.dto.order_details.OrderDetailDTO;
 import com.sma.delivery.dto.order_details.OrderDetailResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
+import com.sma.delivery.service.orders.OrdersServiceImpl;
 
 @Service
 public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, OrdersDetailDomain, OrdersDetailDaoImpl, OrderDetailResult> implements IOrdersDetailService {
@@ -50,6 +52,9 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	public OrderDetailDTO save(OrderDetailDTO dto) {
 		final OrdersDetailDomain domain = convertDtoToDomain(dto);
 		final OrdersDetailDomain ordersDomain = ordersDetailDao.save(domain);
+
+		Logger logger = Logger.getLogger(OrdersDetailServiceImpl.class);
+		logger.info("el id del order es "+ordersDomain.getOrders().toString());
 		final OrderDetailDTO newDto = convertDomainToDto(ordersDomain);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + ordersDomain.getId(), newDto);
@@ -107,10 +112,13 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 		domain.setCost(dto.getCost());
 		domain.setQuantity(dto.getQuantity());
 		domain.setComment(dto.getComment());
-		domain.setPackages(packageDao.getById(dto.getPackageId()));
-		domain.setProduct(productsDao.getById(dto.getProductId()));
+		if (dto.getPackageId() != null)
+			domain.setPackages(packageDao.getById(dto.getPackageId()));
+		if (dto.getProductId() != null)
+			domain.setProduct(productsDao.getById(dto.getProductId()));
+		if (dto.getPromotionId() != null)
+			domain.setPromotion(promotionsDao.getById(dto.getPromotionId()));
 		domain.setOrders(ordersDao.getById(dto.getOrderId()));
-		domain.setPromotion(promotionsDao.getById(dto.getPromotionId()));
 		return domain;
 	}
 	
@@ -123,15 +131,17 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	}
 	@Override
 	@Transactional
-	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
+	//@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
 	public OrderDetailDTO update(OrderDetailDTO dto) {
-		final OrdersDetailDomain userDomain = convertDtoToDomain(dto);
-		final OrdersDetailDomain user = ordersDetailDao.update(userDomain);
-		final OrderDetailDTO newDto = convertDomainToDto(user);
-		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + user.getId(), newDto);
-		}
-		return convertDomainToDto(user);
+		Logger logger = Logger.getLogger(OrdersDetailServiceImpl.class.getName());
+
+		logger.info("update 1");
+		final OrdersDetailDomain detailDomain = convertDtoToDomain(dto);
+		logger.info("update 2");
+		final OrdersDetailDomain detail = ordersDetailDao.update(detailDomain);
+
+		logger.info("termina el update");
+		return convertDomainToDto(detail);
 	}
 
 	@Override

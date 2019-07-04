@@ -4,6 +4,7 @@ package com.sma.delivery.service.orders;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -16,12 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sma.delivery.dao.establishments.IEstablishmentsDao;
 import com.sma.delivery.dao.orders.IOrdersDao;
 import com.sma.delivery.dao.orders.OrdersDaoImpl;
-import com.sma.delivery.dao.orders_details.IOrdersDetailDao;
 import com.sma.delivery.dao.users.IUserDao;
 import com.sma.delivery.domain.orders.OrdersDomain;
-import com.sma.delivery.domain.orders_details.OrdersDetailDomain;
 import com.sma.delivery.dto.order_details.OrderDetailDTO;
-import com.sma.delivery.dto.order_details.OrderDetailResult;
 import com.sma.delivery.dto.orders.OrderDTO;
 import com.sma.delivery.dto.orders.OrderResult;
 import com.sma.delivery.service.base.BaseServiceImpl;
@@ -37,8 +35,6 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	@Autowired
 	private IOrdersDao ordersDao;
 	@Autowired
-	private IOrdersDetailDao ordersDetailDao;
-	@Autowired
 	private IOrdersDetailService orderDetailsService;
 	@Override
 	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
@@ -52,7 +48,10 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 		}
 		for(OrderDetailDTO detail: dto.getOrderDetails()){
 			detail.setOrderId(newDto.getId());
-			orderDetailsService.save(detail);
+			if (detail.getId() == null)
+				orderDetailsService.save(detail);
+			else
+				orderDetailsService.update(detail);
 		}
 		return convertDomainToDto(ordersDomain);
 	}
@@ -122,18 +121,20 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	@Override
 	@Transactional
 	@CachePut(value = "delivery-cache", key = "'ordersA_' + #dto.id")
-	public OrderDTO update(OrderDTO dto) {
-		final OrdersDomain userDomain = convertDtoToDomain(dto);
-		final OrdersDomain user = ordersDao.update(userDomain);
-		final OrderDTO newDto = convertDomainToDto(user);
-		if (dto.getId() == null) {
-			getCacheManager().getCache("delivery-cache").put("ordersA_" + user.getId(), newDto);
-		}
+	public OrderDTO update(OrderDTO dto) {		
+		final OrdersDomain orderDomain = convertDtoToDomain(dto);
+		final OrdersDomain order = ordersDao.update(orderDomain);
 		for(OrderDetailDTO detail: dto.getOrderDetails()){
-			detail.setOrderId(newDto.getId());
-			orderDetailsService.update(detail);
+			detail.setOrderId(dto.getId());
+			if (detail.getId() == null) {
+				orderDetailsService.save(detail);
+			} else {
+				orderDetailsService.update(detail);
+			}
 		}
-		return convertDomainToDto(user);
+		Logger logger = Logger.getLogger(OrdersServiceImpl.class.getName());
+		logger.info("pasa el update");
+		return convertDomainToDto(order);
 	}
 
 	@Override

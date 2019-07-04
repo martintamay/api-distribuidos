@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -65,6 +66,8 @@ public class OrdersResource {
 	@Path("/{id}")
 	@Produces({"application/xml", "application/json"})
 	public OrderDTO update(OrderDTO order, @PathParam("id") Integer orderId) {
+		Logger logger = Logger.getLogger(OrdersResource.class);
+		logger.info("Se recibe el pedido");
 		order.setId(orderId);
 		return ordersService.update(order);
 	}
