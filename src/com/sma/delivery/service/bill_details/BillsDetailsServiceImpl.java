@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.sma.delivery.dao.bill_details.BillDetailsDaoImpl;
@@ -30,7 +32,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 	private IProductsDao productsDao;
 	
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@CachePut(value = "delivery-cache", key = "'billsDetailsA_' + #billsDetails.id", condition = "#dto.id!=null")
 	public BillDetailDTO save(BillDetailDTO dto) {
 		final BillsDetailsDomain domain = convertDtoToDomain(dto);
@@ -110,7 +112,7 @@ public class BillsDetailsServiceImpl extends BaseServiceImpl<BillDetailDTO, Bill
 		return clientResult;
 		}
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@CachePut(value = "delivery-cache", key = "'billsDetails_' + #dto.id")
 	public BillDetailDTO update(BillDetailDTO dto) {
 		final BillsDetailsDomain clientDomain = convertDtoToDomain(dto);

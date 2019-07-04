@@ -35,7 +35,7 @@
 		</property>
 		<property name="addressProvider">
 			<bean class="com.google.code.ssm.config.DefaultAddressProvider">
-				<property name="address" value="127.0.0.1:11211" />
+				<property name="address" value="${cache.ip}:${cache.port}" />
 			</bean>
 		</property>
 		<property name="configuration">

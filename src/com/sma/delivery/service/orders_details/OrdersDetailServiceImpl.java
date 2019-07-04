@@ -143,7 +143,7 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 		ordersDetailDao.delete(userDomain);	
 	}
 	@Override
-	@Transactional
+	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
 	public OrderDetailDTO update(OrderDetailDTO dto) {
 		final OrdersDetailDomain detailDomain = convertDtoToDomain(dto);
