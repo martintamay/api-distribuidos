@@ -36,8 +36,11 @@ public class OrdersServiceImpl extends BaseServiceImpl<OrderDTO, OrdersDomain, O
 	private IOrdersDao ordersDao;
 	@Autowired
 	private IOrdersDetailService orderDetailsService;
+	
+	static final Logger logger = Logger.getLogger(OrdersServiceImpl.class);
+	
 	@Override
-	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
+	@Transactional
 	@CachePut(value = "delivery-cache", key = "'ordersA_' + #order.id", condition = "#dto.id!=null")
 	public OrderDTO save(OrderDTO dto) {
 		final OrdersDomain domain = convertDtoToDomain(dto);

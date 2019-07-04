@@ -43,23 +43,31 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	private IPackageDao packageDao;
 	@Autowired 
 	private IProductsDao productsDao;
+	static final Logger logger = Logger.getLogger(OrdersDetailServiceImpl.class);
 	
 	
 	
 	@Override
-	@Transactional(isolation=Isolation.READ_COMMITTED, propagation = Propagation.REQUIRES_NEW)
+	@Transactional
 	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #ordersDetail.id", condition = "#dto.id!=null")
 	public OrderDetailDTO save(OrderDetailDTO dto) {
+		final OrdersDetailDomain detailDomain = convertDtoToDomain(dto);
+		logger.info("detail save 1: "+(detailDomain.getOrders() == null ? "null" : dto.getOrderId()));
+		
+		final OrdersDetailDomain detail = ordersDetailDao.save(detailDomain);
+		logger.info("detail save 2: "+(detail.getOrders() == null ? "null" : detail.getOrders().getId()));
+		return convertDomainToDto(detail);
+		/*
 		final OrdersDetailDomain domain = convertDtoToDomain(dto);
 		final OrdersDetailDomain ordersDomain = ordersDetailDao.save(domain);
 
-		Logger logger = Logger.getLogger(OrdersDetailServiceImpl.class);
-		logger.info("el id del order es "+ordersDomain.getOrders().toString());
+		logger.info("el id del order es ");
+		logger.info(ordersDomain.getOrders() == null ? "null" : ordersDomain.getOrders().getId());
 		final OrderDetailDTO newDto = convertDomainToDto(ordersDomain);
 		if (dto.getId() == null) {
 			getCacheManager().getCache("delivery-cache").put("ordersDetailA_" + ordersDomain.getId(), newDto);
 		}
-		return convertDomainToDto(ordersDomain);
+		return convertDomainToDto(ordersDomain);*/
 	}
 
 	@Override
@@ -118,6 +126,11 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 			domain.setProduct(productsDao.getById(dto.getProductId()));
 		if (dto.getPromotionId() != null)
 			domain.setPromotion(promotionsDao.getById(dto.getPromotionId()));
+
+		logger.info("id en dto to domain : "+ (dto.getOrderId() == null ? "null" : dto.getOrderId()));
+		logger.info("order en dto to domain : "+ (ordersDao.getById(dto.getOrderId())== null ? "null" : ordersDao.getById(dto.getOrderId()).getId() ));
+		
+		
 		domain.setOrders(ordersDao.getById(dto.getOrderId()));
 		return domain;
 	}
@@ -131,16 +144,10 @@ public class OrdersDetailServiceImpl extends BaseServiceImpl<OrderDetailDTO, Ord
 	}
 	@Override
 	@Transactional
-	//@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
+	@CachePut(value = "delivery-cache", key = "'ordersDetailA_' + #dto.id")
 	public OrderDetailDTO update(OrderDetailDTO dto) {
-		Logger logger = Logger.getLogger(OrdersDetailServiceImpl.class.getName());
-
-		logger.info("update 1");
 		final OrdersDetailDomain detailDomain = convertDtoToDomain(dto);
-		logger.info("update 2");
 		final OrdersDetailDomain detail = ordersDetailDao.update(detailDomain);
-
-		logger.info("termina el update");
 		return convertDomainToDto(detail);
 	}
 
